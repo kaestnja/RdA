@@ -6,13 +6,20 @@ Get-WindowsOptionalFeature -Online
 #Get-WindowsOptionalFeature -online | Sort-Object -Property FeatureName | Format-Table -GroupBy State -Wrap
 #Enable-WindowsOptionalFeature -online -FeatureName NetFx3 -Source e:\Sources\sxs
 
-Add-WindowsFeature IIS-WebServerRole
+#windows server
+#Install-WindowsFeature -name Web-Server -IncludeManagementTools
 
 function InstallFeature($name) {
-    # server
-    # cmd /c "ocsetup $name /passive"
-    # client
-    Enable-WindowsOptionalFeature -online -FeatureName $name
+    $edition = Get-WindowsEdition -Online | Out-String
+    if ($edition -like "*Server*" )
+    {
+        # cmd /c "ocsetup $name /passive"
+        Add-WindowsFeature $name
+    }
+    if ($edition -like "*Professional*" )
+    {
+        Enable-WindowsOptionalFeature -online -FeatureName $name
+    }
 }
 InstallFeature IIS-WebServerRole
     #InstallFeature IIS-WebServer
@@ -34,10 +41,10 @@ InstallFeature IIS-WebServerRole
             #InstallFeature IIS-RequestFiltering
             #InstallFeature IIS-WindowsAuthentication
         #InstallFeature IIS-ApplicationDevelopment
-            InstallFeature IIS-NetFxExtensibility
-            InstallFeature IIS-ISAPIExtensions
-            InstallFeature IIS-ISAPIFilter
-            InstallFeature IIS-ASPNET
+            #InstallFeature IIS-NetFxExtensibility
+            #InstallFeature IIS-ISAPIExtensions
+            #InstallFeature IIS-ISAPIFilter
+            #InstallFeature IIS-ASPNET
             #InstallFeature IIS-WebSockets
             InstallFeature IIS-CGI
     #InstallFeature IIS-WebServerManagementTools 
@@ -48,6 +55,4 @@ InstallFeature IIS-WebServerRole
 import-module WebAdministration
 
 Stop-WebAppPool DefaultAppPool
-
-#windows server
-#Install-WindowsFeature -name Web-Server -IncludeManagementTools
+Start-WebAppPool DefaultAppPool
