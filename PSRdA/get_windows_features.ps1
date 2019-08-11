@@ -1,4 +1,5 @@
 #windows client
+#todo: check here for html tables https://evotec.xyz/working-with-html-in-powershell-just-got-better/
 Get-WindowsOptionalFeature -Online
 
 #gcm -module DISM #List available commands
