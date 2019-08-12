@@ -8,3 +8,5 @@ Update-Module
 #https://github.com/nightroman/Mdbc
 #https://dev.to/tunaxor/powershell--mongo-34om
 #Install-Module Mdbc
+
+#https://winaero.com/blog/run-as-administrator-context-menu-for-power-shell-ps1-files/
