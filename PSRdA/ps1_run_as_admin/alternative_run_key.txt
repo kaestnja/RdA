@@ -1,0 +1,4 @@
+https://stackoverflow.com/questions/44284964/how-to-start-powershell-script-from-bat-file-with-proper-working-directory/57033941#57033941
+
+HKEY_CLASSES_ROOT\Microsoft.PowerShellScript.1\Shell\Run
+powershell -command "   Start-Process PowerShell -Verb RunAs \""-Command `\""cd '%W'; & '%1';`\""\""   "
