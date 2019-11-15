@@ -6,11 +6,6 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "FileSyste
 #prevent download fails, if internet explorer was not first initilized with recommended microsoft settings
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Internet Explorer\Main" -Name "DisableFirstRunCustomize" -Value 2
 
-#on the Siemens network, do not forget to check and set the proxy
-# SET HTTP_PROXY=194.145.60.1:9400
-# SET HTTPS_PROXY=194.145.60.1:9400
-# SET HTTPS_PROXY=https://user:pass@194.145.60.1:9400
-
 md -p "C:\Temp"
 cd c:\Temp
 
