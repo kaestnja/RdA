@@ -125,7 +125,7 @@ if (Test-Path "$temppath") {
 #PowerShellGet\Install-Module posh-git -Scope CurrentUser -AllowPrerelease -Force
 #PowerShellGet\Install-Module posh-sshell -Scope CurrentUser
 #else
-Install-Module posh-git -force #–force 
+Install-Module posh-git -force
 #Install-Module posh-sshell -force
 #PowerShellGet\Update-Module posh-git
 #PowerShellGet\Update-Module posh-sshell
