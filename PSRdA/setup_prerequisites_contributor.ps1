@@ -122,7 +122,7 @@ Install-Module posh-git –force
 #Import-Module posh-git
 #Import-Module posh-sshell
 #user
-Add-PoshGitToProfile
+Add-PoshGitToProfile -force
 #Add-PoshSshellToProfile
 #all
 #Add-PoshGitToProfile -AllUsers -AllHosts
