@@ -1,0 +1,167 @@
+wmic os get caption
+wmic os get osarchitecture
+$PSVersionTable.PSVersion
+Get-ExecutionPolicy
+#Set-ExecutionPolicy RemoteSigned
+#Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
+#Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
+
+#Get-Childitem env:
+#get-childitem -path env:* | get-member
+
+#enable the verry long names for files and paths, just for sure
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "FileSystem@LongPathsEnabled" -Value 1
+#prevent download fails, if internet explorer was not first initilized with recommended microsoft settings
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Internet Explorer\Main" -Name "DisableFirstRunCustomize" -Value 2
+
+$temppath = "C:\Temp"
+if (!($temppath | Test-Path)) { md -p "$temppath" }
+if (Test-Path "$temppath") {
+cd $temppath
+
+#Install PScore6 
+#iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
+$file = "PowerShell-6.2.3-win-x64.msi"
+$path = "$temppath\$file"
+if (!($path | Test-Path)) { curl https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/PowerShell-6.2.3-win-x64.msi -OutFile $path }
+#msiexec.exe /l*v mdbinstall.log /qb /i PowerShell-6.2.3-win-x64.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1
+if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i PowerShell-6.2.3-win-x64.msi","/quiet","ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1","ENABLE_PSREMOTING=1","REGISTER_MANIFEST=1" }
+
+#Install Git 
+$file = "Git-2.24.0.2-64-bit.exe"
+$path = "$temppath\$file"
+if (!($path | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe -OutFile $path }
+#.\Git-2.24.0.2-64-bit.exe /SILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /COMPONENTS="icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh,autoupdate" /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled
+#with ArgumentList as list
+if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/SILENT /NORESTART /NOCANCEL /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled /COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
+#with ArgumentList as string array
+#if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/SILENT","/NORESTART","/NOCANCEL","/CLOSEAPPLICATIONS","/RESTARTAPPLICATIONS","/NoIcons=0","/SetupType=default","/EditorOption=Nano","/PathOption=Cmd","/SSHOption=OpenSSH","/TortoiseOption=false","/CURLOption=OpenSSL","/CRLFOption=CRLFCommitAsIs","/BashTerminalOption=MinTTY","/PerformanceTweaksFSCache=Enabled","/UseCredentialManager=Enabled","/EnableSymlinks=Disabled","/EnableBuiltinInteractiveAdd=Disabled","/COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
+
+#should be in Windows Path now: ";C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;"
+$windows_path = $env:Path -split ';'
+$path = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\bin"
+if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
+$windows_path = $env:Path -split ';'
+$path = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\cmd"
+if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
+
+$windows_path = $env:Path -split ';'
+$path = (Get-Item "Env:ProgramFiles").Value + "\Git\bin"
+if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
+$windows_path = $env:Path -split ';'
+$path = (Get-Item "Env:ProgramFiles").Value + "\Git\cmd"
+if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
+
+#add wget into Git 
+$file = "wget.exe"
+$folder = (Get-Item "Env:ProgramFiles").Value + "\Git\mingw64\bin"
+$path = "$folder\$file"
+if (Test-Path $folder) { if (!($path | Test-Path)) { curl https://eternallybored.org/misc/wget/1.20.3/64/wget.exe -OutFile $path } }
+
+$file = "python-3.8.0-amd64.exe"
+$path = "$temppath\$file"
+if (!($path | Test-Path)) { curl https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe -OutFile $path }
+#.\python-3.8.0-amd64.exe /passive InstallAllUsers=1 TargetDir=C:\Python38 PrependPath=1
+if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python38" }
+
+$file = "python-3.7.5-amd64.exe"
+$path = "$temppath\$file"
+if (!($path | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile $path }
+#.\python-3.7.5-amd64.exe /passive InstallAllUsers=1 TargetDir=C:\Python37 PrependPath=1
+if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" }
+python -m pip install --upgrade pip
+
+$file = "mongodb-compass-community-1.19.12-win32-x64.msi"
+$path = "$temppath\$file"
+if (!($path | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile $path }
+if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
+if (!("C:\MongoDB\data" | Test-Path)) { md -p "C:\MongoDB\data" }
+if (!("C:\MongoDB\log" | Test-Path)) { md -p "C:\MongoDB\log" }
+$file = "mongodb-win32-x86_64-2012plus-4.2.1-signed.msi"
+$path = "$temppath\$file"
+if (!($path | Test-Path)) { curl https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-4.2.1-signed.msi -OutFile $path }
+#developer
+if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerNoService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
+#C:\MongoDB\Server\4.2\bin\mongod.exe --dbpath "C:\MongoDB\data"  "C:\MongoDB\log" --bind_ip 127.0.0.1 --port 27017
+#C:\MongoDB\Server\4.2\bin\mongod.exe --bind_ip 127.0.0.1 --port 27017
+#shortcut
+$WshShell = New-Object -comObject WScript.Shell
+$Shortcut = $WshShell.CreateShortcut("$Home\Desktop\MongoDB.lnk")
+$Shortcut.TargetPath = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe"
+$Shortcut.Arguments = "--dbpath `"C:\MongoDB\data`" --bind_ip 127.0.0.1 --port 27017"
+$Shortcut.Description = "start local MongoDB"
+#$Shortcut.IconLocation = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe, 1"
+$Shortcut.WindowStyle = "1"
+$Shortcut.WorkingDirectory = "${env:ProgramFiles}\MongoDB\Server\4.2\bin"
+$Shortcut.Save()
+
+$file = "npp.7.7.1.Installer.x64.exe"
+$path = "$temppath\$file"
+if (!($path | Test-Path)) { curl https://notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.x64.exe -OutFile $path }
+#if (Test-Path $path) { Start-Process -Wait -FilePath "npp.7.7.1.Installer.x64.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
+if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/S" }
+$file = "npp.7.8.1.Installer.x64.exe"
+$path = "$temppath\$file"
+if (!($path | Test-Path)) { curl http://download.notepad-plus-plus.org/repository/7.x/7.8.1/npp.7.8.1.Installer.x64.exe -OutFile $path }
+#if (Test-Path $path) { Start-Process -Wait -FilePath "npp.7.8.1.Installer.x64.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
+if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/S" }
+
+}
+
+#(new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex install-module posh-git
+#maybe as first time install posh-git and posh-shell
+#PowerShellGet\Install-Module posh-git -Scope CurrentUser -AllowPrerelease -Force
+#PowerShellGet\Install-Module posh-sshell -Scope CurrentUser
+#else
+Install-Module posh-git –force
+#Install-Module posh-sshell -force
+#PowerShellGet\Update-Module posh-git
+#PowerShellGet\Update-Module posh-sshell
+
+#now
+#Import-Module posh-git
+#Import-Module posh-sshell
+#user
+Add-PoshGitToProfile
+#Add-PoshSshellToProfile
+#all
+#Add-PoshGitToProfile -AllUsers -AllHosts
+#speed up git status
+#$GitPromptSettings.EnableFileStatus = $false
+#$GitPromptSettings.RepositoriesInWhichToDisableFileStatus
+
+#disable home Path
+#$GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $false
+
+git update-git-for-windows
+
+$githubProjectServer = 'github.com'
+$SiemensProjectServer = 'code.siemens.com'
+
+ssh -T git@$githubProjectServer
+ssh -T git@$SiemensProjectServer
+
+#~/.ssh/config
+#Connect-Ssh
+#Add-SshConnection -Name githubProjectServer -Uri $githubProjectServer -User kaestnja
+#Add-SshConnection -Name Server1 -Uri server1.jeremyskinner.co.uk -User jeremy
+#Start-SshAgent -Quiet
+
+#get-childitem -path env:* | get-member
+#get git CdA
+$project = "CdA"
+$folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\github.com"
+$path = "$folder\$project"
+if (Test-Path (Get-Item "Env:USERPROFILE").Value) { if (!($folder | Test-Path)) { md -p $folder } }
+if (Test-Path $folder) { if (!($path | Test-Path)) { 
+	cd $folder
+	git clone "https://github.com/kaestnja/CdA.git" 
+	#git clone "https://username:password@code.siemens.com/jan.kaestner/CdA.git"
+	}
+}
+if (Test-Path $path) { 
+	cd $path
+	git pull "https://github.com/kaestnja/CdA.git"
+	#git pull "https://username:password@code.siemens.com/jan.kaestner/CdA.git"
+	python -m pip install -r requirements.txt
+}
