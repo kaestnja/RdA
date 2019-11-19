@@ -177,4 +177,5 @@ if (Test-Path $path) {
 	git pull "https://github.com/kaestnja/CdA.git"
 	#git pull "https://username:password@code.siemens.com/jan.kaestner/CdA.git"
 	python -m pip install -r requirements.txt
+	git status
 }
