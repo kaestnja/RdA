@@ -95,14 +95,17 @@ if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirec
 #C:\MongoDB\Server\4.2\bin\mongod.exe --bind_ip 127.0.0.1 --port 27017
 #shortcut
 $WshShell = New-Object -comObject WScript.Shell
-$Shortcut = $WshShell.CreateShortcut("$Home\Desktop\MongoDB.lnk")
-$Shortcut.TargetPath = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe"
-$Shortcut.Arguments = "--dbpath `"C:\MongoDB\data`" --bind_ip 127.0.0.1 --port 27017"
-$Shortcut.Description = "start local MongoDB"
-#$Shortcut.IconLocation = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe, 1"
-$Shortcut.WindowStyle = "1"
-$Shortcut.WorkingDirectory = "${env:ProgramFiles}\MongoDB\Server\4.2\bin"
-$Shortcut.Save()
+$folder = (Get-Item "Env:Home").Value + "\Desktop"
+if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
+if (Test-Path $folder) { 
+	$Shortcut = $WshShell.CreateShortcut("$folder\MongoDB.lnk") 
+	$Shortcut.TargetPath = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe"
+	$Shortcut.Arguments = "--dbpath `"C:\MongoDB\data`" --bind_ip 127.0.0.1 --port 27017"
+	$Shortcut.Description = "start local MongoDB"
+	#$Shortcut.IconLocation = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe, 1"
+	$Shortcut.WindowStyle = "1"
+	$Shortcut.WorkingDirectory = "${env:ProgramFiles}\MongoDB\Server\4.2\bin"
+	$Shortcut.Save()}
 
 $file = "npp.7.7.1.Installer.x64.exe"
 $path = "$temppath\$file"
@@ -156,6 +159,7 @@ ssh -T git@$SiemensProjectServer
 #Add-SshConnection -Name Server1 -Uri server1.jeremyskinner.co.uk -User jeremy
 #Start-SshAgent -Quiet
 
+#Get-Item "Env:"
 #get-childitem -path env:* | get-member
 #get git CdA
 $project = "CdA"
