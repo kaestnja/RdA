@@ -58,25 +58,27 @@ $folder = (Get-Item "Env:ProgramFiles").Value + "\Git\mingw64\bin"
 $path = "$folder\$file"
 if (Test-Path $folder) { if (!($path | Test-Path)) { curl https://eternallybored.org/misc/wget/1.20.3/64/wget.exe -OutFile $path } }
 
+#install python
 $file = "python-2.7.17.amd64.msi"
 $path = "$temppath\$file"
 if (!($path | Test-Path)) { curl https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi -OutFile $path }
-if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i python-2.7.17.amd64.msi" }
 if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i python-2.7.17.amd64.msi","/passive","/norestart" }
 
 $file = "python-3.8.0-amd64.exe"
 $path = "$temppath\$file"
 if (!($path | Test-Path)) { curl https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe -OutFile $path }
-#.\python-3.8.0-amd64.exe /passive InstallAllUsers=1 TargetDir=C:\Python38 PrependPath=1
 if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python38" }
 
 $file = "python-3.7.5-amd64.exe"
 $path = "$temppath\$file"
 if (!($path | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile $path }
-#.\python-3.7.5-amd64.exe /passive InstallAllUsers=1 TargetDir=C:\Python37 PrependPath=1
 if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" }
-python -m pip install --upgrade pip
 
+python -m pip install --upgrade pip
+python -m pip install --upgrade setuptools
+python -m pip install --upgrade wheel
+
+#install mongodb
 $file = "mongodb-compass-community-1.19.12-win32-x64.msi"
 $path = "$temppath\$file"
 if (!($path | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile $path }
