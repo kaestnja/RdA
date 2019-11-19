@@ -74,6 +74,7 @@ $path = "$temppath\$file"
 if (!($path | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile $path }
 if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" }
 
+python --version
 python -m pip install --upgrade pip
 python -m pip install --upgrade setuptools
 python -m pip install --upgrade wheel
