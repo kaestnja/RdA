@@ -107,7 +107,8 @@ if (Test-Path "$temppath") {
 	#C:\MongoDB\Server\4.2\bin\mongod.exe --bind_ip 127.0.0.1 --port 27017
 	#shortcut
 	$WshShell = New-Object -comObject WScript.Shell
-	$folder = (Get-Item "Env:Home").Value + "\Desktop"
+	$folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
+	if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
 	if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
 	if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
 	if (Test-Path $folder) { 
