@@ -199,7 +199,7 @@ if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRd
 if (Test-Path $path) { 
 	#$exitCode = Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" 
 	$exitCode = Start-Process -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru
-	echo $exitCode
+	echo "exitcode was:"$exitCode
 	}
 
 
