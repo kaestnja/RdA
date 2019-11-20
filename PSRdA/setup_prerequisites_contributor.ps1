@@ -142,7 +142,7 @@ Install-Module posh-git -force
 #PowerShellGet\Update-Module posh-sshell
 
 #now
-#Import-Module posh-git
+Import-Module posh-git
 #Import-Module posh-sshell
 #user
 Add-PoshGitToProfile -force
