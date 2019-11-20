@@ -1,10 +1,13 @@
 wmic os get caption
 wmic os get osarchitecture
+(Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
 $PSVersionTable.PSVersion
 Get-ExecutionPolicy
 #Set-ExecutionPolicy RemoteSigned
 #Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
 #Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
+
+#[Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://username:password@proxy:port/", [EnvironmentVariableTarget]::Machine)
 
 #Get-Childitem env:
 #get-childitem -path env:* | get-member
@@ -172,6 +175,28 @@ if (Test-Path $folder) { if (!($path | Test-Path)) {
 	#git clone "https://username:password@code.siemens.com/jan.kaestner/CdA.git"
 	}
 }
+
+
+#https://asawicki.info/news_1597_installing_visual_c_redistributable_package_from_command_line.html
+
+#https://docs.microsoft.com/de-de/visualstudio/releases/2019/system-requirements
+#https://docs.microsoft.com/en-us/visualstudio/install/build-tools-container?view=vs-2017
+
+$temppath = "C:\Temp"
+$file = "vs_buildtools_2019.exe"
+$path = "$temppath\$file"
+if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRdA/vs_buildtools_2019.exe -OutFile $path }
+#if (Test-Path $path) { Start-Process -Wait -FilePath "vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
+if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" }
+#vs_enterprise.exe --update --quiet --wait
+
+
+#vs_enterprise.exe [command] <options>
+#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
+#vs_enterprise.exe --update --quiet --wait
+#vs_enterprise.exe update --wait --passive --norestart --installPath "C:\installPathVS"
+#vs_enterprise.exe --installPath C:\desktopVS --addProductLang fr-FR --add Microsoft.VisualStudio.Workload.ManagedDesktop --includeRecommended --quiet --wait
+
 if (Test-Path $path) { 
 	cd $path
 	git pull "https://github.com/kaestnja/CdA.git"
