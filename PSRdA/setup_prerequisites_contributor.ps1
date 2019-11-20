@@ -203,11 +203,9 @@ if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRd
 if (Test-Path $path) { 
 	#$exitCode = Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" 
 	$exitCode = Start-Process -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru
-	echo "exitcode was:"$exitCode
 	}
-
-
 read-host "Press ENTER to continue..."
+echo "exitcode was:" + $exitCode
 
 #vs_enterprise.exe [command] <options>
 #vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
