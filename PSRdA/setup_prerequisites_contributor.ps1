@@ -223,7 +223,7 @@ if (Test-Path $path) {
 	git status
 }
 
-exit
+
 Function Pause ($Message = "Press any key to continue...") {
    # Check if running in PowerShell ISE
    If ($psISE) {
