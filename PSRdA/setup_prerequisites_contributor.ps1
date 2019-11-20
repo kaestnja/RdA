@@ -187,7 +187,12 @@ if (Test-Path $folder) { if (!($path | Test-Path)) {
 	#git clone "https://username:password@code.siemens.com/jan.kaestner/CdA.git"
 	}
 }
-
+if (Test-Path $path) { 
+	cd $path
+	git pull "https://github.com/kaestnja/CdA.git"
+	#git pull "https://username:password@code.siemens.com/jan.kaestner/CdA.git"
+	git status
+}
 
 #https://asawicki.info/news_1597_installing_visual_c_redistributable_package_from_command_line.html
 
@@ -203,9 +208,9 @@ if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRd
 if (Test-Path $path) { 
 	#$exitCode = Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" 
 	$exitCode = Start-Process -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru
+	echo "exitcode was:" + $exitCode
 	}
-read-host "Press ENTER to continue..."
-echo "exitcode was:" + $exitCode
+#read-host "Press ENTER to continue..."
 
 #vs_enterprise.exe [command] <options>
 #vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
@@ -213,6 +218,9 @@ echo "exitcode was:" + $exitCode
 #vs_enterprise.exe update --wait --passive --norestart --installPath "C:\installPathVS"
 #vs_enterprise.exe --installPath C:\desktopVS --addProductLang fr-FR --add Microsoft.VisualStudio.Workload.ManagedDesktop --includeRecommended --quiet --wait
 
+$project = "CdA"
+$folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\github.com"
+$path = "$folder\$project"
 if (Test-Path $path) { 
 	cd $path
 	git pull "https://github.com/kaestnja/CdA.git"
