@@ -106,6 +106,7 @@ if (Test-Path "$temppath") {
 	#shortcut
 	$WshShell = New-Object -comObject WScript.Shell
 	$folder = (Get-Item "Env:Home").Value + "\Desktop"
+	if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
 	if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
 	if (Test-Path $folder) { 
 		$Shortcut = $WshShell.CreateShortcut("$folder\MongoDB.lnk") 
