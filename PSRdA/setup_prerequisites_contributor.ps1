@@ -185,7 +185,7 @@ if (Test-Path $folder) { if (!($path | Test-Path)) {
 $temppath = "C:\Temp"
 $file = "vs_buildtools_2019.exe"
 $path = "$temppath\$file"
-if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRdA/vs_buildtools_2019.exe -OutFile $path }
+if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRdA/vs/vs_buildtools_2019.exe -OutFile $path }
 #if (Test-Path $path) { Start-Process -Wait -FilePath "vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
 if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" }
 #vs_enterprise.exe --update --quiet --wait
