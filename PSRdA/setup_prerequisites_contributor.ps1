@@ -106,6 +106,7 @@ if (Test-Path "$temppath") {
 	#C:\MongoDB\Server\4.2\bin\mongod.exe --dbpath "C:\MongoDB\data"  "C:\MongoDB\log" --bind_ip 127.0.0.1 --port 27017
 	#C:\MongoDB\Server\4.2\bin\mongod.exe --bind_ip 127.0.0.1 --port 27017
 	#shortcut
+	#dir env:\home*
 	$WshShell = New-Object -comObject WScript.Shell
 	$folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
 	if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
