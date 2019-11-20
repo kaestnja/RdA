@@ -12,6 +12,8 @@ Get-ExecutionPolicy
 #Get-Childitem env:
 #get-childitem -path env:* | get-member
 
+Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+
 #enable the verry long names for files and paths, just for sure
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "FileSystem@LongPathsEnabled" -Value 1
 #prevent download fails, if internet explorer was not first initilized with recommended microsoft settings
