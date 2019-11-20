@@ -41,12 +41,12 @@ if (Test-Path "$temppath") {
 	#if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/SILENT","/NORESTART","/NOCANCEL","/CLOSEAPPLICATIONS","/RESTARTAPPLICATIONS","/NoIcons=0","/SetupType=default","/EditorOption=Nano","/PathOption=Cmd","/SSHOption=OpenSSH","/TortoiseOption=false","/CURLOption=OpenSSL","/CRLFOption=CRLFCommitAsIs","/BashTerminalOption=MinTTY","/PerformanceTweaksFSCache=Enabled","/UseCredentialManager=Enabled","/EnableSymlinks=Disabled","/EnableBuiltinInteractiveAdd=Disabled","/COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
 
 	#should be in Windows Path now: ";C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;"
-	$windows_path = $env:Path -split ';'
-	$path = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\bin"
-	if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
-	$windows_path = $env:Path -split ';'
-	$path = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\cmd"
-	if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
+	#$windows_path = $env:Path -split ';'
+	#$path = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\bin"
+	#if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
+	#$windows_path = $env:Path -split ';'
+	#$path = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\cmd"
+	#if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
 
 	$windows_path = $env:Path -split ';'
 	$path = (Get-Item "Env:ProgramFiles").Value + "\Git\bin"
@@ -194,9 +194,14 @@ $file = "vs_buildtools_2019.exe"
 $path = "$temppath\$file"
 if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRdA/vs/vs_buildtools_2019.exe -OutFile $path }
 #if (Test-Path $path) { Start-Process -Wait -FilePath "vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
-if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" }
-$exitCode = Start-Process -FilePath vs_enterprise.exe -ArgumentList "--passive", "--wait" -Wait -PassThru
-echo $exitCode
+#if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" }
+if (Test-Path $path) { 
+	#$exitCode = Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" 
+	$exitCode = Start-Process -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru
+	echo $exitCode
+	}
+
+
 read-host "Press ENTER to continue..."
 
 #vs_enterprise.exe [command] <options>
