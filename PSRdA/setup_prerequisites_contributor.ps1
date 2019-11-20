@@ -188,8 +188,9 @@ $path = "$temppath\$file"
 if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRdA/vs/vs_buildtools_2019.exe -OutFile $path }
 #if (Test-Path $path) { Start-Process -Wait -FilePath "vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
 if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" }
-#vs_enterprise.exe --update --quiet --wait
-
+$exitCode = Start-Process -FilePath vs_enterprise.exe -ArgumentList "--passive", "--wait" -Wait -PassThru
+echo $exitCode
+read-host "Press ENTER to continue..."
 
 #vs_enterprise.exe [command] <options>
 #vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
