@@ -30,11 +30,15 @@ if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desk
 if (Test-Path $folder) { echo "found: $folder" }
 
 #check and prepare (and correct) the Powershell profile, maybe the session have to be restarted?
-if (!($profile | Test-Path)) {New-Item -path $profile -type file -force} else {echo "current powershell profile: $profile"}
+if (!($profile | Test-Path)) {New-Item -path $profile -type file -force}
 
 ####################################################################################################################################
 #check TLS problem of PS defaults, ServicePointManager changes are applied per AppDomain ! for globally see https://johnlouros.com/blog/enabling-strong-cryptography-for-all-dot-net-applications and https://referencesource.microsoft.com/#System/net/System/Net/SecureProtocols/SslStream.cs,121
-[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::SystemDefault
+# default 
+#[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::SystemDefault
+
+
+
 #Invoke-RestMethod -Uri https://api.github.com/ -Method Get ;
 $exitCode = Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
 $exitCode = Invoke-RestMethod 'https://github.com/kaestnja/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
@@ -64,21 +68,12 @@ if (Test-Path "HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCry
 # set strong cryptography on 32 bit .Net Framework (version 4 and above)
 #Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord 
 
-$data = get-content $profile
-$securityprotocoldefined = 0
-foreach($line in $data)
-{
-   echo $line
-   if ( $line -contains '[Net.ServicePointManager]::SecurityProtocol') {$securityprotocoldefined = 1}
-}
-if (Test-Path $profile) { 
-if ($securityprotocoldefined -eq 0) { 
-@"
-# Configure PowerShell Transport Layer Security Protocols
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls11, [Net.SecurityProtocolType]::Tls12 ;
-"@ | Out-File -FilePath $profile -Append
-}
-}
+$data = Get-Content -Raw -Path $profile
+if (!($data -like "*Net.ServicePointManager*")) {Add-Content $profile "# Configure PowerShell Transport Layer Security Protocols";
+Add-Content $profile "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls11, [Net.SecurityProtocolType]::Tls12 ;";}
+$data = Get-Content -Path $profile
+echo $data
+
 ####################################################################################################################################
 
 #check proxy 
