@@ -5,16 +5,31 @@ wmic os get caption
 wmic os get osarchitecture
 (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
 $PSVersionTable.PSVersion
-if (!($profile | Test-Path)) {echo "no powershell profile found"} else {echo "current powershell profile: $profile"}
 
-#prepare executability
+#check and generate the Powershell profile, maybe the session have to be restarted?
+if (!($profile | Test-Path)) {echo "no powershell profile found"} else {echo "current powershell profile: $profile"}
+if (!($profile | Test-Path)) {New-Item -path $profile -type file -force}
+
+#identify the correct userprofile path, need to prepare desktop links and others
+#Get-Childitem env:
+#Get-Childitem -path env:* | get-member
+$folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
+if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
+if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
+if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
+if (Test-Path $folder) { echo "found: $folder" }
+
+#eventually prepare executability
 Get-ExecutionPolicy
 #Set-ExecutionPolicy RemoteSigned
 #Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
-#Get-Childitem env:
-#get-childitem -path env:* | get-member
 
-#check for needed system reboot, which should be done first
+#enable the verry long names for files and paths, just for sure
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "FileSystem@LongPathsEnabled" -Value 1
+#prevent download fails, if internet explorer was not first initilized with recommended microsoft settings
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Internet Explorer\Main" -Name "DisableFirstRunCustomize" -Value 2
+
+#check for a needed system reboot, which should be done first
 if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired") {read-host "reboot needed! Press ENTER to continue..."}
 if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending") {read-host "reboot needed! Press ENTER to continue..."}
 if (Test-Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations") {read-host "reboot needed! Press ENTER to continue..."}
@@ -22,22 +37,19 @@ if (Test-Path "HKLM:\SYSTEM\ControlSet001\Control\Session Manager\PendingFileRen
 if (Test-Path "HKLM:\SYSTEM\ControlSet002\Control\Session Manager\PendingFileRenameOperations") {read-host "reboot needed! Press ENTER to continue..."}
 if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\InProgress") {read-host "reboot needed! Press ENTER to continue..."}
 
-#identify the correct userprofile path
-$folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
-if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
-if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
-if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
-if (Test-Path $folder) { echo "found: $folder" }
-
-#check and prepare (and correct) the Powershell profile, maybe the session have to be restarted?
-if (!($profile | Test-Path)) {New-Item -path $profile -type file -force}
-
 ####################################################################################################################################
 #check TLS problem of PS defaults, ServicePointManager changes are applied per AppDomain ! for globally see https://johnlouros.com/blog/enabling-strong-cryptography-for-all-dot-net-applications and https://referencesource.microsoft.com/#System/net/System/Net/SecureProtocols/SslStream.cs,121
+if (Test-Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCrypto") {read-host "strong crypto not globaly enabled! Press ENTER to continue..."}
+if (Test-Path "HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCrypto") {read-host "strong crypto not globaly enabled! Press ENTER to continue..."}
+# set strong cryptography on 64 bit .Net Framework (version 4 and above)
+#Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
+# set strong cryptography on 32 bit .Net Framework (version 4 and above)
+#Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord 
+
 # default 
 #[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::SystemDefault
-
-
+# needed
+#[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 
 #Invoke-RestMethod -Uri https://api.github.com/ -Method Get ;
 $exitCode = Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
@@ -55,18 +67,9 @@ $myUri ="https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md"
 [System.Net.ServicePointManager]::FindServicePoint($myUri)
 ServicePoint mySP = ServicePointManager.FindServicePoint(myUri);
 
-[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::SystemDefault
-#[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 #to be stored in Microsoft.PowerShell_profile.ps1 and/or Microsoft.PowerShellISE_profile.ps1 ? 
 #\OneDrive\Dokumente\WindowsPowerShell\Microsoft.PowerShell_profile.ps1 \OneDrive\Dokumente\PowerShell\Microsoft.PowerShell_profile.ps1
 #Else, it is a per session setting. The cmdlets like Invoke-RestMethod will always by default use, TLS 1.0, so prior to making the call you would have the have the code 
-
-if (Test-Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCrypto") {read-host "strong crypto not globaly enabled! Press ENTER to continue..."}
-if (Test-Path "HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCrypto") {read-host "strong crypto not globaly enabled! Press ENTER to continue..."}
-# set strong cryptography on 64 bit .Net Framework (version 4 and above)
-#Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
-# set strong cryptography on 32 bit .Net Framework (version 4 and above)
-#Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord 
 
 $data = Get-Content -Raw -Path $profile
 if (!($data -like "*Net.ServicePointManager*")) {Add-Content $profile "# Configure PowerShell Transport Layer Security Protocols";
@@ -74,19 +77,12 @@ Add-Content $profile "[Net.ServicePointManager]::SecurityProtocol = [Net.Securit
 $data = Get-Content -Path $profile
 echo $data
 
-####################################################################################################################################
-
 #check proxy 
 #[Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://username:password@proxy:port/", [EnvironmentVariableTarget]::Machine)
-
-#enable the verry long names for files and paths, just for sure
-Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "FileSystem@LongPathsEnabled" -Value 1
-#prevent download fails, if internet explorer was not first initilized with recommended microsoft settings
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Internet Explorer\Main" -Name "DisableFirstRunCustomize" -Value 2
-
+####################################################################################################################################
 #Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
-
+####################################################################################################################################
 $temppath = "C:\Temp"
 if (!($temppath | Test-Path)) { md -p "$temppath" }
 if (Test-Path "$temppath") {
@@ -163,18 +159,18 @@ if (Test-Path "$temppath") {
 	$file = "mongodb-compass-community-1.19.12-win32-x64.msi"
 	$path = "$temppath\$file"
 	if (!($path | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile $path }
+	#developer gets a mongodb-compass as application, which is able to edit mongodb completely
 	if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
 	if (!("C:\MongoDB\data" | Test-Path)) { md -p "C:\MongoDB\data" }
 	if (!("C:\MongoDB\log" | Test-Path)) { md -p "C:\MongoDB\log" }
 	$file = "mongodb-win32-x86_64-2012plus-4.2.1-signed.msi"
 	$path = "$temppath\$file"
 	if (!($path | Test-Path)) { curl https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-4.2.1-signed.msi -OutFile $path }
-	#developer
+	#developer gets a mongodb as application (not as service), which have to be startet with a shortcut on the desktop
 	if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerNoService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
 	#C:\MongoDB\Server\4.2\bin\mongod.exe --dbpath "C:\MongoDB\data"  "C:\MongoDB\log" --bind_ip 127.0.0.1 --port 27017
 	#C:\MongoDB\Server\4.2\bin\mongod.exe --bind_ip 127.0.0.1 --port 27017
-	#shortcut
-	#dir env:\home*
+	#find all home paths:  dir env:\home*
 	$WshShell = New-Object -comObject WScript.Shell
 	$folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
 	if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
@@ -189,7 +185,8 @@ if (Test-Path "$temppath") {
 		$Shortcut.WindowStyle = "1"
 		$Shortcut.WorkingDirectory = "${env:ProgramFiles}\MongoDB\Server\4.2\bin"
 		$Shortcut.Save()}
-
+	
+	#developer gets an allround editor
 	$file = "npp.7.7.1.Installer.x64.exe"
 	$path = "$temppath\$file"
 	if (!($path | Test-Path)) { curl https://notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.x64.exe -OutFile $path }
@@ -200,6 +197,26 @@ if (Test-Path "$temppath") {
 	if (!($path | Test-Path)) { curl http://download.notepad-plus-plus.org/repository/7.x/7.8.1/npp.7.8.1.Installer.x64.exe -OutFile $path }
 	#if (Test-Path $path) { Start-Process -Wait -FilePath "npp.7.8.1.Installer.x64.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
 	if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/S" }
+
+	#https://asawicki.info/news_1597_installing_visual_c_redistributable_package_from_command_line.html
+	#https://docs.microsoft.com/de-de/visualstudio/releases/2019/system-requirements
+	#https://docs.microsoft.com/en-us/visualstudio/install/build-tools-container?view=vs-2017
+	$file = "vs_buildtools_2019.exe"
+	$path = "$temppath\$file"
+	if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRdA/vs/vs_buildtools_2019.exe -OutFile $path }
+	#if (Test-Path $path) { Start-Process -Wait -FilePath "vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
+	#if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" }
+	if (Test-Path $path) { 
+		#$exitCode = Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" 
+		$exitCode = Start-Process -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
+		echo "exitcode was: + $exitCode";
+		read-host "Press ENTER to continue...";
+		}
+	#vs_enterprise.exe [command] <options>
+	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
+	#vs_enterprise.exe --update --quiet --wait
+	#vs_enterprise.exe update --wait --passive --norestart --installPath "C:\installPathVS"
+	#vs_enterprise.exe --installPath C:\desktopVS --addProductLang fr-FR --add Microsoft.VisualStudio.Workload.ManagedDesktop --includeRecommended --quiet --wait
 
 }
 
@@ -262,30 +279,6 @@ if (Test-Path $path) {
 	#git pull "https://username:password@code.siemens.com/jan.kaestner/CdA.git"
 	git status
 }
-
-#https://asawicki.info/news_1597_installing_visual_c_redistributable_package_from_command_line.html
-
-#https://docs.microsoft.com/de-de/visualstudio/releases/2019/system-requirements
-#https://docs.microsoft.com/en-us/visualstudio/install/build-tools-container?view=vs-2017
-
-$temppath = "C:\Temp"
-$file = "vs_buildtools_2019.exe"
-$path = "$temppath\$file"
-if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRdA/vs/vs_buildtools_2019.exe -OutFile $path }
-#if (Test-Path $path) { Start-Process -Wait -FilePath "vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
-#if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" }
-if (Test-Path $path) { 
-	#$exitCode = Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" 
-	$exitCode = Start-Process -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru
-	echo "exitcode was:" + $exitCode
-	}
-#read-host "Press ENTER to continue..."
-
-#vs_enterprise.exe [command] <options>
-#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
-#vs_enterprise.exe --update --quiet --wait
-#vs_enterprise.exe update --wait --passive --norestart --installPath "C:\installPathVS"
-#vs_enterprise.exe --installPath C:\desktopVS --addProductLang fr-FR --add Microsoft.VisualStudio.Workload.ManagedDesktop --includeRecommended --quiet --wait
 
 $project = "CdA"
 $folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\github.com"
