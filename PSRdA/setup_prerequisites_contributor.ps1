@@ -37,8 +37,7 @@ if (Test-Path "HKLM:\SYSTEM\ControlSet001\Control\Session Manager\PendingFileRen
 if (Test-Path "HKLM:\SYSTEM\ControlSet002\Control\Session Manager\PendingFileRenameOperations") {read-host "reboot needed! Press ENTER to continue..."}
 if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\InProgress") {read-host "reboot needed! Press ENTER to continue..."}
 
-####################################################################################################################################
-#check TLS problem of PS defaults, ServicePointManager changes are applied per AppDomain ! for globally see https://johnlouros.com/blog/enabling-strong-cryptography-for-all-dot-net-applications and https://referencesource.microsoft.com/#System/net/System/Net/SecureProtocols/SslStream.cs,121
+#check a bunch of TLS problems of PS defaults, ServicePointManager changes are applied per AppDomain ! for globally see https://johnlouros.com/blog/enabling-strong-cryptography-for-all-dot-net-applications and https://referencesource.microsoft.com/#System/net/System/Net/SecureProtocols/SslStream.cs,121
 if (Test-Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCrypto") {read-host "strong crypto not globaly enabled! Press ENTER to continue..."}
 if (Test-Path "HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCrypto") {read-host "strong crypto not globaly enabled! Press ENTER to continue..."}
 # set strong cryptography on 64 bit .Net Framework (version 4 and above)
@@ -51,31 +50,34 @@ if (Test-Path "HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCry
 # needed
 #[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 
-#Invoke-RestMethod -Uri https://api.github.com/ -Method Get ;
-$exitCode = Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
-$exitCode = Invoke-RestMethod 'https://github.com/kaestnja/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
-#$exitCode = Invoke-WebRequest -Uri 'https://github.com/kaestnja/RdA/raw/master/README.md' -OutFile 'C:\Temp\README.md'; echo "exitcode was: $exitCode";
-$exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
-$exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
-#$exitCode = Invoke-WebRequest -Uri 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md' -OutFile 'C:\Temp\README.md'; echo "exitcode was: $exitCode";
-
-$myUri ="https://github.com/"
-$myUri ="https://github.com/kaestnja/RdA/raw/master/README.md"
-$myUri ="https://github.com/kaestnja/CdA/raw/master/README.md"
-$myUri ="https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md"
-$myUri ="https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md"
-[System.Net.ServicePointManager]::FindServicePoint($myUri)
-ServicePoint mySP = ServicePointManager.FindServicePoint(myUri);
-
 #to be stored in Microsoft.PowerShell_profile.ps1 and/or Microsoft.PowerShellISE_profile.ps1 ? 
 #\OneDrive\Dokumente\WindowsPowerShell\Microsoft.PowerShell_profile.ps1 \OneDrive\Dokumente\PowerShell\Microsoft.PowerShell_profile.ps1
-#Else, it is a per session setting. The cmdlets like Invoke-RestMethod will always by default use, TLS 1.0, so prior to making the call you would have the have the code 
+#Else, it is a per session setting. The cmdlets like Invoke-RestMethod will always by default use, TLS 1.0
+if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityProtocolType]::SystemDefault){echo "PowerShell Transport Layer Security Protocols is maybe to weak (default)";
+	#enable TLS1.2 for now:
+	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+	#enter TLS1.2 into Powershell profile for next script too:
+	$data = Get-Content -Raw -Path $profile; echo $data;
+	if (!($data -like "*Net.ServicePointManager*")) {Add-Content $profile "# Configure PowerShell Transport Layer Security Protocols";
+		Add-Content $profile "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls11, [Net.SecurityProtocolType]::Tls12 ;";};
+	$data = Get-Content -Path $profile; echo $data;}
 
-$data = Get-Content -Raw -Path $profile
-if (!($data -like "*Net.ServicePointManager*")) {Add-Content $profile "# Configure PowerShell Transport Layer Security Protocols";
-Add-Content $profile "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls11, [Net.SecurityProtocolType]::Tls12 ;";}
-$data = Get-Content -Path $profile
-echo $data
+####################################################################################################################################
+#Invoke-RestMethod -Uri https://api.github.com/ -Method Get ;
+#$exitCode = Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
+#$exitCode = Invoke-RestMethod 'https://github.com/kaestnja/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
+##$exitCode = Invoke-WebRequest -Uri 'https://github.com/kaestnja/RdA/raw/master/README.md' -OutFile 'C:\Temp\README.md'; echo "exitcode was: $exitCode";
+#$exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
+#$exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
+##$exitCode = Invoke-WebRequest -Uri 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md' -OutFile 'C:\Temp\README.md'; echo "exitcode was: $exitCode";
+
+#$myUri ="https://github.com/"
+#$myUri ="https://github.com/kaestnja/RdA/raw/master/README.md"
+#$myUri ="https://github.com/kaestnja/CdA/raw/master/README.md"
+#$myUri ="https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md"
+#$myUri ="https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md"
+#[System.Net.ServicePointManager]::FindServicePoint($myUri)
+#ServicePoint mySP = ServicePointManager.FindServicePoint(myUri);
 
 #check proxy 
 #[Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://username:password@proxy:port/", [EnvironmentVariableTarget]::Machine)
