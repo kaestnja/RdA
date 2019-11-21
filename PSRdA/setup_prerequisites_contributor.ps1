@@ -14,9 +14,9 @@ if (!($profile | Test-Path)) {New-Item -path $profile -type file -force}
 #Get-Childitem env:
 #Get-Childitem -path env:* | get-member
 $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
-if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
+if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
 if (Test-Path $folder) { echo "found: $folder" }
 
 #eventually prepare executability
@@ -55,7 +55,8 @@ if (Test-Path "HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCry
 #Else, it is a per session setting. The cmdlets like Invoke-RestMethod will always by default use, TLS 1.0
 if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityProtocolType]::SystemDefault){echo "PowerShell Transport Layer Security Protocols is maybe to weak (default)";
 	#enable TLS1.2 for now:
-	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+	#[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+	[Net.ServicePointManager]::SecurityProtocol = ([Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12);
 	#enter TLS1.2 into Powershell profile for next script too:
 	$data = Get-Content -Raw -Path $profile; echo $data;
 	if (!($data -like "*Net.ServicePointManager*")) {Add-Content $profile "# Configure PowerShell Transport Layer Security Protocols";
