@@ -34,11 +34,24 @@ if (!($profile | Test-Path)) {New-Item -path $profile -type file -force} else {e
 
 ####################################################################################################################################
 #check TLS problem of PS defaults, ServicePointManager changes are applied per AppDomain ! for globally see https://johnlouros.com/blog/enabling-strong-cryptography-for-all-dot-net-applications and https://referencesource.microsoft.com/#System/net/System/Net/SecureProtocols/SslStream.cs,121
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::SystemDefault
 #Invoke-RestMethod -Uri https://api.github.com/ -Method Get ;
 $exitCode = Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
+$exitCode = Invoke-RestMethod 'https://github.com/kaestnja/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
 #$exitCode = Invoke-WebRequest -Uri 'https://github.com/kaestnja/RdA/raw/master/README.md' -OutFile 'C:\Temp\README.md'; echo "exitcode was: $exitCode";
 $exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
+$exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
 #$exitCode = Invoke-WebRequest -Uri 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md' -OutFile 'C:\Temp\README.md'; echo "exitcode was: $exitCode";
+
+$myUri ="https://github.com/"
+$myUri ="https://github.com/kaestnja/RdA/raw/master/README.md"
+$myUri ="https://github.com/kaestnja/CdA/raw/master/README.md"
+$myUri ="https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md"
+$myUri ="https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md"
+[System.Net.ServicePointManager]::FindServicePoint($myUri)
+ServicePoint mySP = ServicePointManager.FindServicePoint(myUri);
+
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::SystemDefault
 #[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 #to be stored in Microsoft.PowerShell_profile.ps1 and/or Microsoft.PowerShellISE_profile.ps1 ? 
 #\OneDrive\Dokumente\WindowsPowerShell\Microsoft.PowerShell_profile.ps1 \OneDrive\Dokumente\PowerShell\Microsoft.PowerShell_profile.ps1
@@ -51,11 +64,20 @@ if (Test-Path "HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCry
 # set strong cryptography on 32 bit .Net Framework (version 4 and above)
 #Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord 
 
+$data = get-content $profile
+$securityprotocoldefined = 0
+foreach($line in $data)
+{
+   echo $line
+   if ( $line -contains '[Net.ServicePointManager]::SecurityProtocol') {$securityprotocoldefined = 1}
+}
 if (Test-Path $profile) { 
+if ($securityprotocoldefined -eq 0) { 
 @"
 # Configure PowerShell Transport Layer Security Protocols
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls11, [Net.SecurityProtocolType]::Tls12 ;
 "@ | Out-File -FilePath $profile -Append
+}
 }
 ####################################################################################################################################
 
@@ -200,7 +222,8 @@ Install-Module posh-git -force
 Import-Module posh-git
 #Import-Module posh-sshell
 #user
-Add-PoshGitToProfile -force
+Add-PoshGitToProfile
+#Add-PoshGitToProfile -force
 #Add-PoshSshellToProfile
 #all
 #Add-PoshGitToProfile -AllUsers -AllHosts
