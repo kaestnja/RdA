@@ -42,8 +42,10 @@ if (Test-Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319\Sch
 if (Test-Path "HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCrypto") {read-host "strong crypto not globaly enabled! Press ENTER to continue..."}
 # set strong cryptography on 64 bit .Net Framework (version 4 and above)
 #Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
+#new-itemproperty -path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319" -name "SchUseStrongCrypto" -Value 1 -PropertyType "DWord"
 # set strong cryptography on 32 bit .Net Framework (version 4 and above)
 #Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord 
+#new-itemproperty -path "HKLM:\SOFTWARE\Microsoft\.NETFramework\v4.0.30319" -name "SchUseStrongCrypto" -Value 1 -PropertyType "DWord";
 
 # default 
 #[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::SystemDefault
