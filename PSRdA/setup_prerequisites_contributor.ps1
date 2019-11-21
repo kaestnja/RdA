@@ -1,14 +1,19 @@
+#plz replace all – with - , except in this line. those came from copy snipets from internet.
+
+#report some important info
 wmic os get caption
 wmic os get osarchitecture
 (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
 $PSVersionTable.PSVersion
+
+#prepare executability
 Get-ExecutionPolicy
 #Set-ExecutionPolicy RemoteSigned
 #Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
 #Get-Childitem env:
 #get-childitem -path env:* | get-member
 
-#check for needed reboot
+#check for needed system reboot, which should be done first
 if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired") {read-host "reboot needed! Press ENTER to continue..."}
 if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending") {read-host "reboot needed! Press ENTER to continue..."}
 if (Test-Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations") {read-host "reboot needed! Press ENTER to continue..."}
@@ -16,16 +21,46 @@ if (Test-Path "HKLM:\SYSTEM\ControlSet001\Control\Session Manager\PendingFileRen
 if (Test-Path "HKLM:\SYSTEM\ControlSet002\Control\Session Manager\PendingFileRenameOperations") {read-host "reboot needed! Press ENTER to continue..."}
 if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\InProgress") {read-host "reboot needed! Press ENTER to continue..."}
 
-#Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
+#identify the correct userprofile path
+$folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
+if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
+if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
+if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
+if (Test-Path $folder) { echo "found: $folder" }
 
+#check and prepare (and correct) the Powershell profile, maybe the session have to be restarted?
+if (!($profile | Test-Path)) {New-Item -path $profile -type file -force} else {echo $profile}
+
+####################################################################################################################################
+#check TLS problem of PS defaults 
+#Invoke-RestMethod -Uri https://api.github.com/ -Method Get ;
+$exitCode = Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
+$exitCode = Invoke-WebRequest -Uri 'https://github.com/kaestnja/RdA/raw/master/README.md' -OutFile 'C:\Temp\README.md'; echo "exitcode was: $exitCode";
+$exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
+$exitCode = Invoke-WebRequest -Uri 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md' -OutFile 'C:\Temp\README.md'; echo "exitcode was: $exitCode";
+#[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+#to be stored in Microsoft.PowerShell_profile.ps1 and/or Microsoft.PowerShellISE_profile.ps1 ? 
+#\OneDrive\Dokumente\WindowsPowerShell\Microsoft.PowerShell_profile.ps1 \OneDrive\Dokumente\PowerShell\Microsoft.PowerShell_profile.ps1
+#Else, it is a per session setting. The cmdlets like Invoke-RestMethod will always by default use, TLS 1.0, so prior to making the call you would have the have the code 
+
+if (Test-Path $profile) { 
+@"
+# Configure PowerShell Transport Layer Security Protocols
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls11, [Net.SecurityProtocolType]::Tls12 ;
+"@ | Out-File -FilePath $profile -Append
+}
+####################################################################################################################################
+
+#check proxy 
 #[Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://username:password@proxy:port/", [EnvironmentVariableTarget]::Machine)
-
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 
 #enable the verry long names for files and paths, just for sure
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "FileSystem@LongPathsEnabled" -Value 1
 #prevent download fails, if internet explorer was not first initilized with recommended microsoft settings
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Internet Explorer\Main" -Name "DisableFirstRunCustomize" -Value 2
+
+#Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
+Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 
 $temppath = "C:\Temp"
 if (!($temppath | Test-Path)) { md -p "$temppath" }
