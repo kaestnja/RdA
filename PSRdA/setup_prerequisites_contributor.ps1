@@ -67,12 +67,11 @@ if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityP
 
 ####################################################################################################################################
 #Invoke-RestMethod -Uri https://api.github.com/ -Method Get ;
+
 #$exitCode = Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
 #$exitCode = Invoke-RestMethod 'https://github.com/kaestnja/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
-##$exitCode = Invoke-WebRequest -Uri 'https://github.com/kaestnja/RdA/raw/master/README.md' -OutFile 'C:\Temp\README.md'; echo "exitcode was: $exitCode";
 #$exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
 #$exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
-##$exitCode = Invoke-WebRequest -Uri 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md' -OutFile 'C:\Temp\README.md'; echo "exitcode was: $exitCode";
 
 #$myUri ="https://github.com/"
 #$myUri ="https://github.com/kaestnja/RdA/raw/master/README.md"
@@ -92,6 +91,10 @@ $temppath = "C:\Temp"
 if (!($temppath | Test-Path)) { md -p "$temppath" }
 if (Test-Path "$temppath") {
 	cd $temppath
+	Invoke-WebRequest -Uri 'https://github.com/kaestnja/RdA/raw/master/README.md' -OutFile "$temppath\README_RdA_Github.md";
+	Invoke-WebRequest -Uri 'https://github.com/kaestnja/CdA/raw/master/README.md' -OutFile "$temppath\README_CdA_Github.md";
+	Invoke-WebRequest -Uri 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md' -OutFile "$temppath\README_RdA_Code.md";
+	Invoke-WebRequest -Uri 'https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md' -OutFile "$temppath\README_CdA_Code.md";
 
 	#Install PScore6 
 	#iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
