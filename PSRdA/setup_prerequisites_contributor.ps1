@@ -5,12 +5,20 @@ $PSVersionTable.PSVersion
 Get-ExecutionPolicy
 #Set-ExecutionPolicy RemoteSigned
 #Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
+#Get-Childitem env:
+#get-childitem -path env:* | get-member
+
+#check for needed reboot
+if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired") {read-host "reboot needed! Press ENTER to continue..."}
+if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending") {read-host "reboot needed! Press ENTER to continue..."}
+if (Test-Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations") {read-host "reboot needed! Press ENTER to continue..."}
+if (Test-Path "HKLM:\SYSTEM\ControlSet001\Control\Session Manager\PendingFileRenameOperations") {read-host "reboot needed! Press ENTER to continue..."}
+if (Test-Path "HKLM:\SYSTEM\ControlSet002\Control\Session Manager\PendingFileRenameOperations") {read-host "reboot needed! Press ENTER to continue..."}
+if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\InProgress") {read-host "reboot needed! Press ENTER to continue..."}
+
 #Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
 
 #[Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://username:password@proxy:port/", [EnvironmentVariableTarget]::Machine)
-
-#Get-Childitem env:
-#get-childitem -path env:* | get-member
 
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 
