@@ -1,4 +1,22 @@
-#plz replace all – with - , except in this line. those came from copy snipets from internet.
+#plz replace all –   with - " , except in this line. those came from copy snipets from internet.
+$temppath = "C:\Temp"
+$gitserver = 'github.com'
+$gituser = 'kaestnja'
+
+ssh -T "git@$gitserver"
+
+#~/.ssh/config
+#Connect-Ssh
+#Add-SshConnection -Name gitserver -Uri "$gitserver" -User "$gituser""
+#Add-SshConnection -Name Server1 -Uri server1.jeremyskinner.co.uk -User jeremy
+#Start-SshAgent -Quiet
+
+#check proxy maybe set proxy
+#[Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://username:password@proxy:port/", [EnvironmentVariableTarget]::Machine)
+#$myPipProxy='--proxy=http://194.145.60.1:9400'
+#$myPipProxy='--proxy=http://server:port'
+#$myPipProxy='--proxy=https://user@server:port'
+#$myPipProxy='--proxy=https://user:pass@server:port'
 
 #report some important info
 wmic os get caption
@@ -37,27 +55,8 @@ if (Test-Path "HKLM:\SYSTEM\ControlSet001\Control\Session Manager\PendingFileRen
 if (Test-Path "HKLM:\SYSTEM\ControlSet002\Control\Session Manager\PendingFileRenameOperations") {read-host "reboot needed! Press ENTER to continue..."}
 if (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\InProgress") {read-host "reboot needed! Press ENTER to continue..."}
 
-#check a bunch of TLS problems of PS defaults, ServicePointManager changes are applied per AppDomain ! for globally see https://johnlouros.com/blog/enabling-strong-cryptography-for-all-dot-net-applications and https://referencesource.microsoft.com/#System/net/System/Net/SecureProtocols/SslStream.cs,121
-if (Test-Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCrypto") {read-host "strong crypto not globaly enabled! Press ENTER to continue..."}
-if (Test-Path "HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319\SchUseStrongCrypto") {read-host "strong crypto not globaly enabled! Press ENTER to continue..."}
-# set strong cryptography on 64 bit .Net Framework (version 4 and above)
-#Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
-#new-itemproperty -path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319" -name "SchUseStrongCrypto" -Value 1 -PropertyType "DWord"
-# set strong cryptography on 32 bit .Net Framework (version 4 and above)
-#Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord 
-#new-itemproperty -path "HKLM:\SOFTWARE\Microsoft\.NETFramework\v4.0.30319" -name "SchUseStrongCrypto" -Value 1 -PropertyType "DWord";
-
-# default 
-#[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::SystemDefault
-# needed
-#[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-
-#to be stored in Microsoft.PowerShell_profile.ps1 and/or Microsoft.PowerShellISE_profile.ps1 ? 
-#\OneDrive\Dokumente\WindowsPowerShell\Microsoft.PowerShell_profile.ps1 \OneDrive\Dokumente\PowerShell\Microsoft.PowerShell_profile.ps1
-#Else, it is a per session setting. The cmdlets like Invoke-RestMethod will always by default use, TLS 1.0
 if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityProtocolType]::SystemDefault){echo "PowerShell Transport Layer Security Protocols is maybe to weak (default)";
-	#enable TLS1.2 for now:
-	#[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+	#to enable TLS1.2 for now: [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 	[Net.ServicePointManager]::SecurityProtocol = ([Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12);
 	#enter TLS1.2 into Powershell profile for next script too:
 	$data = Get-Content -Raw -Path $profile; echo $data;
@@ -66,116 +65,84 @@ if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityP
 	$data = Get-Content -Path $profile; echo $data;}
 
 ####################################################################################################################################
-#Invoke-RestMethod -Uri https://api.github.com/ -Method Get ;
-
-#$exitCode = Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
-#$exitCode = Invoke-RestMethod 'https://github.com/kaestnja/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
-#$exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md'; echo "exitcode was: $exitCode";
-#$exitCode = Invoke-RestMethod 'https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md'; echo "exitcode was: $exitCode";
-
-#$myUri ="https://github.com/"
-#$myUri ="https://github.com/kaestnja/RdA/raw/master/README.md"
-#$myUri ="https://github.com/kaestnja/CdA/raw/master/README.md"
-#$myUri ="https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md"
-#$myUri ="https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md"
-#[System.Net.ServicePointManager]::FindServicePoint($myUri)
-#ServicePoint mySP = ServicePointManager.FindServicePoint(myUri);
-
-#check proxy 
-#[Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://username:password@proxy:port/", [EnvironmentVariableTarget]::Machine)
-####################################################################################################################################
 #Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 ####################################################################################################################################
-$temppath = "C:\Temp"
+
 if (!($temppath | Test-Path)) { md -p "$temppath" }
 if (Test-Path "$temppath") {
 	cd $temppath
-	Invoke-WebRequest -Uri 'https://github.com/kaestnja/RdA/raw/master/README.md' -OutFile "$temppath\README_RdA_Github.md";
-	Invoke-WebRequest -Uri 'https://github.com/kaestnja/CdA/raw/master/README.md' -OutFile "$temppath\README_CdA_Github.md";
-	Invoke-WebRequest -Uri 'https://code.siemens.com/jan.kaestner/RdA/raw/master/README.md' -OutFile "$temppath\README_RdA_Code.md";
-	Invoke-WebRequest -Uri 'https://code.siemens.com/jan.kaestner/CdA/raw/master/README.md' -OutFile "$temppath\README_CdA_Code.md";
+	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/README.md" -OutFile "$temppath\README_RdA_Github.md";
 
 	#Install PScore6 
 	#iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
 	$file = "PowerShell-6.2.3-win-x64.msi"
-	$path = "$temppath\$file"
-	if (!($path | Test-Path)) { curl https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/PowerShell-6.2.3-win-x64.msi -OutFile $path }
+	if (!("$temppath\$file" | Test-Path)) { curl https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/PowerShell-6.2.3-win-x64.msi -OutFile "$temppath\$file" }
 	#msiexec.exe /l*v mdbinstall.log /qb /i PowerShell-6.2.3-win-x64.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1
-	if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i PowerShell-6.2.3-win-x64.msi","/quiet","ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1","ENABLE_PSREMOTING=1","REGISTER_MANIFEST=1" }
+	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i PowerShell-6.2.3-win-x64.msi","/quiet","ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1","ENABLE_PSREMOTING=1","REGISTER_MANIFEST=1" }
 
 	#Install Git 
 	$file = "Git-2.24.0.2-64-bit.exe"
-	$path = "$temppath\$file"
-	if (!($path | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe -OutFile $path }
+	if (!("$temppath\$file" | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe -OutFile "$temppath\$file" }
 	#.\Git-2.24.0.2-64-bit.exe /SILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /COMPONENTS="icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh,autoupdate" /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled
 	#with ArgumentList as list
-	if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/SILENT /NORESTART /NOCANCEL /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled /COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
+	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/SILENT /NORESTART /NOCANCEL /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled /COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
 	#with ArgumentList as string array
 	#if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/SILENT","/NORESTART","/NOCANCEL","/CLOSEAPPLICATIONS","/RESTARTAPPLICATIONS","/NoIcons=0","/SetupType=default","/EditorOption=Nano","/PathOption=Cmd","/SSHOption=OpenSSH","/TortoiseOption=false","/CURLOption=OpenSSL","/CRLFOption=CRLFCommitAsIs","/BashTerminalOption=MinTTY","/PerformanceTweaksFSCache=Enabled","/UseCredentialManager=Enabled","/EnableSymlinks=Disabled","/EnableBuiltinInteractiveAdd=Disabled","/COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
 
-	#should be in Windows Path now: ";C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;"
-	#$windows_path = $env:Path -split ';'
-	#$path = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\bin"
-	#if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
-	#$windows_path = $env:Path -split ';'
-	#$path = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\cmd"
-	#if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
-
+	#should be in Windows Path now like: ";C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;"
 	$windows_path = $env:Path -split ';'
-	$path = (Get-Item "Env:ProgramFiles").Value + "\Git\bin"
-	if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
-	$windows_path = $env:Path -split ';'
-	$path = (Get-Item "Env:ProgramFiles").Value + "\Git\cmd"
-	if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
+	$folder = (Get-Item "Env:ProgramFiles").Value + "\Git\bin"
+	if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+	$folder = (Get-Item "Env:ProgramFiles").Value + "\Git\cmd"
+    if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+	$folder = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\bin"
+	if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+	$folder = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\cmd"
+	if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
 
 	#add wget into Git 
 	$file = "wget.exe"
 	$folder = (Get-Item "Env:ProgramFiles").Value + "\Git\mingw64\bin"
-	$path = "$folder\$file"
-	if (Test-Path $folder) { if (!($path | Test-Path)) { curl https://eternallybored.org/misc/wget/1.20.3/64/wget.exe -OutFile $path } }
+	if (Test-Path $folder) { if (!("$folder\$file" | Test-Path)) { curl https://eternallybored.org/misc/wget/1.20.3/64/wget.exe -OutFile "$folder\$file" } }
 
 	#install python
 	$file = "python-2.7.17.amd64.msi"
-	$path = "$temppath\$file"
-	if (!($path | Test-Path)) { curl https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi -OutFile $path }
-	if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i python-2.7.17.amd64.msi","/passive","/norestart" }
+	if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi -OutFile "$temppath\$file" }
+	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i python-2.7.17.amd64.msi","/passive","/norestart" }
 
 	$file = "python-3.8.0-amd64.exe"
-	$path = "$temppath\$file"
-	if (!($path | Test-Path)) { curl https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe -OutFile $path }
-	if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python38" }
+	if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe -OutFile "$temppath\$file" }
+	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python38" }
 
 	$file = "python-3.7.5-amd64.exe"
-	$path = "$temppath\$file"
-	if (!($path | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile $path }
-	if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" }
+	if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$file" }
+	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" }
 
 	$windows_path = $env:Path -split ';'
-	$path = "C:\Python37\Scripts\"
-	if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
-	$windows_path = $env:Path -split ';'
-	$path = "C:\Python37\"
-	if ($windows_path -notcontains $path) { if (Test-Path $path) { $env:path += ";" + $path } }
+	$folder = "C:\Python37\Scripts\"
+    if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+	$folder = "C:\Python37\"
+    if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
 
-	python --version
-	python -m pip install --upgrade pip
-	python -m pip install --upgrade setuptools
-	python -m pip install --upgrade wheel
+    python --version
+    $errorcode = python -m pip install --upgrade pip --timeout=3 --retries=1
+    #WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<pip._vendor.urllib3.connection.VerifiedHTTPSConnection object at 0x000001DDE3735088>, 'Connection to pypi.org timed out. (connect timeout=3.0)')': /simple/pip/
+    python -m pip install --upgrade pip $myPipProxy
+	python -m pip install --upgrade setuptools $myPipProxy
+	python -m pip install --upgrade wheel $myPipProxy
 
 	#install mongodb
 	$file = "mongodb-compass-community-1.19.12-win32-x64.msi"
-	$path = "$temppath\$file"
-	if (!($path | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile $path }
+	if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
 	#developer gets a mongodb-compass as application, which is able to edit mongodb completely
-	if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
+	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
 	if (!("C:\MongoDB\data" | Test-Path)) { md -p "C:\MongoDB\data" }
 	if (!("C:\MongoDB\log" | Test-Path)) { md -p "C:\MongoDB\log" }
 	$file = "mongodb-win32-x86_64-2012plus-4.2.1-signed.msi"
-	$path = "$temppath\$file"
-	if (!($path | Test-Path)) { curl https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-4.2.1-signed.msi -OutFile $path }
+	if (!("$temppath\$file" | Test-Path)) { curl https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-4.2.1-signed.msi -OutFile "$temppath\$file" }
 	#developer gets a mongodb as application (not as service), which have to be startet with a shortcut on the desktop
-	if (Test-Path $path) { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerNoService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
+	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerNoService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
 	#C:\MongoDB\Server\4.2\bin\mongod.exe --dbpath "C:\MongoDB\data"  "C:\MongoDB\log" --bind_ip 127.0.0.1 --port 27017
 	#C:\MongoDB\Server\4.2\bin\mongod.exe --bind_ip 127.0.0.1 --port 27017
 	#find all home paths:  dir env:\home*
@@ -196,29 +163,22 @@ if (Test-Path "$temppath") {
 	
 	#developer gets an allround editor
 	$file = "npp.7.7.1.Installer.x64.exe"
-	$path = "$temppath\$file"
-	if (!($path | Test-Path)) { curl https://notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.x64.exe -OutFile $path }
-	#if (Test-Path $path) { Start-Process -Wait -FilePath "npp.7.7.1.Installer.x64.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
-	if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/S" }
+	if (!("$temppath\$file" | Test-Path)) { curl https://notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.x64.exe -OutFile "$temppath\$file" }
+	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/S" }
 	$file = "npp.7.8.1.Installer.x64.exe"
-	$path = "$temppath\$file"
-	if (!($path | Test-Path)) { curl http://download.notepad-plus-plus.org/repository/7.x/7.8.1/npp.7.8.1.Installer.x64.exe -OutFile $path }
-	#if (Test-Path $path) { Start-Process -Wait -FilePath "npp.7.8.1.Installer.x64.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
-	if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/S" }
+	if (!("$temppath\$file" | Test-Path)) { curl http://download.notepad-plus-plus.org/repository/7.x/7.8.1/npp.7.8.1.Installer.x64.exe -OutFile "$temppath\$file" }
+	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/S" }
 
 	#https://asawicki.info/news_1597_installing_visual_c_redistributable_package_from_command_line.html
 	#https://docs.microsoft.com/de-de/visualstudio/releases/2019/system-requirements
 	#https://docs.microsoft.com/en-us/visualstudio/install/build-tools-container?view=vs-2017
 	$file = "vs_buildtools_2019.exe"
-	$path = "$temppath\$file"
-	if (!($path | Test-Path)) { curl https://github.com/kaestnja/RdA/raw/master/PSRdA/vs/vs_buildtools_2019.exe -OutFile $path }
+	if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
 	#if (Test-Path $path) { Start-Process -Wait -FilePath "vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
 	#if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" }
-	if (Test-Path $path) { 
+	if (Test-Path "$temppath\$file") { 
 		#$exitCode = Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" 
-		$exitCode = Start-Process -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
-		echo "exitcode was: + $exitCode";
-		read-host "Press ENTER to continue...";
+		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
 		}
 	#vs_enterprise.exe [command] <options>
 	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
@@ -256,47 +216,28 @@ Add-PoshGitToProfile
 
 git update-git-for-windows
 
-$githubProjectServer = 'github.com'
-$SiemensProjectServer = 'code.siemens.com'
-
-ssh -T git@$githubProjectServer
-ssh -T git@$SiemensProjectServer
-
-#~/.ssh/config
-#Connect-Ssh
-#Add-SshConnection -Name githubProjectServer -Uri $githubProjectServer -User kaestnja
-#Add-SshConnection -Name Server1 -Uri server1.jeremyskinner.co.uk -User jeremy
-#Start-SshAgent -Quiet
-
 #Get-Item "Env:"
 #get-childitem -path env:* | get-member
 #get git CdA
 $project = "CdA"
-$folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\github.com"
-$path = "$folder\$project"
+$folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\$gitserver"
 if (Test-Path (Get-Item "Env:USERPROFILE").Value) { if (!($folder | Test-Path)) { md -p $folder } }
-if (Test-Path $folder) { if (!($path | Test-Path)) { 
+if (Test-Path $folder) { if (!("$folder\$project" | Test-Path)) { 
 	cd $folder
-	git clone "https://github.com/kaestnja/CdA.git" 
-	#git clone "https://username:password@code.siemens.com/jan.kaestner/CdA.git"
+	git clone "https://$gitserver/$gituser/CdA.git" 
+	#git clone "https://username:password@$gitserver/$gituser/CdA.git"
 	}
 }
-if (Test-Path $path) { 
-	cd $path
-	git pull "https://github.com/kaestnja/CdA.git"
-	#git pull "https://username:password@code.siemens.com/jan.kaestner/CdA.git"
+if (Test-Path "$folder\$project") { 
+	cd "$folder\$project"
+	git pull "https://$gitserver/$gituser/CdA.git"
+	#git pull "https://username:password@$gitserver/$gituser/CdA.git"
 	git status
 }
-
-$project = "CdA"
-$folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\github.com"
-$path = "$folder\$project"
-if (Test-Path $path) { 
-	cd $path
-	git pull "https://github.com/kaestnja/CdA.git"
-	#git pull "https://username:password@code.siemens.com/jan.kaestner/CdA.git"
-	python -m pip install -r requirements.txt
-	git status
+$file = "requirements.txt"
+if (Test-Path "$folder\$project\$file") { 
+	cd "$folder\$project"
+	python -m pip install -r "$folder\$project\$file" $myPipProxy
 }
 
 
