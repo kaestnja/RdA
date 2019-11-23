@@ -137,6 +137,7 @@ if (Test-Path "$temppath") {
 	if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
 	#developer gets a mongodb-compass as application, which is able to edit mongodb completely
 	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
+	
 	if (!("C:\MongoDB\data" | Test-Path)) { md -p "C:\MongoDB\data" }
 	if (!("C:\MongoDB\log" | Test-Path)) { md -p "C:\MongoDB\log" }
 	$file = "mongodb-win32-x86_64-2012plus-4.2.1-signed.msi"
