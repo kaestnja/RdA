@@ -170,23 +170,39 @@ if (Test-Path "$temppath") {
 	if (!("$temppath\$file" | Test-Path)) { curl http://download.notepad-plus-plus.org/repository/7.x/7.8.1/npp.7.8.1.Installer.x64.exe -OutFile "$temppath\$file" }
 	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/S" }
 
-	#https://asawicki.info/news_1597_installing_visual_c_redistributable_package_from_command_line.html
-	#https://docs.microsoft.com/de-de/visualstudio/releases/2019/system-requirements
-	#https://docs.microsoft.com/en-us/visualstudio/install/build-tools-container?view=vs-2017
-	$file = "vs_buildtools_2019.exe"
+	$file = "vs_enterprise_2019.exe"
 	if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
-	#if (Test-Path $path) { Start-Process -Wait -FilePath "vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "/S" }
-	#if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" }
 	if (Test-Path "$temppath\$file") { 
-		#$exitCode = Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "--update","--quiet","--wait" 
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
 		}
 	#vs_enterprise.exe [command] <options>
 	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
+	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
 	#vs_enterprise.exe --update --quiet --wait
 	#vs_enterprise.exe update --wait --passive --norestart --installPath "C:\installPathVS"
 	#vs_enterprise.exe --installPath C:\desktopVS --addProductLang fr-FR --add Microsoft.VisualStudio.Workload.ManagedDesktop --includeRecommended --quiet --wait
+	##Start-Process -FilePath "C:\Temp\vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "--update","--passive","--wait","--quiet","--add Microsoft.VisualStudio.Workload.MSBuildTools" -Wait -PassThru;
+	##Start-Process -FilePath "C:\Temp\vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "--update","--passive","--wait","--quiet","--add Microsoft.VisualStudio.Workload.MSBuildTools" -Wait -PassThru;
+	$setupconfig = 	"--add Microsoft.VisualStudio.Component.Roslyn.Compiler",
+    "--add Microsoft.Component.MSBuild",
+    "--add Microsoft.VisualStudio.Component.CoreBuildTools",
+    "--add Microsoft.VisualStudio.Workload.MSBuildTools",
+    "--add Microsoft.VisualStudio.Component.Windows10SDK",
+    "--add Microsoft.VisualStudio.Component.VC.CoreBuildTools",
+    "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+    "--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest",
+    "--add Microsoft.VisualStudio.Component.Windows10SDK.18362",
+    "--add Microsoft.VisualStudio.Component.VC.CMake.Project",
+    "--add Microsoft.VisualStudio.Component.TestTools.BuildTools",
+    "--add Microsoft.VisualStudio.Workload.VCTools",
+    "--add Microsoft.VisualStudio.Component.WebDeploy"
 
+	#rem in case missing ...error: Microsoft Visual C++ 14.0 is required. Get it with "Microsoft Visual C++ Build Tools", repeat:
+	#python -m pip install --upgrade python-bsonjs
+	#python -m pip install --upgrade pyxdameraulevenshtein
+	#https://asawicki.info/news_1597_installing_visual_c_redistributable_package_from_command_line.html
+	#https://docs.microsoft.com/de-de/visualstudio/releases/2019/system-requirements
+	#https://docs.microsoft.com/en-us/visualstudio/install/build-tools-container?view=vs-2017
 }
 
 #(new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex install-module posh-git
