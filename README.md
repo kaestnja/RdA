@@ -18,4 +18,5 @@ Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/
 ``` 
 [Net.ServicePointManager]::SecurityProtocol = ([Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12);
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
+Unblock-File -Path 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1'
 ``` 
