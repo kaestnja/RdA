@@ -35,7 +35,7 @@ $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
-if (Test-Path $folder) { echo "found: $folder" }
+if (Test-Path $($(Get-Item "Env:USERPROFILE").Value + "\Desktop")) { echo "found: cd $($(Get-Item "Env:USERPROFILE").Value + "\Desktop")" }
 
 #eventually prepare executability
 Get-ExecutionPolicy
@@ -229,9 +229,11 @@ git update-git-for-windows
 
 #Get-Item "Env:"
 #get-childitem -path env:* | get-member
+if (Test-Path $($(Get-Item "Env:USERPROFILE").Value)) { echo "found: $($(Get-Item "Env:USERPROFILE").Value)" }
+if (Test-Path $($(Get-Item "Env:USERPROFILE").Value + "\source")) { echo "found: $($(Get-Item "Env:USERPROFILE").Value + "\source")" }
 #get git CdA
 $project = "CdA"
-$folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\$gitserver"
+$folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\$gitserver\$gituser"
 if (Test-Path (Get-Item "Env:USERPROFILE").Value) { if (!($folder | Test-Path)) { md -p $folder } }
 if (Test-Path $folder) { if (!("$folder\$project" | Test-Path)) { 
 	cd $folder
