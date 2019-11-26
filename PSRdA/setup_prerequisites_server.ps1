@@ -209,3 +209,11 @@ if (Test-Path "$folder\$project\$file") {
 	cd "$folder\$project"
 	python -m pip install -r "$folder\$project\$file" $myPipProxy
 }
+
+
+
+$file = "PyCdA.py"
+if (Test-Path "$folder\$project\$file") { 
+	cd "$folder\$project"
+	python -m "$folder\$project\$file"
+}
