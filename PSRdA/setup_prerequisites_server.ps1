@@ -35,7 +35,7 @@ $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
-if (Test-Path $folder) { echo "found: $folder" }
+if (Test-Path $($(Get-Item "Env:USERPROFILE").Value + "\Desktop")) { echo "found: cd $($(Get-Item "Env:USERPROFILE").Value + "\Desktop")" }
 
 #eventually prepare executability
 Get-ExecutionPolicy
@@ -124,7 +124,6 @@ if (Test-Path "$temppath") {
 	python -m pip install --upgrade setuptools $myPipProxy
 	python -m pip install --upgrade wheel $myPipProxy
 
-
 	#install mongodb
 	$file = "mongodb-compass-community-1.19.12-win32-x64.msi"
 	if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
@@ -135,7 +134,7 @@ if (Test-Path "$temppath") {
 	if (!("C:\MongoDB\log" | Test-Path)) { md -p "C:\MongoDB\log" }
 	$file = "mongodb-win32-x86_64-2012plus-4.2.1-signed.msi"
 	if (!("$temppath\$file" | Test-Path)) { curl https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-4.2.1-signed.msi -OutFile "$temppath\$file" }
-	#server gets a mongodb as application (not as service), which have to be startet with a shortcut on the desktop
+	#server gets a mongodb as service, which runs from startup
 	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
 	#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"all`"" }
 
@@ -146,6 +145,7 @@ if (Test-Path "$temppath") {
 
 	#server gets minimum c++ 14.0 for levenshtein
 	$vsconfig_vs_buildtools_2019 = 	"`"--add Microsoft.VisualStudio.Workload.MSBuildTools`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.TestTools.BuildTools`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
+	$vsconfig_vs_enterprise_2019 = 	"`"--add Microsoft.VisualStudio.Workload.CoreEditor`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.VisualStudio.Workload.Python`",`"--add Microsoft.VisualStudio.Workload.NativeDesktop`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.Component.PythonTools`",`"--add Microsoft.Component.PythonTools.Web`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreEditor`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.VC.CoreIde`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
 	$file = "vs_buildtools_2019.exe"
 	if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
 	if (Test-Path "$temppath\$file") { 
@@ -186,9 +186,11 @@ git update-git-for-windows
 
 #Get-Item "Env:"
 #get-childitem -path env:* | get-member
+if (Test-Path $($(Get-Item "Env:USERPROFILE").Value)) { echo "found: $($(Get-Item "Env:USERPROFILE").Value)" }
+if (Test-Path $($(Get-Item "Env:USERPROFILE").Value + "\source")) { echo "found: $($(Get-Item "Env:USERPROFILE").Value + "\source")" }
 #get git CdA
 $project = "CdA"
-$folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\$gitserver"
+$folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\$gitserver\$gituser"
 if (Test-Path (Get-Item "Env:USERPROFILE").Value) { if (!($folder | Test-Path)) { md -p $folder } }
 if (Test-Path $folder) { if (!("$folder\$project" | Test-Path)) { 
 	cd $folder
