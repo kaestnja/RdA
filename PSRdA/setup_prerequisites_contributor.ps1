@@ -252,10 +252,26 @@ if (Test-Path "$folder\$project\$file") {
 	cd "$folder\$project"
 	python -m pip install -r "$folder\$project\$file" $myPipProxy
 }
+
+
+#"$folder\MongoDB.lnk"
+$file = "mongod.exe"
+if (Test-Path "${env:ProgramFiles}\MongoDB\Server\4.2\bin\$file") { 
+	#cd "$folder\$project"
+	#python "$folder\$project\$file"
+	#Invoke-Expression "& { $(python "$folder\$project\$file") }"
+	#python $home\source\repos\github.com\kaestnja\CdA\PyCdA.py
+	#Invoke-Expression "& { $(python "$home\source\repos\github.com\kaestnja\CdA\PyCdA.py") }"
+	Start-Process -FilePath "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe" -WorkingDirectory "${env:ProgramFiles}\MongoDB\Server\4.2\bin" -ArgumentList "--dbpath `"C:\MongoDB\data`"","--bind_ip 127.0.0.1","--port 27017" -PassThru;
+}
+
 $file = "PyCdA.py"
 if (Test-Path "$folder\$project\$file") { 
 	cd "$folder\$project"
-	python -m "$folder\$project\$file"
+	#python "$folder\$project\$file"
+	Invoke-Expression "& { $(python "$folder\$project\$file") }"
+	#python $home\source\repos\github.com\kaestnja\CdA\PyCdA.py
+	#Invoke-Expression "& { $(python "$home\source\repos\github.com\kaestnja\CdA\PyCdA.py") }"
 }
 
 

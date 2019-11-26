@@ -213,5 +213,8 @@ if (Test-Path "$folder\$project\$file") {
 $file = "PyCdA.py"
 if (Test-Path "$folder\$project\$file") { 
 	cd "$folder\$project"
-	python -m "$folder\$project\$file"
+	#python "$folder\$project\$file"
+	Invoke-Expression "& { $(python "$folder\$project\$file") }"
+	#python $home\source\repos\github.com\kaestnja\CdA\PyCdA.py
+	#Invoke-Expression "& { $(python "$home\source\repos\github.com\kaestnja\CdA\PyCdA.py") }"
 }
