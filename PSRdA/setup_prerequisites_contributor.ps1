@@ -11,6 +11,8 @@ $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
 
+Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor"
+
 if ((Test-Admin) -eq $false)  {
 	read-host "This code have to be run elevate, which is not the case now.";
     if ($elevated) {
