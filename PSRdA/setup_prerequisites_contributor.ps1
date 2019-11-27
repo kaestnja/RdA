@@ -100,8 +100,20 @@ if (Test-Path "$temppath") {
 	(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\InProgress") ) {
 		read-host "reboot needed! Press ENTER to going to reboot now.";
 		if (Test-Path "$temppath\setup_prerequisites_contributor.ps1") {
+			Write-Host "Changing RunOnce script." -foregroundcolor "magenta"
 			read-host "To continue after reboot, this script is called once after login the same user...";
-			#Set-ItemProperty -Path "HKEY_CURRENT_USER:Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "FileSystem@LongPathsEnabled" -Value 1
+	        $KeyName = 'setup_prerequisites_contributor';
+	        $Command = "%systemroot%\System32\WindowsPowerShell\v1.0\powershell.exe -executionpolicy bypass -file $temppath\setup_prerequisites_contributor.ps1";
+			if (Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce\setup_prerequisites_contributor")
+			{
+				Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name $KeyName -Value $Command -PropertyType ExpandString
+			}
+			else
+			{
+				New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name $KeyName -Value $Command -PropertyType ExpandString
+			}
+			#$RunOnceKey = "HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce"
+			#set-itemproperty $RunOnceKey "NextRun" ('C:\Windows\System32\WindowsPowerShell\v1.0\Powershell.exe -executionPolicy Unrestricted -File ' + "C:\Tempscript\TempScript2.ps1")
 			}
 		}
 
