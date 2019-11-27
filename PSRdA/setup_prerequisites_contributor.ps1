@@ -109,6 +109,7 @@ if (Test-Path "$temppath") {
 			read-host "To continue after reboot, this script is called once after login the same user...";
 	        $KeyName = 'setup_prerequisites_contributor';
 	        $Command = "%systemroot%\System32\WindowsPowerShell\v1.0\powershell.exe -executionpolicy bypass -file $temppath\setup_prerequisites_contributor.ps1";
+			#$Command = "%systemroot%\System32\WindowsPowerShell\v1.0\PowerShell.exe -NoProfile -ExecutionPolicy Unrestricted -Command "& {Start-Process PowerShell -ArgumentList '-NoProfile -ExecutionPolicy Unrestricted -File ""C:\Users\UserName\Desktop\-online.ps1""' -Verb RunAs}";
 			if (Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce\setup_prerequisites_contributor")
 			{
 				Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name $KeyName -Value $Command -PropertyType ExpandString
