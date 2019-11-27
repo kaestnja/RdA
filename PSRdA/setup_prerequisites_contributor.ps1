@@ -19,8 +19,11 @@ if ((Test-Admin) -eq $false)  {
         read-host "tried to elevate, did not work, aborting";
     } 
     else {
-		read-host "try to elevate now..."
+		read-host "try to elevate and run a downloaded local script now..."
+		if (!($temppath | Test-Path)) { md -p "$temppath" }
+		if (Test-Path "$temppath") { Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";}
 		if (Test-Path "$temppath\setup_prerequisites_contributor.ps1") { 
+			Unblock-File -Path './setup_prerequisites_contributor.ps1'
 			Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f "$temppath\setup_prerequisites_contributor.ps1")
 		}
 		#Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
@@ -28,7 +31,7 @@ if ((Test-Admin) -eq $false)  {
         #Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition))
 		#Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"))
 	}
-	#exit
+	exit
 }
 
 
