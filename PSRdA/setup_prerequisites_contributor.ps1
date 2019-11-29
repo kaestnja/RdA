@@ -17,6 +17,10 @@ If (-not $MyError)
 {
     Write-Host -ForegroundColor Green "Throw Flag here"
 }
+else
+{
+    Write-Host -ForegroundColor Yellow "Throw Flag here"
+}
 
 if ((Test-Admin) -eq $false)  {
 	read-host "This code have to be run elevate, which is not the case now.";
