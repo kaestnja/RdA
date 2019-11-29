@@ -20,7 +20,7 @@ If (-not $MyError){
     $Error.clear()
 }
 
-if ((Test-Admin) -eq $false)  {
+if ((Test-Admin) -eq $false){
 	read-host "This code have to be run elevate, which is not the case now.";
     if ($elevated) {
         read-host "tried to elevate, did not work";
