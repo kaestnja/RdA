@@ -9,14 +9,16 @@ function Test-Admin {
   $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 }
 function Test-RegistryValue {param ( [parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]$Path,[parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]$Value)
+    $Error.clear()
     try {
-    Get-ItemProperty -Path $Path | Select-Object -ExpandProperty $Value -ErrorAction Stop | Out-Null
-     return $true
-     }
+        Get-ItemProperty -Path $Path | Select-Object -ExpandProperty $Value -ErrorAction Stop | Out-Null
+        return $true
+        }
     catch {
-    return $false
+        return $false
     }
 }
+
 
 #plz replace all wrong characters like –   with - " , except in this line. those came from copying snipets from internet.
 $temppath = "C:\Temp"
@@ -30,13 +32,12 @@ $Error.clear()
 Write-Host -ForegroundColor Green "version:" + $version
 
 $keyValue = $myname
-Test-RegistryValue -Path $keyRunOnce -Value $keyValue
 If (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
     Write-Host -ForegroundColor Yellow "this script seems like to run from a CurrentUser RunOnce registry entry, which will be removed now(!)"
     #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue -ErrorVariable 'MyError' -ErrorAction "SilentlyContinue"
     #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue -ErrorAction "SilentlyContinue"
-    #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue *>&1 | out-null
-    Remove-ItemProperty -Path $keyRunOnce -Name $keyValue
+    Remove-ItemProperty -Path $keyRunOnce -Name $keyValue *>&1 | out-null
+    #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue
 }
 
 
