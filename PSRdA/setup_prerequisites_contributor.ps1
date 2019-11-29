@@ -19,6 +19,10 @@ function Test-RegistryValue {param ( [parameter(Mandatory=$true)] [ValidateNotNu
         return $false
     }
 }
+#Function Test-RegistryValue { param([string]$RegKeyPath,[string]$Value)
+#    $ValueExist = (Get-ItemProperty $RegKeyPath).$Value -ne $null
+#    Return $ValueExist
+#}
 
 
 #plz replace all wrong characters like –   with - " , except in this line. those came from copying snipets from internet.
