@@ -6,7 +6,7 @@ param([switch]$Elevated)
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.5'
+$version = '0.0.6'
 $myname = 'setup_prerequisites_contributor.ps1'
 $keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
 $Error.clear()
@@ -103,7 +103,7 @@ if (Test-Path $($(Get-Item "Env:USERPROFILE").Value + "\Desktop")) { echo "found
 
 #eventually prepare executability
 Get-ExecutionPolicy
-#Set-ExecutionPolicy RemoteSigned
+Set-ExecutionPolicy RemoteSigned
 #Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
 
 #enable the verry long names for files and paths, just for sure
@@ -252,6 +252,8 @@ if (Test-Path "$temppath") {
 	#developer gets minimum c++ 14.0 for levenshtein and complete ide for python and django webdeployment
     Get-PSRepository
     Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+    Install-Module VSSetup
+
 	$vsconfig_vs_buildtools_2019 = 	"`"--add Microsoft.VisualStudio.Workload.MSBuildTools`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.TestTools.BuildTools`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
 	$vsconfig_vs_enterprise_2019 = 	"`"--add Microsoft.VisualStudio.Workload.CoreEditor`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.VisualStudio.Workload.Python`",`"--add Microsoft.VisualStudio.Workload.NativeDesktop`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.Component.PythonTools`",`"--add Microsoft.Component.PythonTools.Web`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreEditor`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.VC.CoreIde`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
 	$file = "vs_buildtools.exe"
@@ -259,20 +261,24 @@ if (Test-Path "$temppath") {
     if (!("$temppath\$file" | Test-Path)) { curl "https://aka.ms/vs/16/release/$file" -OutFile "$temppath\$file" }
 	#if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
 	if (Test-Path "$temppath\$file") { 
-
-		echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
-		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
-		read-host "To continue after update";
+		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
+		#Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
+		#read-host "To continue after update";
+        Write-Host -ForegroundColor Yellow "--------------------------------------------------------------"
 		echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
+        Write-Host -ForegroundColor Yellow "--------------------------------------------------------------"
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
-		read-host "To continue after vs_buildtools_2019";
+        if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
+		    read-host "Installation of Visual Studio failed. You can try it manually with the command between the last two yellow lines...";
+            return 1;
+            }
 		}
 	$file = "vs_enterprise_2019.exe"
 	if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
 	if (Test-Path "$temppath\$file") { 
-		echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
-		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
-		read-host "To continue after update";
+		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
+		#Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
+		#read-host "To continue after update";
 		echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_enterprise_2019 -Wait -PassThru;"
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait",$vsconfig_vs_enterprise_2019 -Wait -PassThru;
 		read-host "To continue after vs_enterprise_20199";
