@@ -11,7 +11,12 @@ $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
 
-Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor"
+Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorVariable 'MyError'
+## No error = good, continue the next iteration of the loop
+If (-not $MyError)
+{
+    Write-Host -ForegroundColor Green "Throw Flag here"
+}
 
 if ((Test-Admin) -eq $false)  {
 	read-host "This code have to be run elevate, which is not the case now.";
