@@ -1,6 +1,17 @@
 #Requires -RunAsAdministrator
 param([switch]$Elevated)
 #start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
+
+#plz replace all wrong characters like –   with - " , except in this line. those came from copying snipets from internet.
+$temppath = "C:\Temp"
+$gitserver = 'github.com'
+$gituser = 'kaestnja'
+$version = '0.0.4'
+$myname = 'setup_prerequisites_contributor.ps1'
+$keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
+$Error.clear()
+#echo "version: " + $version
+Write-Host -ForegroundColor Green "version:" + $version
 #$ErrorActionPreference = 'SilentlyContinue'
 #$ErrorActionPreference = 'Continue'
 
@@ -24,17 +35,6 @@ function Test-RegistryValue {param ( [parameter(Mandatory=$true)] [ValidateNotNu
 #    Return $ValueExist
 #}
 
-
-#plz replace all wrong characters like –   with - " , except in this line. those came from copying snipets from internet.
-$temppath = "C:\Temp"
-$gitserver = 'github.com'
-$gituser = 'kaestnja'
-$version = '0.0.4'
-$myname = 'setup_prerequisites_contributor.ps1'
-$keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
-$Error.clear()
-#echo "version: " + $version
-Write-Host -ForegroundColor Green "version:" + $version
 
 $keyValue = $myname
 If (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
