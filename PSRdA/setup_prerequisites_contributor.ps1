@@ -1,9 +1,20 @@
 #Requires -RunAsAdministrator
 param([switch]$Elevated)
+#$ErrorActionPreference = 'SilentlyContinue'
+#$ErrorActionPreference = 'Continue'
 
 function Test-Admin {
   $currentPrincipal = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
   $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+}
+function Test-RegistryValue {param ( [parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]$Path,[parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]$Value)
+    try {
+    Get-ItemProperty -Path $Path | Select-Object -ExpandProperty $Value -ErrorAction Stop | Out-Null
+     return $true
+     }
+    catch {
+    return $false
+    }
 }
 
 #plz replace all wrong characters like –   with - " , except in this line. those came from copying snipets from internet.
@@ -11,18 +22,21 @@ $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
 $version = '0.0.2'
+$myname = 'setup_prerequisites_contributor.ps1'
+$keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
 $Error.clear()
 #echo "version: " + $version
 Write-Host -ForegroundColor Green "version:" + $version
 
-#Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorVariable 'MyError' -ErrorAction "SilentlyContinue"
-Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorAction "SilentlyContinue"
-If (-not $MyError){
-    Write-Host -ForegroundColor Green "this script seems like to run from CurrentUser RunOnce registry entry"
-}else{
-    Write-Host -ForegroundColor Yellow "myerror:" + $MyError + " or error:" + $Error
-    $Error.clear()
+$keyValue = $myname
+Test-RegistryValue -Path $keyRunOnce -Value $keyValue
+If (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
+    Write-Host -ForegroundColor Yellow "this script seems like to run from a CurrentUser RunOnce registry entry, which will be removed now(!)"
+    #Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorVariable 'MyError' -ErrorAction "SilentlyContinue"
+    #Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorAction "SilentlyContinue"
+    Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" *>&1 | out-null
 }
+
 
 if ((Test-Admin) -eq $false){
 	read-host "This code have to be run elevate, which is not the case now.";
@@ -124,18 +138,16 @@ if (Test-Path "$temppath") {
 		if (Test-Path "$temppath\setup_prerequisites_contributor.ps1") {
 			Write-Host "Changing RunOnce script." -foregroundcolor "magenta"
 			read-host "To continue after reboot, this script is called once after login the same user...";
-	        $KeyName = 'setup_prerequisites_contributor';
 	        $Command = "%systemroot%\System32\WindowsPowerShell\v1.0\powershell.exe -executionpolicy bypass -file $temppath\setup_prerequisites_contributor.ps1";
 			#$Command = "%systemroot%\System32\WindowsPowerShell\v1.0\PowerShell.exe -NoProfile -ExecutionPolicy Unrestricted -Command "& {Start-Process PowerShell -ArgumentList '-NoProfile -ExecutionPolicy Unrestricted -File ""C:\Users\UserName\Desktop\-online.ps1""' -Verb RunAs}";
-            if (Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce\setup_prerequisites_contributor"){
-                Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name $KeyName -Value $Command -PropertyType ExpandString
+            $keyValue = $myname
+            if (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
+                Set-ItemProperty -Path $keyRunOnce -Name $keyValue -Value $Command
                 }else{
-                New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name $KeyName -Value $Command -PropertyType ExpandString
+                New-ItemProperty -Path $keyRunOnce -Name $keyValue -Value $Command -PropertyType ExpandString
             }
-			#$RunOnceKey = "HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce"
-			#set-itemproperty $RunOnceKey "NextRun" ('C:\Windows\System32\WindowsPowerShell\v1.0\Powershell.exe -executionPolicy Unrestricted -File ' + "C:\Tempscript\TempScript2.ps1")
-			}
 		}
+	}
 
 	#Install PScore6 
 	#iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
