@@ -270,7 +270,7 @@ if (Test-Path "$temppath") {
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
         if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
 		    read-host "Installation of Visual Studio failed. You can try it manually with the command between the last two yellow lines...";
-            return 1;
+            return;
             }
 		}
 	$file = "vs_enterprise_2019.exe"
