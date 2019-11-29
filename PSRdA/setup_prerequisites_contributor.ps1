@@ -15,11 +15,12 @@ Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOn
 ## No error = good, continue the next iteration of the loop
 If (-not $MyError)
 {
-    Write-Host -ForegroundColor Green "Throw Flag here"
+    Write-Host -ForegroundColor Green "Throw Flag here:" + $MyError + " or here:" + $Error
 }
 else
 {
-    Write-Host -ForegroundColor Yellow "Throw Flag here"
+    Write-Host -ForegroundColor Yellow "Throw Flag here:" + $MyError + " or here:" + $Error
+    $Error.clear()
 }
 
 if ((Test-Admin) -eq $false)  {
