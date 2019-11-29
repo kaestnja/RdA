@@ -10,9 +10,10 @@ function Test-Admin {
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.1'
+$version = '0.0.2'
 $Error.clear()
-echo "version: " + $version
+#echo "version: " + $version
+Write-Host -ForegroundColor Green "version:" + $version
 
 Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorVariable 'MyError' -ErrorAction "SilentlyContinue"
 ## No error = good, continue the next iteration of the loop
