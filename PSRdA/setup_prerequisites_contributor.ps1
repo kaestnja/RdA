@@ -33,9 +33,10 @@ $keyValue = $myname
 Test-RegistryValue -Path $keyRunOnce -Value $keyValue
 If (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
     Write-Host -ForegroundColor Yellow "this script seems like to run from a CurrentUser RunOnce registry entry, which will be removed now(!)"
-    #Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorVariable 'MyError' -ErrorAction "SilentlyContinue"
-    #Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorAction "SilentlyContinue"
-    Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" *>&1 | out-null
+    #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue -ErrorVariable 'MyError' -ErrorAction "SilentlyContinue"
+    #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue -ErrorAction "SilentlyContinue"
+    #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue *>&1 | out-null
+    Remove-ItemProperty -Path $keyRunOnce -Name $keyValue
 }
 
 
