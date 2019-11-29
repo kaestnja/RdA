@@ -15,12 +15,12 @@ $Error.clear()
 #echo "version: " + $version
 Write-Host -ForegroundColor Green "version:" + $version
 
-Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorVariable 'MyError' -ErrorAction "SilentlyContinue"
-## No error = good, continue the next iteration of the loop
+#Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorVariable 'MyError' -ErrorAction "SilentlyContinue"
+Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorAction "SilentlyContinue"
 If (-not $MyError){
-    Write-Host -ForegroundColor Green "Throw Flag here:" + $MyError + " or here:" + $Error
+    Write-Host -ForegroundColor Green "this script seems like to run from CurrentUser RunOnce registry entry"
 }else{
-    Write-Host -ForegroundColor Yellow "Throw Flag here:" + $MyError + " or here:" + $Error
+    Write-Host -ForegroundColor Yellow "myerror:" + $MyError + " or error:" + $Error
     $Error.clear()
 }
 
