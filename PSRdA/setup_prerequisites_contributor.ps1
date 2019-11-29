@@ -2,11 +2,11 @@
 param([switch]$Elevated)
 
 function Test-Admin {
-  $currentUser = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
-  $currentUser.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+  $currentPrincipal = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
+  $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 }
 
-#plz replace all –   with - " , except in this line. those came from copying snipets from internet.
+#plz replace all wrong characters like –   with - " , except in this line. those came from copying snipets from internet.
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
@@ -16,24 +16,28 @@ Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOn
 if ((Test-Admin) -eq $false)  {
 	read-host "This code have to be run elevate, which is not the case now.";
     if ($elevated) {
-        read-host "tried to elevate, did not work, aborting";
+        read-host "tried to elevate, did not work";
     } 
     else {
-		read-host "try to elevate and run a downloaded local script now..."
+		read-host "try to download the same script for running it local now..."
 		if (!($temppath | Test-Path)) { md -p "$temppath" }
 		if (Test-Path "$temppath") { Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";}
 		if (Test-Path "$temppath\setup_prerequisites_contributor.ps1") { 
-			Unblock-File -Path './setup_prerequisites_contributor.ps1'
-			Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f "$temppath\setup_prerequisites_contributor.ps1")
+            read-host "have the same script, now try to elevate and run it local now...";
+			#Unblock-File -Path '$temppath\setup_prerequisites_contributor.ps1';
+			#Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f "$temppath\setup_prerequisites_contributor.ps1");
+            Start-Process -FilePath "powershell" -ArgumentList "$('-File ""')$(Get-Location)$('\')$($MyInvocation.MyCommand.Name)$('""')" -Verb runAs;
 		}
 		#Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
 		#Start-Process powershell -verb runas -ArgumentList "-file fullpathofthescript"
         #Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition))
 		#Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"))
 	}
-	exit
+    read-host "aborting aything now";
+	exit;
 }
-
+read-host "aborting aything now";
+exit
 
 ssh -T "git@$gitserver"
 
@@ -223,11 +227,16 @@ if (Test-Path "$temppath") {
 	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/S" }
 
 	#developer gets minimum c++ 14.0 for levenshtein and complete ide for python and django webdeployment
+    Get-PSRepository
+    Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 	$vsconfig_vs_buildtools_2019 = 	"`"--add Microsoft.VisualStudio.Workload.MSBuildTools`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.TestTools.BuildTools`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
 	$vsconfig_vs_enterprise_2019 = 	"`"--add Microsoft.VisualStudio.Workload.CoreEditor`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.VisualStudio.Workload.Python`",`"--add Microsoft.VisualStudio.Workload.NativeDesktop`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.Component.PythonTools`",`"--add Microsoft.Component.PythonTools.Web`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreEditor`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.VC.CoreIde`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
-	$file = "vs_buildtools_2019.exe"
-	if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
+	$file = "vs_buildtools.exe"
+    #https://aka.ms/vs/16/release/vs_buildtools.exe
+    if (!("$temppath\$file" | Test-Path)) { curl "https://aka.ms/vs/16/release/$file" -OutFile "$temppath\$file" }
+	#if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
 	if (Test-Path "$temppath\$file") { 
+
 		echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
 		read-host "To continue after update";
