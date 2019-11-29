@@ -33,22 +33,22 @@ if ((Test-Admin) -eq $false){
 		if (!($temppath | Test-Path)) { md -p "$temppath" }
 		if (Test-Path "$temppath") { Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";}
 		if (Test-Path "$temppath\setup_prerequisites_contributor.ps1") { 
-            read-host "have the same script, now try to elevate and run it local now...";
+            read-host "have the same script, now try to elevate and run the second instance local now...";
 			#Unblock-File -Path '$temppath\setup_prerequisites_contributor.ps1';
-			#Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f "$temppath\setup_prerequisites_contributor.ps1");
-            Start-Process -FilePath "powershell" -ArgumentList "$('-File ""')$(Get-Location)$('\')$($MyInvocation.MyCommand.Name)$('""')" -Verb runAs;
+			Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f "$temppath\setup_prerequisites_contributor.ps1");
+            #Start-Process -FilePath "powershell" -ArgumentList "$('-File ""')$(Get-Location)$('\')$($MyInvocation.MyCommand.Name)$('""')" -Verb runAs;
 		}
 		#Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
 		#Start-Process powershell -verb runas -ArgumentList "-file fullpathofthescript"
         #Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition))
 		#Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"))
 	}
-    read-host "aborting aything now";
+    read-host "aborting this script now (!)";
 	exit;
 }
-read-host "aborting aything now";
-exit
 
+read-host "aborting anything now";
+exit;
 ssh -T "git@$gitserver"
 
 #~/.ssh/config
