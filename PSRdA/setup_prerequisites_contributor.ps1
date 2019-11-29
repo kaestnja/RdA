@@ -1,5 +1,6 @@
 #Requires -RunAsAdministrator
 param([switch]$Elevated)
+#start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
 #$ErrorActionPreference = 'SilentlyContinue'
 #$ErrorActionPreference = 'Continue'
 
