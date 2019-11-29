@@ -11,7 +11,8 @@ function Test-Admin {
 function Test-RegistryValue {param ( [parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]$Path,[parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]$Value)
     $Error.clear()
     try {
-        Get-ItemProperty -Path $Path | Select-Object -ExpandProperty $Value -ErrorAction Stop | Out-Null
+        #Get-ItemProperty -Path $Path | Select-Object -ExpandProperty $Value -ErrorAction Stop | Out-Null
+        Get-ItemProperty -Path $Path -Name $Value -ErrorAction Stop | Out-Null
         return $true
         }
     catch {
