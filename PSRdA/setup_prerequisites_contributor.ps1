@@ -22,7 +22,7 @@ function Test-RegistryValue {param ( [parameter(Mandatory=$true)] [ValidateNotNu
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.3'
+$version = '0.0.4'
 $myname = 'setup_prerequisites_contributor.ps1'
 $keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
 $Error.clear()
