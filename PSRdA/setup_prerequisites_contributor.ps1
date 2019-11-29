@@ -35,27 +35,26 @@ function Test-RegistryValue {param ( [parameter(Mandatory=$true)] [ValidateNotNu
 #    Return $ValueExist
 #}
 
-
 $keyValue = $myname
 If (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
     Write-Host -ForegroundColor Yellow "this script seems like to run from a CurrentUser RunOnce registry entry, which will be removed now(!)"
     #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue -ErrorVariable 'MyError' -ErrorAction "SilentlyContinue"
     #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue -ErrorAction "SilentlyContinue"
-    Remove-ItemProperty -Path $keyRunOnce -Name $keyValue *>&1 | out-null
-    #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue
+    #Remove-ItemProperty -Path $keyRunOnce -Name $keyValue *>&1 | out-null
+    Remove-ItemProperty -Path $keyRunOnce -Name $keyValue
 }
 
 
 if ((Test-Admin) -eq $false){
 	read-host "This code have to be run elevate, which is not the case now.";
     if ($elevated) {
-        read-host "tried to elevate, did not work";
+        Write-Host -ForegroundColor Red "tried to elevate, did not work";
     }else{
-		read-host "try to download the same script for running it local now..."
+		Write-Host -ForegroundColor Yellow "try to download the same script for running it local now..."
 		if (!($temppath | Test-Path)) { md -p "$temppath" }
 		if (Test-Path "$temppath") { Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";}
 		if (Test-Path "$temppath\setup_prerequisites_contributor.ps1") { 
-            read-host "have the same script, now try to elevate and run the second instance local now...";
+            read-host "have the same script, will now try to elevate into a second, but local instance now...";
 			#Unblock-File -Path '$temppath\setup_prerequisites_contributor.ps1';
 			Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f "$temppath\setup_prerequisites_contributor.ps1");
             #Start-Process -FilePath "powershell" -ArgumentList "$('-File ""')$(Get-Location)$('\')$($MyInvocation.MyCommand.Name)$('""')" -Verb runAs;
@@ -65,12 +64,9 @@ if ((Test-Admin) -eq $false){
         #Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition))
 		#Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"))
 	}
-    read-host "aborting this script now (!)";
 	exit;
 }
 
-read-host "aborting anything now";
-exit;
 ssh -T "git@$gitserver"
 
 #~/.ssh/config
