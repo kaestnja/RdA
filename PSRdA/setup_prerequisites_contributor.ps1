@@ -13,12 +13,9 @@ $gituser = 'kaestnja'
 
 Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Name "setup_prerequisites_contributor" -ErrorVariable 'MyError' -ErrorAction "SilentlyContinue"
 ## No error = good, continue the next iteration of the loop
-If (-not $MyError)
-{
+If (-not $MyError){
     Write-Host -ForegroundColor Green "Throw Flag here:" + $MyError + " or here:" + $Error
-}
-else
-{
+}else{
     Write-Host -ForegroundColor Yellow "Throw Flag here:" + $MyError + " or here:" + $Error
     $Error.clear()
 }
@@ -27,8 +24,7 @@ if ((Test-Admin) -eq $false)  {
 	read-host "This code have to be run elevate, which is not the case now.";
     if ($elevated) {
         read-host "tried to elevate, did not work";
-    } 
-    else {
+    }else{
 		read-host "try to download the same script for running it local now..."
 		if (!($temppath | Test-Path)) { md -p "$temppath" }
 		if (Test-Path "$temppath") { Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";}
@@ -127,14 +123,11 @@ if (Test-Path "$temppath") {
 	        $KeyName = 'setup_prerequisites_contributor';
 	        $Command = "%systemroot%\System32\WindowsPowerShell\v1.0\powershell.exe -executionpolicy bypass -file $temppath\setup_prerequisites_contributor.ps1";
 			#$Command = "%systemroot%\System32\WindowsPowerShell\v1.0\PowerShell.exe -NoProfile -ExecutionPolicy Unrestricted -Command "& {Start-Process PowerShell -ArgumentList '-NoProfile -ExecutionPolicy Unrestricted -File ""C:\Users\UserName\Desktop\-online.ps1""' -Verb RunAs}";
-			if (Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce\setup_prerequisites_contributor")
-			{
-				Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name $KeyName -Value $Command -PropertyType ExpandString
-			}
-			else
-			{
-				New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name $KeyName -Value $Command -PropertyType ExpandString
-			}
+            if (Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce\setup_prerequisites_contributor"){
+                Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name $KeyName -Value $Command -PropertyType ExpandString
+                }else{
+                New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name $KeyName -Value $Command -PropertyType ExpandString
+            }
 			#$RunOnceKey = "HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce"
 			#set-itemproperty $RunOnceKey "NextRun" ('C:\Windows\System32\WindowsPowerShell\v1.0\Powershell.exe -executionPolicy Unrestricted -File ' + "C:\Tempscript\TempScript2.ps1")
 			}
