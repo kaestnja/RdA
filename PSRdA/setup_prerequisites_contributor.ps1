@@ -179,6 +179,7 @@ if (Test-Path "$temppath") {
 	if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
 	$folder = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git\cmd"
 	if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+	git update-git-for-windows
 
 	#add wget into Git 
 	$file = "wget.exe"
@@ -273,15 +274,22 @@ if (Test-Path "$temppath") {
             return;
             }
 		}
-	$file = "vs_enterprise_2019.exe"
-	if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
+	$file = "vs_enterprise.exe"
+	#https://aka.ms/vs/16/release/vs_Enterprise.exe
+	if (!("$temppath\$file" | Test-Path)) { curl "https://aka.ms/vs/16/release/$file" -OutFile "$temppath\$file" }
+	#if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
 	if (Test-Path "$temppath\$file") { 
 		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
 		#Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
 		#read-host "To continue after update";
+		Write-Host -ForegroundColor Blue "--------------------------------------------------------------"
 		echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_enterprise_2019 -Wait -PassThru;"
+		Write-Host -ForegroundColor Blue "--------------------------------------------------------------"
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait",$vsconfig_vs_enterprise_2019 -Wait -PassThru;
-		read-host "To continue after vs_enterprise_20199";
+		if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
+		    read-host "Installation of Visual Studio failed. You can try it manually with the command between the last two blue lines...";
+            return;
+            }
 		}
 	#vs_enterprise.exe [command] <options>
 	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
