@@ -6,7 +6,7 @@ param([switch]$Elevated)
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.6'
+$version = '0.0.7'
 $myname = 'setup_prerequisites_contributor.ps1'
 $keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
 $Error.clear()
