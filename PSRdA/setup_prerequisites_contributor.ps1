@@ -1,14 +1,14 @@
 #Requires -RunAsAdministrator
-param([switch]$Elevated)
+param([switch]$Elevated,[parameter(HelpMessage="can be one of:expert,server,contributor or just nothing")][String]$setuptype,[parameter(HelpMessage="reinstalls anything, if set to true")][Boolean]$force)
 #start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
 
 #plz replace all wrong characters like –   with - " , except in this line. those came from copying snipets from internet.
-$setupkind = "contributor"
-$setupstrong = $null #"force"
+$setuptype = "contributor"
+$force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.7'
+$version = '0.0.8'
 $myname = 'setup_prerequisites_contributor.ps1'
 $keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
 $Error.clear()
@@ -56,10 +56,13 @@ if ((Test-Admin) -eq $false){
 		if (!($temppath | Test-Path)) { md -p "$temppath" }
 		if (Test-Path "$temppath") { Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";}
 		if (Test-Path "$temppath\setup_prerequisites_contributor.ps1") { 
-            read-host "have the same script, will now try to elevate into a second, but local instance now...";
-			#Unblock-File -Path '$temppath\setup_prerequisites_contributor.ps1';
-			Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f "$temppath\setup_prerequisites_contributor.ps1");
-            #Start-Process -FilePath "powershell" -ArgumentList "$('-File ""')$(Get-Location)$('\')$($MyInvocation.MyCommand.Name)$('""')" -Verb runAs;
+            Write-Host  -ForegroundColor Green "have the same script locally."
+            if ($setuptype -eq "contributor"){
+                read-host  -ForegroundColor Red "will now try to elevate into a second and administrative, but local instance now...";
+			    #Unblock-File -Path '$temppath\setup_prerequisites_contributor.ps1';
+			    Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f "$temppath\setup_prerequisites_contributor.ps1");
+                #Start-Process -FilePath "powershell" -ArgumentList "$('-File ""')$(Get-Location)$('\')$($MyInvocation.MyCommand.Name)$('""')" -Verb runAs;
+            }
 		}
 		#Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
 		#Start-Process powershell -verb runas -ArgumentList "-file fullpathofthescript"
@@ -254,12 +257,14 @@ if (Test-Path "$temppath") {
     }
 
 	#install mongodb-compass
-    if (!("C:\Program Files\MongoDB Compass Community\MongoDBCompassCommunity.exe" | Test-Path)) {
-	    $file = "mongodb-compass-community-1.19.12-win32-x64.msi"
-	    if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
-	    #developer gets a mongodb-compass as application, which is able to edit mongodb completely
-	    if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
-	}
+    if ($setuptype -eq "contributor"){
+        if (!("C:\Program Files\MongoDB Compass Community\MongoDBCompassCommunity.exe" | Test-Path)) {
+	        $file = "mongodb-compass-community-1.19.12-win32-x64.msi"
+	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
+	        #developer gets a mongodb-compass as application, which is able to edit mongodb completely
+	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
+	        }
+        }
     #install mongodb
     if (!("C:\Program Files\MongoDB\Server\4.2\bin\mongod.exe" | Test-Path)) {
 	    if (!("C:\MongoDB\data" | Test-Path)) { md -p "C:\MongoDB\data" }
@@ -287,14 +292,16 @@ if (Test-Path "$temppath") {
 		    $Shortcut.Save()}
 	}
 	#developer gets an allround editor, if possible the new 7.8.1, or at minimum the 7.7.1
-    if (!('C:\Program Files\Notepad++\notepad++.exe' | Test-Path)) {
-	    $file = "npp.7.7.1.Installer.x64.exe"
-	    if (!("$temppath\$file" | Test-Path)) { curl https://notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.x64.exe -OutFile "$temppath\$file" }
-	    if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/S" }
-	    $file = "npp.7.8.1.Installer.x64.exe"
-	    if (!("$temppath\$file" | Test-Path)) { curl http://download.notepad-plus-plus.org/repository/7.x/7.8.1/npp.7.8.1.Installer.x64.exe -OutFile "$temppath\$file" }
-	    if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/S" }
-    }
+    if ($setuptype -eq "contributor"){
+        if (!('C:\Program Files\Notepad++\notepad++.exe' | Test-Path)) {
+	        $file = "npp.7.7.1.Installer.x64.exe"
+	        if (!("$temppath\$file" | Test-Path)) { curl https://notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.x64.exe -OutFile "$temppath\$file" }
+	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/S" }
+	        $file = "npp.7.8.1.Installer.x64.exe"
+	        if (!("$temppath\$file" | Test-Path)) { curl http://download.notepad-plus-plus.org/repository/7.x/7.8.1/npp.7.8.1.Installer.x64.exe -OutFile "$temppath\$file" }
+	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/S" }
+            }
+        }
 
 	#developer gets minimum c++ 14.0 for levenshtein and complete ide for python and django webdeployment
     Install-Module PowerShellGet -Force -SkipPublisherCheck
@@ -322,23 +329,25 @@ if (Test-Path "$temppath") {
             return;
             }
 		}
-	$file = "vs_enterprise.exe"
-	#https://aka.ms/vs/16/release/vs_Enterprise.exe
-	if (!("$temppath\$file" | Test-Path)) { curl "https://aka.ms/vs/16/release/$file" -OutFile "$temppath\$file" }
-	#if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
-	if (Test-Path "$temppath\$file") { 
-		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
-		#Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
-		#read-host "To continue after update";
-		Write-Host -ForegroundColor Blue "--------------------------------------------------------------"
-		echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_enterprise_2019 -Wait -PassThru;"
-		Write-Host -ForegroundColor Blue "--------------------------------------------------------------"
-		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait",$vsconfig_vs_enterprise_2019 -Wait -PassThru;
-		if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
-		    read-host "Installation of Visual Studio failed. You can try it manually with the command between the last two blue lines...";
-            return;
-            }
-		}
+    if ($setuptype -eq "contributor"){
+	    $file = "vs_enterprise.exe"
+	    #https://aka.ms/vs/16/release/vs_Enterprise.exe
+	    if (!("$temppath\$file" | Test-Path)) { curl "https://aka.ms/vs/16/release/$file" -OutFile "$temppath\$file" }
+	    #if (!("$temppath\$file" | Test-Path)) { curl "https://$gitserver/$gituser/RdA/raw/master/PSRdA/vs/$file" -OutFile "$temppath\$file" }
+	    if (Test-Path "$temppath\$file") { 
+		    #echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
+		    #Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
+		    #read-host "To continue after update";
+		    Write-Host -ForegroundColor Blue "--------------------------------------------------------------"
+		    echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_enterprise_2019 -Wait -PassThru;"
+		    Write-Host -ForegroundColor Blue "--------------------------------------------------------------"
+		    Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait",$vsconfig_vs_enterprise_2019 -Wait -PassThru;
+		    if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
+		        read-host "Installation of Visual Studio failed. You can try it manually with the command between the last two blue lines...";
+                return;
+                }
+		    }
+        }
 	#vs_enterprise.exe [command] <options>
 	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
 	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
