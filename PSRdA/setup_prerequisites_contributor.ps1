@@ -185,6 +185,7 @@ if (Test-Path "$temppath") {
     {
         git | Out-Null
         Write-Host "Git is installed" -foregroundcolor "green"
+        git update-git-for-windows
     }
     catch [System.Management.Automation.CommandNotFoundException]
     {
@@ -404,8 +405,6 @@ Add-PoshGitToProfile
 
 #disable home Path
 #$GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $false
-
-git update-git-for-windows
 
 #Get-Item "Env:"
 #get-childitem -path env:* | get-member
