@@ -8,7 +8,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.8'
+$version = '0.0.9'
 $myname = 'setup_prerequisites_contributor.ps1'
 $keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
 $Error.clear()
@@ -88,9 +88,13 @@ ssh -T "git@$gitserver"
 #$myPipProxy='--proxy=https://user:pass@server:port'
 
 #report some important info
-wmic os get caption
-wmic os get osarchitecture
-(Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
+#get-wmiobject win32_operatingsystem | select @{Name="Installed"; Expression={$_.ConvertToDateTime($_.InstallDate)}}, Caption
+#$osinfo = (Get-WMIObject win32_operatingsystem).name.split("|")[0]
+$osinfo = (Get-WMIObject win32_operatingsystem).name.split("|")[0] + " " + (Get-WmiObject Win32_OperatingSystem).OSArchitecture + " " + (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
+#wmic os get caption
+#wmic os get osarchitecture
+#(Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
+Write-Host -foregroundcolor "green" $osinfo
 $PSVersionTable.PSVersion
 
 #check and generate the Powershell profile, maybe the session have to be restarted?
