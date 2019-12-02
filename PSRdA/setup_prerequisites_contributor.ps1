@@ -177,11 +177,11 @@ if (Test-Path "$temppath") {
     try
     {
         git | Out-Null
-       "Git is installed"
+        Write-Host "Git is installed" -foregroundcolor "green"
     }
     catch [System.Management.Automation.CommandNotFoundException]
     {
-        "No git"
+        Write-Host "Git is not installed" -foregroundcolor "red"
     }
     $isGitInstalled = $null -ne ( (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*) + (Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*) | Where-Object { $null -ne $_.DisplayName -and $_.Displayname.Contains('Git') })
     if (!($isGitInstalled )){
@@ -217,14 +217,14 @@ if (Test-Path "$temppath") {
     $p = &{python -V} 2>&1
     # check if an ErrorRecord was returned
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
+        Trace-Command –Name CommandDiscovery –Expression {get-command python} -PSHost
         # grab the version string from the error message
         $p.Exception.Message
     }else{
         # otherwise return as is
         $p
     }
-    echo $p
-    echo $version
+    Write-Host "Python is installed as: $version" -foregroundcolor "green"
 
 	#$file = "python-2.7.17.amd64.msi"
 	#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi -OutFile "$temppath\$file" }
@@ -245,7 +245,7 @@ if (Test-Path "$temppath") {
 	    $folder = "C:\Python37\"
         if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
 
-        python --version
+        #python --version
         $errorcode = python -m pip install --upgrade pip --timeout=3 --retries=1
         #WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<pip._vendor.urllib3.connection.VerifiedHTTPSConnection object at 0x000001DDE3735088>, 'Connection to pypi.org timed out. (connect timeout=3.0)')': /simple/pip/
         python -m pip install --upgrade pip $myPipProxy
@@ -286,7 +286,7 @@ if (Test-Path "$temppath") {
 		    $Shortcut.WorkingDirectory = "${env:ProgramFiles}\MongoDB\Server\4.2\bin"
 		    $Shortcut.Save()}
 	}
-	#developer gets an allround editor
+	#developer gets an allround editor, if possible the new 7.8.1, or at minimum the 7.7.1
     if (!('C:\Program Files\Notepad++\notepad++.exe' | Test-Path)) {
 	    $file = "npp.7.7.1.Installer.x64.exe"
 	    if (!("$temppath\$file" | Test-Path)) { curl https://notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.x64.exe -OutFile "$temppath\$file" }
