@@ -4,7 +4,7 @@ param([switch]$Elevated)
 
 #plz replace all wrong characters like –   with - " , except in this line. those came from copying snipets from internet.
 $setupkind = "contributor"
-$setupstrong = Null #"force"
+$setupstrong = None #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
