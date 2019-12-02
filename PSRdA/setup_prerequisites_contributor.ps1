@@ -228,15 +228,6 @@ if (Test-Path "$temppath") {
         $p
     }
     Write-Host "Python is installed as: $version" -foregroundcolor "green"
-
-	#$file = "python-2.7.17.amd64.msi"
-	#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi -OutFile "$temppath\$file" }
-	#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i python-2.7.17.amd64.msi","/passive","/norestart" }
-
-	#$file = "python-3.8.0-amd64.exe"
-	#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe -OutFile "$temppath\$file" }
-	#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python38" }
-
     if ($version -notcontains "Python 3.7.5"){
 	    $file = "python-3.7.5-amd64.exe"
 	    if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$file" }
@@ -255,9 +246,18 @@ if (Test-Path "$temppath") {
 	    python -m pip install --upgrade setuptools $myPipProxy
 	    python -m pip install --upgrade wheel $myPipProxy
     }
+    #if maybe other python is needed as well, uncomment this:
+    #$file = "python-2.7.17.amd64.msi"
+	#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi -OutFile "$temppath\$file" }
+	#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i python-2.7.17.amd64.msi","/passive","/norestart" }
+
+	#$file = "python-3.8.0-amd64.exe"
+	#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe -OutFile "$temppath\$file" }
+	#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python38" }
+
 
 	#install mongodb-compass
-    if ($setuptype -eq "contributor"){
+    if (($setuptype -eq "contributor") -or ($setuptype -eq "server")){
         if (!("C:\Program Files\MongoDB Compass Community\MongoDBCompassCommunity.exe" | Test-Path)) {
 	        $file = "mongodb-compass-community-1.19.12-win32-x64.msi"
 	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
@@ -265,6 +265,15 @@ if (Test-Path "$temppath") {
 	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
 	        }
         }
+    if ($setuptype -eq "expert"){
+        if (!("C:\Program Files\MongoDB Compass Readonly\MongoDBCompassReadonly.exe" | Test-Path)) {
+            $file = "mongodb-compass-readonly-1.19.12-win32-x64.msi"
+	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-readonly-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
+	        #developer gets a mongodb-compass as application, which is able to edit mongodb completely
+	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
+            }
+        }
+
     #install mongodb
     if (!("C:\Program Files\MongoDB\Server\4.2\bin\mongod.exe" | Test-Path)) {
 	    if (!("C:\MongoDB\data" | Test-Path)) { md -p "C:\MongoDB\data" }
