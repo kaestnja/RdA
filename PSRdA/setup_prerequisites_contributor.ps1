@@ -3,6 +3,8 @@ param([switch]$Elevated)
 #start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
 
 #plz replace all wrong characters like –   with - " , except in this line. those came from copying snipets from internet.
+$setupkind = "contributor"
+$setupstrong = Empty #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
@@ -154,13 +156,35 @@ if (Test-Path "$temppath") {
 	}
 
 	#Install PScore6 
-	#iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
-	$file = "PowerShell-6.2.3-win-x64.msi"
-	if (!("$temppath\$file" | Test-Path)) { curl https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/PowerShell-6.2.3-win-x64.msi -OutFile "$temppath\$file" }
-	#msiexec.exe /l*v mdbinstall.log /qb /i PowerShell-6.2.3-win-x64.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1
-	if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i PowerShell-6.2.3-win-x64.msi","/quiet","ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1","ENABLE_PSREMOTING=1","REGISTER_MANIFEST=1" }
+    #$key = "HKLM:\Software\Microsoft\PowerShell\1\Install"
+    #$key = "HKLM:\SOFTWARE\Microsoft\PowerShell\1\PowerShellEngine\PowerShellVersion"
+    #$key = "HKLM:\SOFTWARE\Microsoft\PowerShell\3"
+    $key = "HKLM:\SOFTWARE\Microsoft\PowerShellCore\InstalledVersions\31ab5147-9a97-4452-8443-d9709f0516e1"
+    $keyValue = "SemanticVersion"
+    if (!(Test-Path $key )){
+        Write-Host "Powershell 6 missing" -foregroundcolor "yellow"
+        if (!(Test-RegistryValue -Path $key -Value $keyValue)){
+            Write-Host "Powershell 6 not identified" -foregroundcolor "yellow"
+            #iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
+	        $file = "PowerShell-6.2.3-win-x64.msi"
+	        if (!("$temppath\$file" | Test-Path)) { curl https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/PowerShell-6.2.3-win-x64.msi -OutFile "$temppath\$file" }
+	        #msiexec.exe /l*v mdbinstall.log /qb /i PowerShell-6.2.3-win-x64.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1
+	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i PowerShell-6.2.3-win-x64.msi","/quiet","ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1","ENABLE_PSREMOTING=1","REGISTER_MANIFEST=1" }
+        }
+    }
 
-	#Install Git 
+    #Install Git 
+    try
+    {
+        git | Out-Null
+       "Git is installed"
+    }
+    catch [System.Management.Automation.CommandNotFoundException]
+    {
+        "No git"
+    }
+    $isGitInstalled = $null -ne ( (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*) + (Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*) | Where-Object { $null -ne $_.DisplayName -and $_.Displayname.Contains('Git') })
+    if (!($isGitInstalled )){
 	$file = "Git-2.24.0.2-64-bit.exe"
 	if (!("$temppath\$file" | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe -OutFile "$temppath\$file" }
 	#.\Git-2.24.0.2-64-bit.exe /SILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /COMPONENTS="icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh,autoupdate" /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled
@@ -185,6 +209,8 @@ if (Test-Path "$temppath") {
 	$file = "wget.exe"
 	$folder = (Get-Item "Env:ProgramFiles").Value + "\Git\mingw64\bin"
 	if (Test-Path $folder) { if (!("$folder\$file" | Test-Path)) { curl https://eternallybored.org/misc/wget/1.20.3/64/wget.exe -OutFile "$folder\$file" } }
+    }
+
 
 	#install python
 	$file = "python-2.7.17.amd64.msi"
