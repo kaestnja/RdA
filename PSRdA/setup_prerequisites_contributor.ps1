@@ -127,7 +127,7 @@ if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityP
 
 ####################################################################################################################################
 #Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -ErrorAction Stop | Out-Null
 ####################################################################################################################################
 
 if (!($temppath | Test-Path)) { md -p "$temppath" }
