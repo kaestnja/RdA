@@ -362,21 +362,21 @@ if (Test-Path "$temppath") {
 		$errorcode = $null
 		$errorcode = python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1
 		if ($errorcode -like '*Requirement already up-to-date:*'){
-			Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
-		} elseif ($errorcode -like '*sososo*'){
+			Write-Host "Python pyxdameraulevenshtein already up-to-date" -foregroundcolor "green"
+		} elseif ($errorcode -like '*error: Microsoft Visual C++ 14.0 is required.*'){
 			Write-Host $errorcode -foregroundcolor "red"
 		} else {
-			Write-Host $errorcode -foregroundcolor "red"
+			Write-Host $errorcode -foregroundcolor "black"
 			read-host "python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1"
 		}
 		$errorcode = $null
 		$errorcode = python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
 		if ($errorcode -like '*Requirement already up-to-date:*'){
-			Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
-		} elseif ($errorcode -like '*sososo*'){
+			Write-Host "Python python-bsonjs already up-to-date" -foregroundcolor "green"
+		} elseif ($errorcode -like '*error: Microsoft Visual C++ 14.0 is required.*'){
 			Write-Host $errorcode -foregroundcolor "red"
 		} else {
-			Write-Host $errorcode -foregroundcolor "red"
+			Write-Host $errorcode -foregroundcolor "black"
 			read-host "python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1"
 		}
 
