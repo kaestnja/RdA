@@ -357,11 +357,28 @@ if (Test-Path "$temppath") {
 		echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--quiet`",`"--wait`",`"--norestart`",`"--nocache`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
         Write-Host -ForegroundColor Yellow "--------------------------------------------------------------"
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--quiet","--wait","--norestart","--nocache",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
-		
+
+		$errorcode = $null
 		$errorcode = python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1
-		read-host "python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1"
+			if ($errorcode -like '*Requirement already up-to-date:*'){
+				Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
+			} elseif ($errorcode -like '*sososo*'){
+				Write-Host $errorcode -foregroundcolor "red"
+			} else {
+				Write-Host $errorcode -foregroundcolor "red"
+				read-host "python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1"
+			}
+		$errorcode = $null
 		$errorcode = python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
-		read-host "python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1"
+			if ($errorcode -like '*Requirement already up-to-date:*'){
+				Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
+			} elseif ($errorcode -like '*sososo*'){
+				Write-Host $errorcode -foregroundcolor "red"
+			} else {
+				Write-Host $errorcode -foregroundcolor "red"
+				read-host "python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1"
+			}
+
 		if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
 		    read-host "Installation of Visual Studio failed. You can try it manually with the command between the last two yellow lines...";
             return;
