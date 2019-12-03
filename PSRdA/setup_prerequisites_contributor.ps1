@@ -246,7 +246,15 @@ if (Test-Path "$temppath") {
 		Write-Host "install Python 3.7.5 now" -foregroundcolor "yellow"
 	    $file = "python-3.7.5-amd64.exe"
 	    if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$file" }
-	    if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" }
+	    if (Test-Path "$temppath\$file") { 
+			Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" 
+			if (!("C:\Python37\python.exe" | Test-Path)){
+				Write-Host "missing Python 3.7.5" -foregroundcolor "red"
+				read-host "?"
+			}
+		}else{
+			Write-Host "$temppath\$file not found" -foregroundcolor "red"
+		}
 	}
 	$p = &{python -V} 2>&1
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
