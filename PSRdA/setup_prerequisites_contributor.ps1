@@ -383,6 +383,11 @@ if (Test-Path "$temppath") {
 		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
 		read-host "Installation 3"
 
+		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--wait","--nocache",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
+		Get-VSSetupInstance -All -Prerelease
+		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
+		read-host "Installation 4"
+
 		$errorcode = $null
 		$errorcode = python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1
 		if ($errorcode -like '*Requirement already up-to-date:*'){
