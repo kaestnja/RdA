@@ -18,8 +18,8 @@ Write-Host -ForegroundColor Green "version:" + $version
 #$ErrorActionPreference = 'Continue'
 
 function Test-Admin {
-  $currentPrincipal = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
-  $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+	$currentPrincipal = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
+	$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 }
 function Test-RegistryValue {param ( [parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]$Path,[parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]$Value)
     $Error.clear()
@@ -30,7 +30,7 @@ function Test-RegistryValue {param ( [parameter(Mandatory=$true)] [ValidateNotNu
         }
     catch {
         return $false
-    }
+    	}
 }
 #Function Test-RegistryValue { param([string]$RegKeyPath,[string]$Value)
 #    $ValueExist = (Get-ItemProperty $RegKeyPath).$Value -ne $null
@@ -51,7 +51,7 @@ if ((Test-Admin) -eq $false){
 	read-host "This code have to be run elevate, which is not the case now.";
     if ($elevated) {
         Write-Host -ForegroundColor Red "tried to elevate, did not work";
-    }else{
+    } else {
 		Write-Host -ForegroundColor Yellow "try to download the same script for running it local now..."
 		if (!($temppath | Test-Path)) { md -p "$temppath" }
 		if (Test-Path "$temppath") { Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";}
@@ -127,7 +127,8 @@ if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityP
 	$data = Get-Content -Raw -Path $profile; echo $data;
 	if (!($data -like "*Net.ServicePointManager*")) {Add-Content $profile "# Configure PowerShell Transport Layer Security Protocols";
 		Add-Content $profile "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls11, [Net.SecurityProtocolType]::Tls12 ;";};
-	$data = Get-Content -Path $profile; echo $data;}
+	$data = Get-Content -Path $profile; echo $data;
+}
 
 ####################################################################################################################################
 #Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
@@ -156,7 +157,7 @@ if (Test-Path "$temppath") {
             $keyValue = $myname
             if (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
                 Set-ItemProperty -Path $keyRunOnce -Name $keyValue -Value $Command
-                }else{
+            } else {
                 New-ItemProperty -Path $keyRunOnce -Name $keyValue -Value $Command -PropertyType ExpandString
             }
 		}
@@ -228,7 +229,7 @@ if (Test-Path "$temppath") {
         Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
         # grab the version string from the error message
         $p.Exception.Message
-    }else{
+    } else {
         # otherwise return as is
         $p
     }
@@ -243,7 +244,7 @@ if (Test-Path "$temppath") {
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
         Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
         $p.Exception.Message
-    }else{
+    } else {
         $p
     }
 	if ($version -like '*Python 3.7*'){
@@ -255,14 +256,13 @@ if (Test-Path "$temppath") {
 	}
 	$errorcode = $null
 	$errorcode = python -m pip install --upgrade pip --timeout=3 --retries=1
-		if ($errorcode -like '*Requirement already up-to-date:*'){
-			Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
-		} elseif ($errorcode -like '*sososo*'){
-			Write-Host $errorcode -foregroundcolor "red"
-		}
-		} else {
-			Write-Host $errorcode -foregroundcolor "red"
-		}
+	if ($errorcode -like '*Requirement already up-to-date:*'){
+		Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
+	} elseif ($errorcode -like '*sososo*'){
+		Write-Host $errorcode -foregroundcolor "red"
+	} else {
+		Write-Host $errorcode -foregroundcolor "red"
+	}
 	#WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<pip._vendor.urllib3.connection.VerifiedHTTPSConnection object at 0x000001DDE3735088>, 'Connection to pypi.org timed out. (connect timeout=3.0)')': /simple/pip/
 	python -m pip install --upgrade pip $myPipProxy
 	python -m pip install --upgrade setuptools $myPipProxy
@@ -285,16 +285,16 @@ if (Test-Path "$temppath") {
 	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
 	        #developer gets a mongodb-compass as application, which is able to edit mongodb completely
 	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
-	        }
-        }
+	    }
+    }
     if ($setuptype -eq "expert"){
         if (!("C:\Program Files\MongoDB Compass Readonly\MongoDBCompassReadonly.exe" | Test-Path)) {
             $file = "mongodb-compass-readonly-1.19.12-win32-x64.msi"
 	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-readonly-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
 	        #developer gets a mongodb-compass as application, which is able to edit mongodb completely
 	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
-            }
         }
+    }
 
     #install mongodb
     if (!("C:\Program Files\MongoDB\Server\4.2\bin\mongod.exe" | Test-Path)) {
@@ -320,7 +320,8 @@ if (Test-Path "$temppath") {
 		    #$Shortcut.IconLocation = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe, 1"
 		    $Shortcut.WindowStyle = "1"
 		    $Shortcut.WorkingDirectory = "${env:ProgramFiles}\MongoDB\Server\4.2\bin"
-		    $Shortcut.Save()}
+			$Shortcut.Save()
+		}
 	}
 	#developer gets an allround editor, if possible the new 7.8.1, or at minimum the 7.7.1
     if ($setuptype -eq "contributor"){
@@ -331,8 +332,8 @@ if (Test-Path "$temppath") {
 	        $file = "npp.7.8.1.Installer.x64.exe"
 	        if (!("$temppath\$file" | Test-Path)) { curl http://download.notepad-plus-plus.org/repository/7.x/7.8.1/npp.7.8.1.Installer.x64.exe -OutFile "$temppath\$file" }
 	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/S" }
-            }
         }
+    }
 
 	#developer gets minimum c++ 14.0 for levenshtein and complete ide for python and django webdeployment
     Install-Module PowerShellGet -Force -SkipPublisherCheck
@@ -360,30 +361,30 @@ if (Test-Path "$temppath") {
 
 		$errorcode = $null
 		$errorcode = python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1
-			if ($errorcode -like '*Requirement already up-to-date:*'){
-				Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
-			} elseif ($errorcode -like '*sososo*'){
-				Write-Host $errorcode -foregroundcolor "red"
-			} else {
-				Write-Host $errorcode -foregroundcolor "red"
-				read-host "python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1"
-			}
+		if ($errorcode -like '*Requirement already up-to-date:*'){
+			Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
+		} elseif ($errorcode -like '*sososo*'){
+			Write-Host $errorcode -foregroundcolor "red"
+		} else {
+			Write-Host $errorcode -foregroundcolor "red"
+			read-host "python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1"
+		}
 		$errorcode = $null
 		$errorcode = python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
-			if ($errorcode -like '*Requirement already up-to-date:*'){
-				Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
-			} elseif ($errorcode -like '*sososo*'){
-				Write-Host $errorcode -foregroundcolor "red"
-			} else {
-				Write-Host $errorcode -foregroundcolor "red"
-				read-host "python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1"
-			}
+		if ($errorcode -like '*Requirement already up-to-date:*'){
+			Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
+		} elseif ($errorcode -like '*sososo*'){
+			Write-Host $errorcode -foregroundcolor "red"
+		} else {
+			Write-Host $errorcode -foregroundcolor "red"
+			read-host "python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1"
+		}
 
 		if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
 		    read-host "Installation of Visual Studio failed. You can try it manually with the command between the last two yellow lines...";
             return;
             }
-		}
+	}
 
 	
     if ($setuptype -eq "contributor"){
@@ -402,9 +403,9 @@ if (Test-Path "$temppath") {
 		    if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
 		        read-host "Installation of Visual Studio failed. You can try it manually with the command between the last two blue lines...";
                 return;
-                }
-		    }
-        }
+            }
+		}
+    }
 	#vs_enterprise.exe [command] <options>
 	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
 	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
