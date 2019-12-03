@@ -137,7 +137,7 @@ if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityP
 }
 
 ####################################################################################################################################
-#Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
+Install-Module PowerShellGet -Scope AllUsers -Force -AllowClobber -ErrorAction Stop | Out-Null
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -ErrorAction Stop | Out-Null
 ####################################################################################################################################
 
