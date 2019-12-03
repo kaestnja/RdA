@@ -340,11 +340,18 @@ if (Test-Path "$temppath") {
 		echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--quiet`",`"--wait`",`"--norestart`",`"--nocache`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
         Write-Host -ForegroundColor Yellow "--------------------------------------------------------------"
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--quiet","--wait","--norestart","--nocache",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
-        if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
+		
+		$errorcode = python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1
+		read-host "python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1"
+		$errorcode = python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
+		read-host "python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1"
+		if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
 		    read-host "Installation of Visual Studio failed. You can try it manually with the command between the last two yellow lines...";
             return;
             }
 		}
+
+	
     if ($setuptype -eq "contributor"){
 	    $file = "vs_enterprise.exe"
 	    #https://aka.ms/vs/16/release/vs_Enterprise.exe
