@@ -225,7 +225,7 @@ if (Test-Path "$temppath") {
     $p = &{python -V} 2>&1
     # check if an ErrorRecord was returned
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
-        Trace-Command �Name CommandDiscovery �Expression {get-command python} -PSHost
+        Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
         # grab the version string from the error message
         $p.Exception.Message
     }else{
@@ -234,23 +234,40 @@ if (Test-Path "$temppath") {
     }
     Write-Host "Python is installed as: $version" -foregroundcolor "green"
     if ($version -notcontains "Python 3.7.5"){
+		Write-Host "install Python 3.7.5 now" -foregroundcolor "yellow"
 	    $file = "python-3.7.5-amd64.exe"
 	    if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$file" }
 	    if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" }
-
-	    $windows_path = $env:Path -split ';'
-	    $folder = "C:\Python37\Scripts\"
-        if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
-	    $folder = "C:\Python37\"
-        if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
-
-        #python --version
-        $errorcode = python -m pip install --upgrade pip --timeout=3 --retries=1
-        #WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<pip._vendor.urllib3.connection.VerifiedHTTPSConnection object at 0x000001DDE3735088>, 'Connection to pypi.org timed out. (connect timeout=3.0)')': /simple/pip/
-        python -m pip install --upgrade pip $myPipProxy
-	    python -m pip install --upgrade setuptools $myPipProxy
-	    python -m pip install --upgrade wheel $myPipProxy
+	}
+	$p = &{python -V} 2>&1
+    $version = if($p -is [System.Management.Automation.ErrorRecord]){
+        Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
+        $p.Exception.Message
+    }else{
+        $p
     }
+	if ($version -like '*Python 3.7*'){
+		$windows_path = $env:Path -split ';'
+		$folder = "C:\Python37\Scripts\"
+		if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+		$folder = "C:\Python37\"
+		if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+	}
+	$errorcode = $null
+	$errorcode = python -m pip install --upgrade pip --timeout=3 --retries=1
+		if ($errorcode -like '*Requirement already up-to-date:*'){
+			Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
+		} elseif ($errorcode -like '*sososo*'){
+			Write-Host $errorcode -foregroundcolor "red"
+		}
+		} else {
+			Write-Host $errorcode -foregroundcolor "red"
+		}
+	#WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<pip._vendor.urllib3.connection.VerifiedHTTPSConnection object at 0x000001DDE3735088>, 'Connection to pypi.org timed out. (connect timeout=3.0)')': /simple/pip/
+	python -m pip install --upgrade pip $myPipProxy
+	python -m pip install --upgrade setuptools $myPipProxy
+	python -m pip install --upgrade wheel $myPipProxy
+
     #if maybe other python is needed as well, uncomment this:
     #$file = "python-2.7.17.amd64.msi"
 	#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi -OutFile "$temppath\$file" }
