@@ -95,7 +95,10 @@ $osinfo = (Get-WMIObject win32_operatingsystem).name.split("|")[0] + " " + (Get-
 #wmic os get osarchitecture
 #(Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
 Write-Host -foregroundcolor "green" $osinfo
-$PSVersionTable.PSVersion
+#Get-Content C:\test1\testfile2.txt | Out-String
+$psinfo = ForEach-Object {"$($PSVersionTable.PSVersion)"}
+$psinfo = "Powershell Version: " + $psinfo
+Write-Host -foregroundcolor "green" $psinfo
 
 #check and generate the Powershell profile, maybe the session have to be restarted?
 if (!($profile | Test-Path)) {echo "no powershell profile found"} else {echo "current powershell profile: $profile"}
@@ -232,7 +235,9 @@ if (Test-Path "$temppath") {
     } else {
         # otherwise return as is
         $p
-    }
+	}
+	#[System.Version]"2.7.0.19530" -gt [System.Version]"3.0.0.4080"		False
+	#[System.Version]"2.7.0.19530" -lt  [System.Version]"3.0.0.4080"	True
     Write-Host "Python is installed as: $version" -foregroundcolor "green"
     if ($version -notcontains "Python 3.7.5"){
 		Write-Host "install Python 3.7.5 now" -foregroundcolor "yellow"
