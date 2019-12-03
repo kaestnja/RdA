@@ -137,7 +137,10 @@ if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityP
 }
 
 ####################################################################################################################################
-Install-Module PowerShellGet -Scope AllUsers -Force -AllowClobber -ErrorAction Stop | Out-Null
+#Get-Module -ListAvailable
+#Find-Module -Name PowerShellGet*
+#Install-Module PowerShellGet -Scope AllUsers -Force -AllowClobber -ErrorAction Stop | Out-Null
+Install-Module -Name PowerShellGet -RequiredVersion 2.1.0 -Force -Scope AllUsers -AllowClobber -ErrorAction Stop | Out-Null
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -ErrorAction Stop | Out-Null
 ####################################################################################################################################
 
@@ -402,6 +405,8 @@ if (Test-Path "$temppath") {
 		Get-VSSetupInstance -All -Prerelease
 		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
 		read-host "Installation 3"
+		#Install-Module -Scope CurrentUser MSI
+		#Get-MSIRelatedProductInfo '{1571205C-BAD1-4237-BFE6-B77E622C51DB}' | Repair-MSIProduct
 
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--quiet","--wait",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
 		Get-VSSetupInstance -All -Prerelease
