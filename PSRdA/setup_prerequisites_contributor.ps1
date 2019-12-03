@@ -376,19 +376,14 @@ if (Test-Path "$temppath") {
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait",$vsconfig_vs_buildtools_2019 -Wait -PassThru
 		Get-VSSetupInstance -All -Prerelease
 		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
-		read-host "Installation 11"
+		read-host "Installation 2"
 
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--quiet","--wait","--norestart","--nocache",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
 		Get-VSSetupInstance -All -Prerelease
 		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
-		read-host "Installation 2"
-
-		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--wait","--norestart","--nocache",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
-		Get-VSSetupInstance -All -Prerelease
-		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
 		read-host "Installation 3"
 
-		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--wait","--nocache",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
+		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--quiet","--wait",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
 		Get-VSSetupInstance -All -Prerelease
 		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
 		read-host "Installation 4"
