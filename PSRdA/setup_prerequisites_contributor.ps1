@@ -246,8 +246,8 @@ if (Test-Path "$temppath") {
 	}
 	#[System.Version]"2.7.0.19530" -gt [System.Version]"3.0.0.4080"		False
 	#[System.Version]"2.7.0.19530" -lt  [System.Version]"3.0.0.4080"	True
-    Write-Host "Python is installed as: $version" -foregroundcolor "green"
-    if ($version -notcontains "Python 3.7.5"){
+    if ($version -like '*is not recognized*'){
+		Write-Host "$version" -foregroundcolor "yellow"
 		Write-Host "install Python 3.7.5 now" -foregroundcolor "yellow"
 	    $file = "python-3.7.5-amd64.exe"
 	    if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$file" }
@@ -265,6 +265,8 @@ if (Test-Path "$temppath") {
 		}else{
 			Write-Host "$temppath\$file not found" -foregroundcolor "red"
 		}
+	} else {
+		Write-Host "Python is installed as: $version" -foregroundcolor "green"
 	}
 	$p = &{python -V} 2>&1
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
