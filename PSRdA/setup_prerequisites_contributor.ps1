@@ -101,8 +101,11 @@ $psinfo = "Powershell Version: " + $psinfo
 Write-Host -foregroundcolor "green" $psinfo
 
 #check and generate the Powershell profile, maybe the session have to be restarted?
-if (!($profile | Test-Path)) {echo "no powershell profile found"} else {echo "current powershell profile: $profile"}
-if (!($profile | Test-Path)) {New-Item -path $profile -type file -force}
+if (!($profile | Test-Path)) {
+	Write-Host -foregroundcolor "yellow" "no powershell profile found, create it now";
+	New-Item -path $profile -type file -force
+} else {Write-Host -foregroundcolor "green" "current powershell profile: $profile"}
+
 
 #identify the correct userprofile path, need to prepare desktop links and others
 #Get-Childitem env:
