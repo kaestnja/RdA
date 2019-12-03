@@ -228,7 +228,12 @@ if (Test-Path "$temppath") {
 
 
 	#install python
-    # redirect stderr into stdout
+	# redirect stderr into stdout
+	$windows_path = $env:Path -split ';'
+	$folder = "C:\Python37\Scripts\"
+	if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+	$folder = "C:\Python37\"
+	if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
     $p = &{python -V} 2>&1
     # check if an ErrorRecord was returned
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
@@ -248,6 +253,11 @@ if (Test-Path "$temppath") {
 	    if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$file" }
 	    if (Test-Path "$temppath\$file") { 
 			Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" 
+			$windows_path = $env:Path -split ';'
+			$folder = "C:\Python37\Scripts\"
+			if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+			$folder = "C:\Python37\"
+			if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
 			if (!("C:\Python37\python.exe" | Test-Path)){
 				Write-Host "missing Python 3.7.5" -foregroundcolor "red"
 				read-host "?"
