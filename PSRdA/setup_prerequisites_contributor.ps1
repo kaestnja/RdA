@@ -114,7 +114,7 @@ $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
 if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
-if (Test-Path $($(Get-Item "Env:USERPROFILE").Value + "\Desktop")) { echo "found: cd $($(Get-Item "Env:USERPROFILE").Value + "\Desktop")" }
+if (Test-Path $($(Get-Item "Env:USERPROFILE").Value + "\Desktop")) { echo "found: $($(Get-Item "Env:USERPROFILE").Value + "\Desktop")" }
 
 #eventually prepare executability
 Get-ExecutionPolicy
