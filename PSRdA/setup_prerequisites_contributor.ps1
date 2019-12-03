@@ -364,14 +364,19 @@ if (Test-Path "$temppath") {
 		#Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
 		#read-host "To continue after update";
         Write-Host -ForegroundColor Yellow "--------------------------------------------------------------"
-		echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
+		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
 		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--quiet`",`"--wait`",`"--norestart`",`"--nocache`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
 		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--wait`",`"--norestart`",`"--nocache`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
         Write-Host -ForegroundColor Yellow "--------------------------------------------------------------"
-		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait",$vsconfig_vs_buildtools_2019 -Wait -PassThru
+		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait","--norestart","--nocache",$vsconfig_vs_buildtools_2019 -Wait -PassThru
 		Get-VSSetupInstance -All -Prerelease
 		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
 		read-host "Installation 1"
+
+		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait",$vsconfig_vs_buildtools_2019 -Wait -PassThru
+		Get-VSSetupInstance -All -Prerelease
+		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
+		read-host "Installation 11"
 
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--quiet","--wait","--norestart","--nocache",$vsconfig_vs_buildtools_2019 -Wait -PassThru;
 		Get-VSSetupInstance -All -Prerelease
