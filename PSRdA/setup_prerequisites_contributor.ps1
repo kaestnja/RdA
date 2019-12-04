@@ -80,6 +80,14 @@ ssh -T "git@$gitserver"
 #Add-SshConnection -Name Server1 -Uri server1.jeremyskinner.co.uk -User jeremy
 #Start-SshAgent -Quiet
 
+#Get-ChildItem -Path Env:\
+#Set-Location -Path Env:\
+#Get-ChildItem -Path COMPUTERNAME,Path
+#$env:Path                                                      #session wise user context environment variables
+#[System.Environment]::GetEnvironmentVariable('PATH')           #permament wise user context environment variables
+#[System.Environment]::GetEnvironmentVariable('PATH','machine') #permament wise system context environment variables, like "Machine, Process or User"
+#[System.Environment]::SetEnvironmentVariable('FOO', 'bar',[System.EnvironmentVariableTarget]::Machine)
+
 #check proxy maybe set proxy
 #[Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://username:password@proxy:port/", [EnvironmentVariableTarget]::Machine)
 #$myPipProxy='--proxy=http://194.145.60.1:9400'
@@ -227,7 +235,10 @@ if (Test-Path "$temppath") {
 	    #with ArgumentList as string array
 	    #if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/SILENT","/NORESTART","/NOCANCEL","/CLOSEAPPLICATIONS","/RESTARTAPPLICATIONS","/NoIcons=0","/SetupType=default","/EditorOption=Nano","/PathOption=Cmd","/SSHOption=OpenSSH","/TortoiseOption=false","/CURLOption=OpenSSL","/CRLFOption=CRLFCommitAsIs","/BashTerminalOption=MinTTY","/PerformanceTweaksFSCache=Enabled","/UseCredentialManager=Enabled","/EnableSymlinks=Disabled","/EnableBuiltinInteractiveAdd=Disabled","/COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
 
-	    #should be in Windows Path now like: ";C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;"
+	    #oldSystemPath = [System.Environment]::GetEnvironmentVariable('PATH','machine')
+        #newSystemPath = oldSystemPath
+        #[System.Environment]::SetEnvironmentVariable('PATH', 'bar',[System.EnvironmentVariableTarget]::Machine)
+        #should be in Windows Path now like: ";C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;"
 	    $windows_path = $env:Path -split ';'
 	    $folder = (Get-Item "Env:ProgramFiles").Value + "\Git\bin"
 	    if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
@@ -247,12 +258,63 @@ if (Test-Path "$temppath") {
 
 
 	#install python
-	# redirect stderr into stdout
-	$windows_path = $env:Path -split ';'
-	$folder = "C:\Python37\Scripts\"
-	if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
-	$folder = "C:\Python37\"
-	if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+    $folder = "C:\Python37\Scripts\"
+    #--------------------------maschine
+    $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','machine')
+    $focused_path_splited = $focused_path -split ';'
+    if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine")' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+    $focused_path = $folder + ";" + $focused_path
+    [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Machine)}
+    #--------------------------user
+    $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','user')
+    $focused_path_splited = $focused_path -split ';'
+    if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user")' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+    $focused_path = $folder + ";" + $focused_path
+    [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::User)}
+    #--------------------------process
+    $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','process')
+    $focused_path_splited = $focused_path -split ';'
+    if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process")' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+    $focused_path = $folder + ";" + $focused_path
+    [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Process)}
+    #--------------------------session
+    $focused_path = $env:Path -split ';'
+    $focused_path_splited = $focused_path -split ';'
+    if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+    $env:path = $folder + ";" + $focused_path
+
+    $folder = "C:\Python37\"
+    #--------------------------maschine
+    $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','machine')
+    $focused_path_splited = $focused_path -split ';'
+    if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine")' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+    $focused_path = $folder + ";" + $focused_path
+    [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Machine)}
+    #--------------------------user
+    $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','user')
+    $focused_path_splited = $focused_path -split ';'
+    if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user")' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+    $focused_path = $folder + ";" + $focused_path
+    [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::User)}
+    #--------------------------process
+    $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','process')
+    $focused_path_splited = $focused_path -split ';'
+    if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process")' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+    $focused_path = $folder + ";" + $focused_path
+    [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Process)}
+    #--------------------------session
+    $focused_path = $env:Path -split ';'
+    $focused_path_splited = $focused_path -split ';'
+    if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+    $env:path = $folder + ";" + $focused_path
+
+	#$windows_path = $env:Path -split ';'
+    #if ($windows_path -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"}
+	#if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+    #$folder = "C:\Python37\"
+	#if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
+    
+    # redirect stderr into stdout
     $p = &{python -V} 2>&1
     # check if an ErrorRecord was returned
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
