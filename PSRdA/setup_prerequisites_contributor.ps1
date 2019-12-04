@@ -400,6 +400,7 @@ if (Test-Path "$temppath") {
 		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
 		#Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
         Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--wait" -Wait -PassThru;
+        Get-MSIRelatedProductInfo '{1571205C-BAD1-4237-BFE6-B77E622C51DB}'
 		read-host "To continue after update/setup";
         Write-Host -ForegroundColor Yellow "--------------------------------------------------------------"
 		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
@@ -409,7 +410,6 @@ if (Test-Path "$temppath") {
 
 
         Install-Module MSI -Scope AllUsers
-        Get-MSIRelatedProductInfo '{1571205C-BAD1-4237-BFE6-B77E622C51DB}'
         Get-MSIRelatedProductInfo '{1571205C-BAD1-4237-BFE6-B77E622C51DB}' | Repair-MSIProduct
         read-host "Repair 1"
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--wait","--norestart",$vsconfig_vs_buildtools_2019 -Wait -PassThru
