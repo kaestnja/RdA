@@ -137,11 +137,25 @@ if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityP
 }
 
 ####################################################################################################################################
-#Get-Module -ListAvailable
-#Find-Module -Name PowerShellGet*
-#Install-Module PowerShellGet -Scope AllUsers -Force -AllowClobber -ErrorAction Stop | Out-Null
-Install-Module -Name PowerShellGet -RequiredVersion 2.1.0 -Force -Scope AllUsers -AllowClobber -ErrorAction Stop | Out-Null
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -ErrorAction Stop | Out-Null
+if (Get-InstalledModule -Name "PowerShellGet" -MinimumVersion 2.2.1){
+    Write-Host "PowerShellGet is up to date" -foregroundcolor "green"
+} else {
+    Write-Host "PowerShellGet will be updated now" -foregroundcolor "yellow"
+    #Remove-Module -Name "PowerShellGet" -force
+    #Uninstall-Module -Name "PowerShellGet"  -AllVersions -force
+    #Remove-Module -Name "PackageManagement" -force
+    #Uninstall-Module -Name "PackageManagement"  -AllVersions -force
+
+    #Install-PackageProvider Nuget –force –verbose
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Force -ErrorAction Stop | Out-Null
+    #Get-Module -ListAvailable
+    #Find-Module -Name PowerShellGet*
+    #Find-Module -Name PackageManagement*
+    #Install-Module PowerShellGet -Scope AllUsers -Force -AllowClobber -ErrorAction Stop | Out-Null
+    #Install-Module –Name PowerShellGet –Force –Verbose
+    Install-Module -Name PowerShellGet -RequiredVersion 2.2.1 -Force -Scope AllUsers -AllowClobber -ErrorAction Continue -SkipPublisherCheck | Out-Null
+    }
+Update-Module -Name PowerShellGet
 ####################################################################################################################################
 
 if (!($temppath | Test-Path)) { md -p "$temppath" }
