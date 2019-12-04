@@ -383,7 +383,7 @@ if (Test-Path "$temppath") {
     }
 
 	#developer gets minimum c++ 14.0 for levenshtein and complete ide for python and django webdeployment
-    Install-Module VSSetup
+    Install-Module VSSetup -Scope AllUsers
     Update-Module VSSetup
     Import-Module VSSetup
 
@@ -399,7 +399,8 @@ if (Test-Path "$temppath") {
 	if (Test-Path "$temppath\$file") { 
 		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
 		#Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
-		#read-host "To continue after update";
+        Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--wait" -Wait -PassThru;
+		read-host "To continue after update/setup";
         Write-Host -ForegroundColor Yellow "--------------------------------------------------------------"
 		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
 		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--quiet`",`"--wait`",`"--norestart`",`"--nocache`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
@@ -407,10 +408,11 @@ if (Test-Path "$temppath") {
         Write-Host -ForegroundColor Yellow "--------------------------------------------------------------"
 
 
-        Install-Module -Scope CurrentUser MSI
+        Install-Module MSI -Scope AllUsers
+        Get-MSIRelatedProductInfo '{1571205C-BAD1-4237-BFE6-B77E622C51DB}'
         Get-MSIRelatedProductInfo '{1571205C-BAD1-4237-BFE6-B77E622C51DB}' | Repair-MSIProduct
         read-host "Repair 1"
-		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait","--norestart","--nocache",$vsconfig_vs_buildtools_2019 -Wait -PassThru
+		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--wait","--norestart",$vsconfig_vs_buildtools_2019 -Wait -PassThru
 		read-host "Install 1"
         Get-VSSetupInstance -All -Prerelease
 		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
