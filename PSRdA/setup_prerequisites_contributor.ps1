@@ -156,6 +156,8 @@ if (Get-InstalledModule -Name "PowerShellGet" -MinimumVersion 2.2.1){
     Install-Module -Name PowerShellGet -RequiredVersion 2.2.1 -Force -Scope AllUsers -AllowClobber -ErrorAction Continue -SkipPublisherCheck | Out-Null
     }
 Update-Module -Name PowerShellGet
+#Get-PSRepository
+Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 ####################################################################################################################################
 
 if (!($temppath | Test-Path)) { md -p "$temppath" }
@@ -381,10 +383,8 @@ if (Test-Path "$temppath") {
     }
 
 	#developer gets minimum c++ 14.0 for levenshtein and complete ide for python and django webdeployment
-    Install-Module PowerShellGet -Force -SkipPublisherCheck
-    Get-PSRepository
-    Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
     Install-Module VSSetup
+    Update-Module VSSetup
     Import-Module VSSetup
 
 	$vsconfig_vs_buildtools_2019 = 	"`"--add Microsoft.VisualStudio.Workload.MSBuildTools`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.TestTools.BuildTools`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
@@ -405,8 +405,14 @@ if (Test-Path "$temppath") {
 		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--quiet`",`"--wait`",`"--norestart`",`"--nocache`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
 		#echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--wait`",`"--norestart`",`"--nocache`",$vsconfig_vs_buildtools_2019 -Wait -PassThru;"
         Write-Host -ForegroundColor Yellow "--------------------------------------------------------------"
+
+
+        Install-Module -Scope CurrentUser MSI
+        Get-MSIRelatedProductInfo '{1571205C-BAD1-4237-BFE6-B77E622C51DB}' | Repair-MSIProduct
+        read-host "Repair 1"
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait","--norestart","--nocache",$vsconfig_vs_buildtools_2019 -Wait -PassThru
-		Get-VSSetupInstance -All -Prerelease
+		read-host "Install 1"
+        Get-VSSetupInstance -All -Prerelease
 		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
 		read-host "Installation 1"
 
