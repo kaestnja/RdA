@@ -97,8 +97,9 @@ ssh -T "git@$gitserver"
 
 #report some important info
 #get-wmiobject win32_operatingsystem | select @{Name="Installed"; Expression={$_.ConvertToDateTime($_.InstallDate)}}, Caption
-#$osinfo = (Get-WMIObject win32_operatingsystem).name.split("|")[0]
-$osinfo = (Get-WMIObject win32_operatingsystem).name.split("|")[0] + " " + (Get-WmiObject Win32_OperatingSystem).OSArchitecture + " " + (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
+#$osinfo = (Get-CimInstance -ClassName win32_operatingsystem).name.split("|")[0]
+#$osinfo = (Get-WMIObject win32_operatingsystem).name.split("|")[0] + " " + (Get-WmiObject Win32_OperatingSystem).OSArchitecture + " " + (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
+$osinfo = (Get-CimInstance -ClassName win32_operatingsystem).name.split("|")[0] + " " + (Get-CimInstance -ClassName win32_operatingsystem).OSArchitecture + " " + (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
 #wmic os get caption
 #wmic os get osarchitecture
 #(Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\').BuildLabEx
