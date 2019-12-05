@@ -313,7 +313,7 @@ if (Test-Path "$temppath") {
                 $focused_path = $env:Path -split ';'
                 $focused_path_splited = $focused_path -split ';'
                 if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
-                $env:path = $folder + ";" + $focused_path
+                $env:path = $folder + ";" + $focused_path}
 
                 $folder = "C:\Python37\"
                 #--------------------------maschine
@@ -338,7 +338,7 @@ if (Test-Path "$temppath") {
                 $focused_path = $env:Path -split ';'
                 $focused_path_splited = $focused_path -split ';'
                 if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
-                $env:path = $folder + ";" + $focused_path
+                $env:path = $folder + ";" + $focused_path}
             }
 		}else{
 			Write-Host "$temppath\$file not found" -foregroundcolor "red"
