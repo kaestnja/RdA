@@ -447,11 +447,14 @@ if (Test-Path "$temppath") {
     Update-Module VSSetup
     Import-Module VSSetup
 
-	$vsconfig_vs_buildtools_2019 = 	"`"--add Microsoft.VisualStudio.Workload.MSBuildTools`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.TestTools.BuildTools`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
+	#$vsconfig_vs_buildtools_2019 = 	"`"--add Microsoft.VisualStudio.Workload.MSBuildTools`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.TestTools.BuildTools`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
 	#$vsconfig_vs_buildtools_2019 = 	"`"--add Microsoft.VisualStudio.Workload.MSBuildTools`""
-	$vsconfig_vs_buildtools_2019_splited = $vsconfig_vs_buildtools_2019 -split ','
-	echo $vsconfig_vs_buildtools_2019_splited
-	$vsconfig_vs_enterprise_2019 = 	"`"--add Microsoft.VisualStudio.Workload.CoreEditor`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.VisualStudio.Workload.Python`",`"--add Microsoft.VisualStudio.Workload.NativeDesktop`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.Component.PythonTools`",`"--add Microsoft.Component.PythonTools.Web`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreEditor`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.VC.CoreIde`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
+	#$vsconfig_vs_buildtools_2019_splited = $vsconfig_vs_buildtools_2019 -split ','
+	#echo $vsconfig_vs_buildtools_2019_splited
+	$vsconfig_vs_buildtools_2019 = "--add Microsoft.VisualStudio.Workload.MSBuildTools --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.Component.MSBuild --add Microsoft.VisualStudio.Component.Roslyn.Compiler --add Microsoft.VisualStudio.Component.CoreBuildTools --add Microsoft.VisualStudio.Component.Windows10SDK --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest --add Microsoft.VisualStudio.Component.Windows10SDK.18362 --add Microsoft.VisualStudio.Component.VC.CMake.Project --add Microsoft.VisualStudio.Component.TestTools.BuildTools --add Microsoft.VisualStudio.Component.WebDeploy"
+	#$vsconfig_vs_enterprise_2019 = "`"--add Microsoft.VisualStudio.Workload.CoreEditor`",`"--add Microsoft.VisualStudio.Workload.VCTools`",`"--add Microsoft.VisualStudio.Workload.Python`",`"--add Microsoft.VisualStudio.Workload.NativeDesktop`",`"--add Microsoft.Component.MSBuild`",`"--add Microsoft.Component.PythonTools`",`"--add Microsoft.Component.PythonTools.Web`",`"--add Microsoft.VisualStudio.Component.Roslyn.Compiler`",`"--add Microsoft.VisualStudio.Component.CoreEditor`",`"--add Microsoft.VisualStudio.Component.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.Windows10SDK`",`"--add Microsoft.VisualStudio.Component.VC.CoreBuildTools`",`"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64`",`"--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest`",`"--add Microsoft.VisualStudio.Component.Windows10SDK.18362`",`"--add Microsoft.VisualStudio.Component.VC.CMake.Project`",`"--add Microsoft.VisualStudio.Component.VC.CoreIde`",`"--add Microsoft.VisualStudio.Component.WebDeploy`""
+	$vsconfig_vs_enterprise_2019 = "--add Microsoft.VisualStudio.Workload.CoreEditor --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Workload.Python --add Microsoft.VisualStudio.Workload.NativeDesktop --add Microsoft.Component.MSBuild --add Microsoft.Component.PythonTools --add Microsoft.Component.PythonTools.Web --add Microsoft.VisualStudio.Component.Roslyn.Compiler --add Microsoft.VisualStudio.Component.CoreEditor --add Microsoft.VisualStudio.Component.CoreBuildTools --add Microsoft.VisualStudio.Component.Windows10SDK --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest --add Microsoft.VisualStudio.Component.Windows10SDK.18362 --add Microsoft.VisualStudio.Component.VC.CMake.Project --add Microsoft.VisualStudio.Component.VC.CoreIde --add Microsoft.VisualStudio.Component.WebDeploy"
+	
 	$file = "vs_buildtools.exe"
     #https://aka.ms/vs/16/release/vs_buildtools.exe
     if (!("$temppath\$file" | Test-Path)) { curl "https://aka.ms/vs/16/release/$file" -OutFile "$temppath\$file" }
@@ -473,7 +476,19 @@ if (Test-Path "$temppath") {
         Get-MSIRelatedProductInfo '{1571205C-BAD1-4237-BFE6-B77E622C51DB}' | Repair-MSIProduct
         read-host "Repair 1"
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--wait","--norestart",$vsconfig_vs_buildtools_2019 -Wait -PassThru
-		read-host "Install 1"
+		
+		$test = ''
+		$test = python -m pip install --upgrade python-bsonjs --timeout=3 --retries=
+		if (($test -like "*Successfully installed*") -or ($test -like "*Requirement already up-to-date*")) { read-host "ok?";echo $test; }
+		elseif (($test -like "*Command errored out with exit status 1*") -or ($test -like "*failed with exit status 2*")) { read-host "still failed";echo $test; }
+		else { read-host "something else";echo $test; }
+
+
+
+
+		read-host "Install 1 plz exit here"
+
+
         Get-VSSetupInstance -All -Prerelease
 		python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
 		read-host "Installation 1"
