@@ -481,7 +481,7 @@ if (Test-Path "$temppath") {
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList $vsconfig_vs_buildtools_2019 -Wait -PassThru
 		
 		$test = ''
-		$test = python -m pip install --upgrade python-bsonjs --timeout=3 --retries=
+		$test = python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
 		if (($test -like "*Successfully installed*") -or ($test -like "*Requirement already up-to-date*")) { read-host "ok?";echo $test; }
 		elseif (($test -like "*Command errored out with exit status 1*") -or ($test -like "*failed with exit status 2*")) { read-host "still failed";echo $test; }
 		else { read-host "something else";echo $test; }
