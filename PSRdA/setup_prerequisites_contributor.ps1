@@ -8,7 +8,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.13'
+$version = '0.0.14'
 $myname = 'setup_prerequisites_contributor.ps1'
 $keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
 $Error.clear()
@@ -525,15 +525,6 @@ if (Test-Path "$temppath") {
             }
 		}
     }
-	#vs_enterprise.exe [command] <options>
-	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
-	#vs_enterprise.exe --add Microsoft.VisualStudio.Workload.CoreEditor --passive --norestart
-	#vs_enterprise.exe --update --quiet --wait
-	#vs_enterprise.exe update --wait --passive --norestart --installPath "C:\installPathVS"
-	#vs_enterprise.exe --installPath C:\desktopVS --addProductLang fr-FR --add Microsoft.VisualStudio.Workload.ManagedDesktop --includeRecommended --quiet --wait
-	##Start-Process -FilePath "C:\Temp\vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "--update","--passive","--wait","--quiet","--add Microsoft.VisualStudio.Workload.MSBuildTools" -Wait -PassThru;
-	##Start-Process -FilePath "C:\Temp\vs_buildtools_2019.exe" -WorkingDirectory "C:\Temp" -ArgumentList "--update","--passive","--wait","--quiet","--add Microsoft.VisualStudio.Workload.MSBuildTools" -Wait -PassThru;
-
 
 	#rem in case missing ...error: Microsoft Visual C++ 14.0 is required. Get it with "Microsoft Visual C++ Build Tools", repeat:
 	#python -m pip install --upgrade python-bsonjs
