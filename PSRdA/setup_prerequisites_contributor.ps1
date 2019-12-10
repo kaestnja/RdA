@@ -8,7 +8,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.12'
+$version = '0.0.13'
 $myname = 'setup_prerequisites_contributor.ps1'
 $keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
 $Error.clear()
