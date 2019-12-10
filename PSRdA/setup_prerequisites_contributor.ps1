@@ -36,6 +36,57 @@ function Test-RegistryValue {param ( [parameter(Mandatory=$true)] [ValidateNotNu
 #    $ValueExist = (Get-ItemProperty $RegKeyPath).$Value -ne $null
 #    Return $ValueExist
 #}
+Function Pause ($Message = "Press any key to continue...") {
+   # Check if running in PowerShell ISE
+   If ($psISE) {
+      # "ReadKey" not supported in PowerShell ISE.
+      # Show MessageBox UI
+      $Shell = New-Object -ComObject "WScript.Shell"
+      $Button = $Shell.Popup("Click OK to continue.", 0, "Hello", 0)
+      Return
+   }
+ 
+   $Ignore =
+      16,  # Shift (left or right)
+      17,  # Ctrl (left or right)
+      18,  # Alt (left or right)
+      20,  # Caps lock
+      91,  # Windows key (left)
+      92,  # Windows key (right)
+      93,  # Menu key
+      144, # Num lock
+      145, # Scroll lock
+      166, # Back
+      167, # Forward
+      168, # Refresh
+      169, # Stop
+      170, # Search
+      171, # Favorites
+      172, # Start/Home
+      173, # Mute
+      174, # Volume Down
+      175, # Volume Up
+      176, # Next Track
+      177, # Previous Track
+      178, # Stop Media
+      179, # Play
+      180, # Mail
+      181, # Select Media
+      182, # Application 1
+      183  # Application 2
+ 
+   Write-Host -NoNewline $Message
+   While ($KeyInfo.VirtualKeyCode -Eq $Null -Or $Ignore -Contains $KeyInfo.VirtualKeyCode) {
+      $KeyInfo = $Host.UI.RawUI.ReadKey("NoEcho, IncludeKeyDown")
+   }
+}
+
+
+
+
+
+
+
 
 $keyValue = $myname
 If (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
@@ -364,9 +415,9 @@ if (Test-Path "$temppath") {
 	$errorcode = $null
 	$errorcode = python -m pip install --upgrade pip --timeout=3 --retries=1
 	if ($errorcode -like '*Requirement already up-to-date:*'){
-		Write-Host "Python pip already up-to-date" -foregroundcolor "yellow"
-	} elseif ($errorcode -like '*sososo*'){
-		Write-Host $errorcode -foregroundcolor "red"
+		Write-Host "Python pip already up-to-date" -foregroundcolor "green"
+	} elseif ($errorcode -like '*Successfully installed*'){
+		Write-Host "Python pip successfully installed" -foregroundcolor "green"
 	} else {
 		Write-Host $errorcode -foregroundcolor "red"
 	}
@@ -469,17 +520,17 @@ if (Test-Path "$temppath") {
         #read-host "Repair 1 would be done"
 
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList $vsconfig_vs_buildtools_2019 -Wait -PassThru
-		$test = ''
-		$test = python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
-		if (($test -like "*Successfully installed*") -or ($test -like "*Requirement already up-to-date*")) { read-host "ok?";echo $test; }
-		elseif (($test -like "*Command errored out with exit status 1*") -or ($test -like "*failed with exit status 2*")) { read-host "still failed";echo $test; }
-		else { read-host "something else";echo $test; }
+		$errorcode = $null
+		$errorcode = python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
+		if (($errorcode -like "*Successfully installed*") -or ($errorcode -like "*Requirement already up-to-date*")) { Write-Host "Visual Studio install minimum c++ 14.0 for levenshtein and bsonjs seems ready" -foregroundcolor "green" }
+		elseif (($errorcode -like "*Command errored out with exit status 1*") -or ($errorcode -like "*failed with exit status 2*")) { echo $errorcode; read-host "Visual Studio install minimum c++ 14.0 for levenshtein and bsonjs seems failed."; }
+		else { echo $errorcode; read-host "something else happend?"; }
 
         Get-VSSetupInstance -All -Prerelease
 
 		$errorcode = $null
 		$errorcode = python -m pip install --upgrade pyxdameraulevenshtein --timeout=3 --retries=1
-		if ($errorcode -like '*Requirement already up-to-date:*'){
+		if (($errorcode -like '*Requirement already up-to-date:*') -or ($errorcode -like '*Requirement already up-to-date*')){
 			Write-Host "Python pyxdameraulevenshtein already up-to-date" -foregroundcolor "green"
 		} elseif ($errorcode -like '*error: Microsoft Visual C++ 14.0 is required.*'){
 			Write-Host $errorcode -foregroundcolor "red"
@@ -489,7 +540,7 @@ if (Test-Path "$temppath") {
 		}
 		$errorcode = $null
 		$errorcode = python -m pip install --upgrade python-bsonjs --timeout=3 --retries=1
-		if ($errorcode -like '*Requirement already up-to-date:*'){
+		if (($errorcode -like '*Requirement already up-to-date:*') -or ($errorcode -like '*Requirement already up-to-date*')){
 			Write-Host "Python python-bsonjs already up-to-date" -foregroundcolor "green"
 		} elseif ($errorcode -like '*error: Microsoft Visual C++ 14.0 is required.*'){
 			Write-Host $errorcode -foregroundcolor "red"
@@ -514,9 +565,9 @@ if (Test-Path "$temppath") {
 		    #echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--update`",`"--passive`",`"--wait`" -Wait -PassThru;"
 		    #Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--update","--passive","--wait" -Wait -PassThru;
 		    #read-host "To continue after update";
-		    Write-Host -ForegroundColor Blue "--------------------------------------------------------------"
-		    echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_enterprise_2019 -Wait -PassThru;"
-		    Write-Host -ForegroundColor Blue "--------------------------------------------------------------"
+		    #Write-Host -ForegroundColor Blue "--------------------------------------------------------------"
+		    #echo "Start-Process -FilePath `"$temppath\$file`" -WorkingDirectory `"$temppath`" -ArgumentList `"--passive`",`"--wait`",$vsconfig_vs_enterprise_2019 -Wait -PassThru;"
+		    #Write-Host -ForegroundColor Blue "--------------------------------------------------------------"
 		    #Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--passive","--wait",$vsconfig_vs_enterprise_2019 -Wait -PassThru;
 			Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList $vsconfig_vs_enterprise_2019 -Wait -PassThru
 		    if (!(Get-VSSetupInstance -All -Prerelease | Select-VSSetupInstance -Product * -Require 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')){
@@ -605,50 +656,4 @@ if (Test-Path "$folder\$project\$file") {
 	Invoke-Expression "& { $(python "$folder\$project\$file") }"
 	#python $home\source\repos\github.com\kaestnja\CdA\PyCdA.py
 	#Invoke-Expression "& { $(python "$home\source\repos\github.com\kaestnja\CdA\PyCdA.py") }"
-}
-
-
-Function Pause ($Message = "Press any key to continue...") {
-   # Check if running in PowerShell ISE
-   If ($psISE) {
-      # "ReadKey" not supported in PowerShell ISE.
-      # Show MessageBox UI
-      $Shell = New-Object -ComObject "WScript.Shell"
-      $Button = $Shell.Popup("Click OK to continue.", 0, "Hello", 0)
-      Return
-   }
- 
-   $Ignore =
-      16,  # Shift (left or right)
-      17,  # Ctrl (left or right)
-      18,  # Alt (left or right)
-      20,  # Caps lock
-      91,  # Windows key (left)
-      92,  # Windows key (right)
-      93,  # Menu key
-      144, # Num lock
-      145, # Scroll lock
-      166, # Back
-      167, # Forward
-      168, # Refresh
-      169, # Stop
-      170, # Search
-      171, # Favorites
-      172, # Start/Home
-      173, # Mute
-      174, # Volume Down
-      175, # Volume Up
-      176, # Next Track
-      177, # Previous Track
-      178, # Stop Media
-      179, # Play
-      180, # Mail
-      181, # Select Media
-      182, # Application 1
-      183  # Application 2
- 
-   Write-Host -NoNewline $Message
-   While ($KeyInfo.VirtualKeyCode -Eq $Null -Or $Ignore -Contains $KeyInfo.VirtualKeyCode) {
-      $KeyInfo = $Host.UI.RawUI.ReadKey("NoEcho, IncludeKeyDown")
-   }
 }
