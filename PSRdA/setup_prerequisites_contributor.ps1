@@ -475,6 +475,8 @@ if (Test-Path "$temppath") {
         Install-Module MSI -Scope AllUsers
         Get-MSIRelatedProductInfo '{1571205C-BAD1-4237-BFE6-B77E622C51DB}' | Repair-MSIProduct
         read-host "Repair 1"
+
+
 		Start-Process -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "--wait","--norestart",$vsconfig_vs_buildtools_2019 -Wait -PassThru
 		
 		$test = ''
