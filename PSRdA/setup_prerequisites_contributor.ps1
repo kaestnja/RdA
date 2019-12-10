@@ -461,28 +461,40 @@ if (Test-Path "$temppath") {
 	    $file = "mongodb-win32-x86_64-2012plus-4.2.1-signed.msi"
 	    if (!("$temppath\$file" | Test-Path)) { curl https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-4.2.1-signed.msi -OutFile "$temppath\$file" }
 	    #developer gets a mongodb as application (not as service), which have to be startet with a shortcut on the desktop
-	    if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerNoService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
-	    #C:\MongoDB\Server\4.2\bin\mongod.exe --dbpath "C:\MongoDB\data"  "C:\MongoDB\log" --bind_ip 127.0.0.1 --port 27017
-	    #C:\MongoDB\Server\4.2\bin\mongod.exe --bind_ip 127.0.0.1 --port 27017
-	    #find all home paths:  dir env:\home*
-	    $WshShell = New-Object -comObject WScript.Shell
-	    $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
-	    if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
-	    if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
-	    if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
-	    if (Test-Path $folder) { 
-		    $Shortcut = $WshShell.CreateShortcut("$folder\MongoDB.lnk") 
-		    $Shortcut.TargetPath = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe"
-		    $Shortcut.Arguments = "--dbpath `"C:\MongoDB\data`" --bind_ip 127.0.0.1 --port 27017"
-		    $Shortcut.Description = "start local MongoDB"
-		    #$Shortcut.IconLocation = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe, 1"
-		    $Shortcut.WindowStyle = "1"
-		    $Shortcut.WorkingDirectory = "${env:ProgramFiles}\MongoDB\Server\4.2\bin"
-			$Shortcut.Save()
+	    if ($setuptype -eq "contributor"){
+			if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerNoService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
+			#C:\MongoDB\Server\4.2\bin\mongod.exe --dbpath "C:\MongoDB\data"  "C:\MongoDB\log" --bind_ip 127.0.0.1 --port 27017
+			#C:\MongoDB\Server\4.2\bin\mongod.exe --bind_ip 127.0.0.1 --port 27017
+			#find all home paths:  dir env:\home*
+			$WshShell = New-Object -comObject WScript.Shell
+			$folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
+			if (!($folder | Test-Path)) { $folder = (Get-Item "Env:Home").Value + "\Desktop" }
+			if (!($folder | Test-Path)) { $folder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
+			if (!($folder | Test-Path)) { $folder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
+			if (Test-Path $folder) { 
+				$Shortcut = $WshShell.CreateShortcut("$folder\MongoDB.lnk") 
+				$Shortcut.TargetPath = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe"
+				$Shortcut.Arguments = "--dbpath `"C:\MongoDB\data`" --bind_ip 127.0.0.1 --port 27017"
+				$Shortcut.Description = "start local MongoDB"
+				#$Shortcut.IconLocation = "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe, 1"
+				$Shortcut.WindowStyle = "1"
+				$Shortcut.WorkingDirectory = "${env:ProgramFiles}\MongoDB\Server\4.2\bin"
+				$Shortcut.Save()
+			}
+		}
+		#server gets a mongodb as service, which runs from startup
+		if ($setuptype -eq "server"){
+			if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
+			#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"all`"" }
+		}
+		#expert gets a mongodb as service, not to care about configuring
+		if ($setuptype -eq "expert"){
+			if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
+			#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"all`"" }
 		}
 	}
-	#developer gets an allround editor, if possible the new 7.8.1, or at minimum the 7.7.1
-    if ($setuptype -eq "contributor"){
+	#developer, expert and server gets an allround editor, if possible the new 7.8.1, or at minimum the 7.7.1
+    if (($setuptype -eq "contributor") -or ($setuptype -eq "server") -or ($setuptype -eq "expert")){
         if (!('C:\Program Files\Notepad++\notepad++.exe' | Test-Path)) {
 	        $file = "npp.7.7.1.Installer.x64.exe"
 	        if (!("$temppath\$file" | Test-Path)) { curl https://notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.x64.exe -OutFile "$temppath\$file" }
@@ -637,23 +649,45 @@ if (Test-Path "$folder\$project\$file") {
 	python -m pip install -r "$folder\$project\$file" $myPipProxy
 }
 
-
-#"$folder\MongoDB.lnk"
-$file = "mongod.exe"
-if (Test-Path "${env:ProgramFiles}\MongoDB\Server\4.2\bin\$file") { 
-	#cd "$folder\$project"
-	#python "$folder\$project\$file"
-	#Invoke-Expression "& { $(python "$folder\$project\$file") }"
-	#python $home\source\repos\github.com\kaestnja\CdA\PyCdA.py
-	#Invoke-Expression "& { $(python "$home\source\repos\github.com\kaestnja\CdA\PyCdA.py") }"
-	Start-Process -FilePath "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe" -WorkingDirectory "${env:ProgramFiles}\MongoDB\Server\4.2\bin" -ArgumentList "--dbpath `"C:\MongoDB\data`"","--bind_ip 127.0.0.1","--port 27017" -PassThru;
+if ($setuptype -eq "contributor"){
+	#"$folder\MongoDB.lnk"
+	$file = "mongod.exe"
+	if (Test-Path "${env:ProgramFiles}\MongoDB\Server\4.2\bin\$file") { 
+		#cd "$folder\$project"
+		#python "$folder\$project\$file"
+		#Invoke-Expression "& { $(python "$folder\$project\$file") }"
+		#python $home\source\repos\github.com\kaestnja\CdA\PyCdA.py
+		#Invoke-Expression "& { $(python "$home\source\repos\github.com\kaestnja\CdA\PyCdA.py") }"
+		Start-Process -FilePath "${env:ProgramFiles}\MongoDB\Server\4.2\bin\mongod.exe" -WorkingDirectory "${env:ProgramFiles}\MongoDB\Server\4.2\bin" -ArgumentList "--dbpath `"C:\MongoDB\data`"","--bind_ip 127.0.0.1","--port 27017" -PassThru;
+	}
 }
 
-$file = "PyCdA.py"
-if (Test-Path "$folder\$project\$file") { 
-	cd "$folder\$project"
-	#python "$folder\$project\$file"
-	Invoke-Expression "& { $(python "$folder\$project\$file") }"
-	#python $home\source\repos\github.com\kaestnja\CdA\PyCdA.py
-	#Invoke-Expression "& { $(python "$home\source\repos\github.com\kaestnja\CdA\PyCdA.py") }"
+
+if (($setuptype -eq "contributor") -or ($setuptype -eq "expert")){
+	$file = "PyCdA.py"
+	if (Test-Path "$folder\$project\$file") { 
+		cd "$folder\$project"
+		#python "$folder\$project\$file"
+		Invoke-Expression "& { $(python "$folder\$project\$file") }"
+		#python $home\source\repos\github.com\kaestnja\CdA\PyCdA.py
+		#Invoke-Expression "& { $(python "$home\source\repos\github.com\kaestnja\CdA\PyCdA.py") }"
+	}
+}
+if (($setuptype -eq "contributor") -or ($setuptype -eq "expert") -or ($setuptype -eq "server")){
+	#find all home paths:  dir env:\home*
+	$WshShell = New-Object -comObject WScript.Shell
+	$desktopfolder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
+	if (!($desktopfolder | Test-Path)) { $desktopfolder = (Get-Item "Env:Home").Value + "\Desktop" }
+	if (!($desktopfolder | Test-Path)) { $desktopfolder = (Get-Item "Env:USERPROFILE").Value + "\Desktop" }
+	if (!($desktopfolder | Test-Path)) { $desktopfolder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
+	if (Test-Path $desktopfolder) { 
+		$Shortcut = $WshShell.CreateShortcut("$desktopfolder\PyCdA.lnk") 
+		$Shortcut.TargetPath = "C:\Python37\python.exe"
+		$Shortcut.Arguments = "$folder\$project\$file"
+		$Shortcut.Description = "start PyCdA"
+		#$Shortcut.IconLocation = "$folder\$project\cda.ico, 1"
+		$Shortcut.WindowStyle = "1"
+		$Shortcut.WorkingDirectory = "$folder\$project"
+		$Shortcut.Save()
+	}
 }
