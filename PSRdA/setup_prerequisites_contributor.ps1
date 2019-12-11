@@ -99,7 +99,7 @@ If (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
     Remove-ItemProperty -Path $keyRunOnce -Name $keyValue
 }
 
-
+Write-Host "check Admin Mode---------------------" -foregroundcolor "white"
 if ((Test-Admin) -eq $false){
 	read-host "This code have to be run elevate, which is not the case now.";
     if ($elevated) {
@@ -124,7 +124,7 @@ if ((Test-Admin) -eq $false){
 	}
 	exit;
 }
-
+Write-Host "check SSH with Git Server---------------------" -foregroundcolor "white"
 ssh -T "git@$gitserver"
 
 #~/.ssh/config
@@ -188,6 +188,7 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "FileSyste
 #prevent download fails, if internet explorer was not first initilized with recommended microsoft settings
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Internet Explorer\Main" -Name "DisableFirstRunCustomize" -Value 2
 
+Write-Host "check Security Protocols---------------------" -foregroundcolor "white"
 if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityProtocolType]::SystemDefault){echo "PowerShell Transport Layer Security Protocols is maybe to weak (default)";
 	#to enable TLS1.2 for now: [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 	[Net.ServicePointManager]::SecurityProtocol = ([Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12);
@@ -199,6 +200,7 @@ if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityP
 }
 
 ####################################################################################################################################
+Write-Host "check PowerShell---------------------" -foregroundcolor "white"
 if (Get-InstalledModule -Name "PowerShellGet" -MinimumVersion 2.2.1){
     Write-Host "PowerShellGet is up to date" -foregroundcolor "green"
 } else {
@@ -233,6 +235,7 @@ Import-Module powershell-yaml
 $prerequisitesyaml = ''
 if (!($temppath | Test-Path)) { md -p "$temppath" }
 if (Test-Path "$temppath") {
+	Write-Host "check additional files---------------------" -foregroundcolor "white"
 	cd $temppath
 	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/README.md" -OutFile "$temppath\README_RdA_Github.md";
 	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml" -OutFile "$temppath\prerequisites.yaml";
@@ -245,6 +248,7 @@ if (Test-Path "$temppath") {
 	$prerequisitesyaml = ConvertFrom-YAML $content
 
 	#check for a needed system reboot, which should be done first
+	Write-Host "check RebootRequiered---------------------" -foregroundcolor "white"
 	if ((Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired") -bor
 	(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending")  -bor
 	(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations") -bor
@@ -265,7 +269,7 @@ if (Test-Path "$temppath") {
             }
 		}
 	}
-
+	Write-Host "check PowerShell Core (V6)---------------------" -foregroundcolor "white"
 	#Install PScore6 
     #$key = "HKLM:\Software\Microsoft\PowerShell\1\Install"
     #$key = "HKLM:\SOFTWARE\Microsoft\PowerShell\1\PowerShellEngine\PowerShellVersion"
@@ -285,6 +289,7 @@ if (Test-Path "$temppath") {
     }
 
     #Install Git 
+	Write-Host "check Git---------------------" -foregroundcolor "white"
     try
     {
         git | Out-Null
@@ -328,7 +333,7 @@ if (Test-Path "$temppath") {
 
 
 	#install python
-
+	Write-Host "check Python---------------------" -foregroundcolor "white"
 	#$windows_path = $env:Path -split ';'
     #if ($windows_path -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"}
 	#if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
@@ -430,6 +435,7 @@ if (Test-Path "$temppath") {
 		$folder = "C:\Python37\"
 		if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
 	}
+	Write-Host "check Python Modules---------------------" -foregroundcolor "white"
 	$errorcode = $null
 	$errorcode = python -m pip install --upgrade pip --timeout=3 --retries=1
 	if ($errorcode -like '*Requirement already up-to-date:*'){
@@ -455,6 +461,7 @@ if (Test-Path "$temppath") {
 
 
 	#install mongodb-compass
+	Write-Host "check MongoDB Compass---------------------" -foregroundcolor "white"
     if (($setuptype -eq "contributor") -or ($setuptype -eq "server")){
         if (!("C:\Program Files\MongoDB Compass Community\MongoDBCompassCommunity.exe" | Test-Path)) {
 	        $file = "mongodb-compass-community-1.19.12-win32-x64.msi"
@@ -473,6 +480,7 @@ if (Test-Path "$temppath") {
     }
 
     #install mongodb
+	Write-Host "check MongoDB---------------------" -foregroundcolor "white"
     if (!("C:\Program Files\MongoDB\Server\4.2\bin\mongod.exe" | Test-Path)) {
 	    if (!("C:\MongoDB\data" | Test-Path)) { md -p "C:\MongoDB\data" }
 	    if (!("C:\MongoDB\log" | Test-Path)) { md -p "C:\MongoDB\log" }
@@ -511,7 +519,9 @@ if (Test-Path "$temppath") {
 			#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"all`"" }
 		}
 	}
+
 	#developer, expert and server gets an allround editor, if possible the new 7.8.1, or at minimum the 7.7.1
+	Write-Host "check Notepad++ ---------------------" -foregroundcolor "white"
     if (($setuptype -eq "contributor") -or ($setuptype -eq "server") -or ($setuptype -eq "expert")){
         if (!('C:\Program Files\Notepad++\notepad++.exe' | Test-Path)) {
 	        $file = "npp.7.7.1.Installer.x64.exe"
@@ -524,6 +534,7 @@ if (Test-Path "$temppath") {
     }
 
 	#developer gets minimum c++ 14.0 for levenshtein and complete ide for python and django webdeployment
+	Write-Host "check c++ 14.0 (via Visual Studion BuildTools)---------------------" -foregroundcolor "white"
     Install-Module VSSetup -Scope AllUsers
     Update-Module VSSetup
     Import-Module VSSetup
@@ -587,6 +598,7 @@ if (Test-Path "$temppath") {
 
 	
     if ($setuptype -eq "contributor"){
+		Write-Host "check Visual Studio IDE (via Visual Studion Enterprise)---------------------" -foregroundcolor "white"
 	    $file = "vs_enterprise.exe"
 	    #https://aka.ms/vs/16/release/vs_Enterprise.exe
 	    if (!("$temppath\$file" | Test-Path)) { curl "https://aka.ms/vs/16/release/$file" -OutFile "$temppath\$file" }
@@ -615,6 +627,7 @@ if (Test-Path "$temppath") {
 	#https://docs.microsoft.com/en-us/visualstudio/install/build-tools-container?view=vs-2017
 }
 
+Write-Host "check PowerShell Git---------------------" -foregroundcolor "white"
 #(new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex install-module posh-git
 #maybe as first time install posh-git and posh-shell
 #PowerShellGet\Install-Module posh-git -Scope CurrentUser -AllowPrerelease -Force
@@ -646,6 +659,7 @@ Add-PoshGitToProfile
 if (Test-Path $($(Get-Item "Env:USERPROFILE").Value)) { echo "found: $($(Get-Item "Env:USERPROFILE").Value)" }
 if (Test-Path $($(Get-Item "Env:USERPROFILE").Value + "\source")) { echo "found: $($(Get-Item "Env:USERPROFILE").Value + "\source")" }
 #get git CdA
+Write-Host "check CdA sources---------------------" -foregroundcolor "white"
 $project = "CdA"
 $folder = (Get-Item "Env:USERPROFILE").Value + "\source\repos\$gitserver\$gituser"
 if (Test-Path (Get-Item "Env:USERPROFILE").Value) { if (!($folder | Test-Path)) { md -p $folder } }
@@ -667,6 +681,7 @@ if (Test-Path "$folder\$project\$file") {
 	python -m pip install -r "$folder\$project\$file" $myPipProxy
 }
 
+Write-Host "check usebility (via desktop shortcuts)---------------------" -foregroundcolor "white"
 if ($setuptype -eq "contributor"){
 	#"$folder\MongoDB.lnk"
 	$file = "mongod.exe"
@@ -680,7 +695,7 @@ if ($setuptype -eq "contributor"){
 	}
 }
 
-
+Write-Host "check Run---------------------" -foregroundcolor "white"
 if (($setuptype -eq "contributor") -or ($setuptype -eq "expert")){
 	$file = "PyCdA.py"
 	if (Test-Path "$folder\$project\$file") { 
