@@ -3,13 +3,15 @@ param([switch]$Elevated,[parameter(HelpMessage="can be one of:expert,server,cont
 #start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
 
 #plz replace all wrong characters like � – â€“ ï¿½ with - " , except in this line. those came from copying snipets from internet.
-$setuptype = "contributor"
+$setuptype = "contributor" #"contributor" #"expert" #"server"
 $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
 $version = '0.0.14'
 $myname = 'setup_prerequisites_contributor.ps1'
+$prerequisitesyaml = '' 
+$prerequisitesyamlurl = "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml"
 $keyRunOnce = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce'
 $Error.clear()
 #echo "version: " + $version
@@ -218,13 +220,29 @@ if (Get-InstalledModule -Name "PowerShellGet" -MinimumVersion 2.2.1){
 Update-Module -Name PowerShellGet
 #Get-PSRepository
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-####################################################################################################################################
 
+Install-Module powershell-yaml
+#Install-Module -Name powershell-yaml -Force -Repository PSGallery -Scope AllUsers #CurrentUser
+Update-Module -Name powershell-yaml
+Import-Module powershell-yaml
+####################################################################################################################################
+####################################################################################################################################
+####################################################################################################################################
+####################################################################################################################################
+####################################################################################################################################
+$prerequisitesyaml = ''
 if (!($temppath | Test-Path)) { md -p "$temppath" }
 if (Test-Path "$temppath") {
 	cd $temppath
 	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/README.md" -OutFile "$temppath\README_RdA_Github.md";
+	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml" -OutFile "$temppath\prerequisites.yaml";
+	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/requirements.txt" -OutFile "$temppath\requirements.txt";
 	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";
+
+	[string[]]$fileContent = Get-Content "$temppath\prerequisites.yaml"
+	$content = ''
+	foreach ($line in $fileContent) { $content = $content + "`n" + $line }
+	$prerequisitesyaml = ConvertFrom-YAML $content
 
 	#check for a needed system reboot, which should be done first
 	if ((Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired") -bor
@@ -279,8 +297,8 @@ if (Test-Path "$temppath") {
     }
     $isGitInstalled = $null -ne ( (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*) + (Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*) | Where-Object { $null -ne $_.DisplayName -and $_.Displayname.Contains('Git') })
     if (!($isGitInstalled )){
-	    $file = "Git-2.24.0.2-64-bit.exe"
-	    if (!("$temppath\$file" | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe -OutFile "$temppath\$file" }
+	    $file = "Git-2.24.1.2-64-bit.exe"
+		if (!("$temppath\$file" | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe -OutFile "$temppath\$file" }
 	    #.\Git-2.24.0.2-64-bit.exe /SILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /COMPONENTS="icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh,autoupdate" /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled
 	    #with ArgumentList as list
 	    if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/SILENT /NORESTART /NOCANCEL /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled /COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
