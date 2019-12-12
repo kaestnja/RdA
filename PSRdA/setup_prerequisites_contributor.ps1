@@ -238,8 +238,10 @@ if (Test-Path "$temppath") {
 	Write-Host "check additional files---------------------" -foregroundcolor "white"
 	cd $temppath
 	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/README.md" -OutFile "$temppath\README_RdA_Github.md";
-	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml" -OutFile "$temppath\prerequisites.yaml";
-	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/requirements.txt" -OutFile "$temppath\requirements.txt";
+	#Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml" -OutFile "$temppath\prerequisites.yaml";
+	Invoke-WebRequest -Uri "https://$gitserver/$gituser/CdA/blob/master/prerequisites.yaml" -OutFile "$temppath\prerequisites.yaml";
+	#Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/requirements.txt" -OutFile "$temppath\requirements.txt";
+	Invoke-WebRequest -Uri "https://$gitserver/$gituser/CdA/blob/master/requirements.txt" -OutFile "$temppath\requirements.txt";
 	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";
 
 	[string[]]$fileContent = Get-Content "$temppath\prerequisites.yaml"
