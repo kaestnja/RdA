@@ -3,7 +3,11 @@ param([switch]$Elevated,[parameter(HelpMessage="can be one of:expert,server,cont
 #start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
 
 #plz replace all wrong characters like � – â€“ ï¿½ with - " , except in this line. those came from copying snipets from internet.
-$setuptype = "contributor" #"contributor" #"expert" #"server"
+if ( (!($setuptype -like '*expert*')) -and (!($setuptype -like '*server*')) -and (!($setuptype -like '*contributor*')) ) {
+	Write-Host -ForegroundColor Red "setuptype wrong:" + $setuptype
+	read-host "proceed as contributor now";
+	$setuptype = "contributor" #"contributor" #"expert" #"server" 
+	}
 $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
