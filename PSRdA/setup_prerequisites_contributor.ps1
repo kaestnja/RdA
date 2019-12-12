@@ -1,12 +1,13 @@
 #Requires -RunAsAdministrator
 param([switch]$Elevated,[parameter(HelpMessage="can be one of:expert,server,contributor or just nothing")][String]$setuptype,[parameter(HelpMessage="reinstalls anything, if set to true")][Boolean]$force)
-#start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
+#start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites.ps1') }"
+#start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites.ps1') } -setuptype 'contributor' "
 
-#plz replace all wrong characters like � – â€“ ï¿½ with - " , except in this line. those came from copying snipets from internet.
+#plz replace all wrong characters like – with - " , except in this line. those came from copying snipets from internet.
 if ( (!($setuptype -like '*expert*')) -and (!($setuptype -like '*server*')) -and (!($setuptype -like '*contributor*')) ) {
 	Write-Host -ForegroundColor Red "setuptype wrong:" + $setuptype
 	read-host "proceed as contributor now";
-	$setuptype = "contributor" #"contributor" #"expert" #"server" 
+	$setuptype = "contributor"
 	}
 $force = 0 #"force"
 $temppath = "C:\Temp"
