@@ -240,10 +240,10 @@ if (Test-Path "$temppath") {
 	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/README.md" -OutFile "$temppath\README_RdA_Github.md";
 	#Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml" -OutFile "$temppath\prerequisites.yaml";
 	#Invoke-WebRequest -Uri "https://$gitserver/$gituser/CdA/blob/master/prerequisites.yaml" -OutFile "$temppath\prerequisites.yaml";
-	Invoke-WebRequest -Uri "https://raw.githubusercontent.com/kaestnja/CdA/master/prerequisites.yaml" -OutFile "$temppath\prerequisites.yaml";
+	#Invoke-WebRequest -Uri "https://raw.githubusercontent.com/kaestnja/CdA/master/prerequisites.yaml" -OutFile "$temppath\prerequisites.yaml";
 	#Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/requirements.txt" -OutFile "$temppath\requirements.txt";
 	#Invoke-WebRequest -Uri "https://$gitserver/$gituser/CdA/blob/master/requirements.txt" -OutFile "$temppath\requirements.txt";
-	Invoke-WebRequest -Uri "https://raw.githubusercontent.com/kaestnja/CdA/master/requirements.txt" -OutFile "$temppath\requirements.txt";
+	#Invoke-WebRequest -Uri "https://raw.githubusercontent.com/kaestnja/CdA/master/requirements.txt" -OutFile "$temppath\requirements.txt";
 	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";
 
 	[string[]]$fileContent = Get-Content "$temppath\prerequisites.yaml"
@@ -294,19 +294,23 @@ if (Test-Path "$temppath") {
 
     #Install Git 
 	Write-Host "check Git---------------------" -foregroundcolor "white"
+	$testupdategit = ''
     try
     {
         git | Out-Null
-        Write-Host "Git is installed" -foregroundcolor "green"
-        git update-git-for-windows
+		$testupdategit = git --version
+        Write-Host "Git is installed, $testupdategit" -foregroundcolor "green" #git version 2.24.0.windows.2
+        #git update-git-for-windows
+		#$testupdategit = ''
+		#$testupdategit = git update-git-for-windows | Out-Null
     }
     catch [System.Management.Automation.CommandNotFoundException]
     {
         Write-Host "Git is not installed" -foregroundcolor "red"
     }
+	$file = "Git-2.24.1.2-64-bit.exe"
     $isGitInstalled = $null -ne ( (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*) + (Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*) | Where-Object { $null -ne $_.DisplayName -and $_.Displayname.Contains('Git') })
-    if (!($isGitInstalled )){
-	    $file = "Git-2.24.1.2-64-bit.exe"
+    if ( (!($isGitInstalled )) -or (!($testupdategit -like '*2.24.1*')) ){
 		if (!("$temppath\$file" | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe -OutFile "$temppath\$file" }
 	    #.\Git-2.24.0.2-64-bit.exe /SILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /COMPONENTS="icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh,autoupdate" /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled
 	    #with ArgumentList as list
