@@ -1,0 +1,45 @@
+;*** MSDN Sample Source Code MakeCAB Directive file example
+;
+.OPTION EXPLICIT  ; Generate errors on variable typos
+.set DiskDirectoryTemplate=CDROM  ; All cabinets go in a single directory
+.Set MaxDiskFileCount=1000; Limit file count per cabinet, so that scanning is not too slow
+.Set FolderSizeThreshold=2000000   ; Aim for ~200K per folder
+.Set CompressionType=MSZIP
+;** All files are compressed in cabinet files
+.Set Cabinet=on
+.Set Compress=on
+;-------------------------------------------------------------------
+;** CabinetNameTemplate = name of cab
+;** DiskDirectory1 = output directory where cab will be created
+;-------------------------------------------------------------------
+.Set CabinetNameTemplate=Product.cab
+.Set DiskDirectory1=.
+;-------------------------------------------------------------------
+; Replace <file> with actual files you want to package
+;-------------------------------------------------------------------
+;<file1>
+;<file2>
+Product\advfirewall.xml 
+Product\bcd.xml 
+Product\config.xml 
+Product\desktops.xml 
+Product\firewall.xml 
+Product\gac.xml 
+Product\handles.xml 
+Product\log.xml 
+Product\logons.xml 
+Product\mailslotlist.xml 
+Product\objects.xml 
+Product\pages.xml 
+Product\pipelist.xml 
+Product\ports.xml 
+Product\processes.xml 
+Product\regHKU.xml 
+Product\rpc.xml 
+Product\sids.xml
+Product\security-events.xml 
+Product\services.xml 
+Product\shares.xml 
+Product\threads.xml 
+Product\windows.xml
+;*** <the end>

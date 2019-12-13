@@ -1,0 +1,45 @@
+;-------------------------------------------------------------------
+.OPTION EXPLICIT  ; Generate errors on variable typos
+;.set DiskDirectoryTemplate=CDROM  ; All cabinets go in a single directory
+.Set CompressionType=MSZIP
+.Set Cabinet=on
+.Set Compress=on
+.Set CabinetFileCountThreshold=0
+.Set FolderFileCountThreshold=0
+.Set FolderSizeThreshold=0
+.Set MaxCabinetSize=0
+.Set MaxDiskFileCount=0
+.Set MaxDiskSize=0
+;-------------------------------------------------------------------
+;** CabinetNameTemplate = name of cab
+;** DiskDirectory1 = output directory where cab will be created
+;-------------------------------------------------------------------
+.Set CabinetNameTemplate=Baseline.cab
+.Set DiskDirectory1=.
+;-------------------------------------------------------------------
+Baseline\advfirewall.xml 
+Baseline\bcd.xml 
+Baseline\config.xml 
+Baseline\desktops.xml 
+Baseline\files.xml
+Baseline\firewall.xml 
+Baseline\gac.xml 
+Baseline\handles.xml 
+Baseline\log.xml 
+Baseline\logons.xml 
+Baseline\mailslotlist.xml 
+Baseline\objects.xml 
+Baseline\pages.xml 
+Baseline\pipelist.xml 
+Baseline\ports.xml 
+Baseline\processes.xml 
+Baseline\regHKU.xml 
+Baseline\regHKLM.xml 
+Baseline\rpc.xml 
+Baseline\sids.xml
+Baseline\security-events.xml 
+Baseline\services.xml 
+Baseline\shares.xml 
+Baseline\threads.xml 
+Baseline\windows.xml
+;*** <the end>

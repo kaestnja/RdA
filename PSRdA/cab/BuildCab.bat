@@ -1,0 +1,4 @@
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x64\pvk2pfx.exe" -pvk "<Path to certs>\MyKey.pvk" -pi <Password> -spc "<Path to certs>\MyCert.spc" -pfx "<Path to certs>\MyCert.pfx" -f
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x64\signtool.exe" sign -f "<Path to certs>\MyCert.pfx" -p <Password> -d "<Control name>" -t "http://timestamp.verisign.com/scripts/timstamp.dll" "<Path to Image Uploader files>\Uploader8.ocx"
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x64\cabarc.exe" -m LZX:21 -s 6144 n "<Path to resulting CAB>\Uploader8.cab" "<Path to Image Uploader files>\Uploader8.ocx" "<Path to Image Uploader files>\Uploader8.inf"
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x64\signtool.exe" sign -f "<Path to certs>\MyCert.pfx" -p <Password> -d "<Control name>" -t "http://timestamp.verisign.com/scripts/timstamp.dll" "<Path to resulting CAB>\Uploader8.cab"

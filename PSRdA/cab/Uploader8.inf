@@ -1,0 +1,13 @@
+[version]
+	signature="$CHICAGO$"
+	AdvancedINF=2.0
+[Add.Code]
+	Uploader8.ocx=Uploader8.ocx
+[Deployment] 
+	InstallScope=user|machine 
+[Uploader8.ocx]
+	file-win32-x86=thiscab
+	clsid={<CLSID>}
+	FileVersion=<Version>
+	RegisterServer=yes
+	RedirectToHKCU=yes
