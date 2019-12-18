@@ -28,7 +28,7 @@ function Go () {
 
     # Finds all .git folders by given path, the -match "h" parameter is for hidden folders 
     $gitFolders = Get-ChildItem -Path $baseDir -Depth $depth -Recurse -Force | Where-Object { $_.Mode -match "h" -and $_.FullName -like "*\$gitFolderName" }
-    echo $gitFolders
+    #echo $gitFolders
     ForEach ($gitFolder in $gitFolders) {
 
         #If ($gitFolder[-4] -match '.git' ){
