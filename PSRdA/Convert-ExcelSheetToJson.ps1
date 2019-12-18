@@ -30,6 +30,16 @@ Find me on:
 * My blog: https://flamingkeys.com/
 * Github: https://github.com/chrisbrownie
 
+#-------------------------- EXAMPLE 1 --------------------------
+#Convert-ExcelSheetToJson -InputFile MyExcelWorkbook.xlsx
+#-------------------------- EXAMPLE 2 --------------------------
+#Get-Item MyExcelWorkbook.xlsx | Convert-ExcelSheetToJson -OutputFileName MyConvertedFile.json -SheetName Sheet2
+#Install-Module Convert-ExcelSheetToJson
+#Update-Module Convert-ExcelSheetToJson
+#Import-Module Convert-ExcelSheetToJson
+#Get-Item C:\Users\kaestnja\Documents\AA_JK.xls | Convert-ExcelSheetToJson -OutputFileName C:\Users\kaestnja\Documents\AA_JK_Incidents.json -SheetName Incidents
+#.\Convert-ExcelSheetToJson.ps1 -InputFile C:\Users\kaestnja\Documents\AA_JK.xls -OutputFileName C:\Users\kaestnja\Documents\AA_JK_Incidents.json -SheetName Incidents
+
 #>
 [CmdletBinding()]
 Param(
