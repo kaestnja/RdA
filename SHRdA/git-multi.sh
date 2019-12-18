@@ -1,0 +1,1 @@
+cd $USERPROFILE'\source\repos\' && find . -type d -name .git -execdir sh -c "pwd && git pull" \;
