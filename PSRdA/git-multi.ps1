@@ -1,3 +1,6 @@
+#cd C:\Users\janka_cg1\source\repos\github.com\kaestnja
+#Get-ChildItem -Directory | foreach { Write-Host "Getting latest for $_ " | git -C $_.FullName pull --all --recurse-submodules --verbose }
+
 #usage:  .\git-multi.ps1 -cmd "pull"
 
 param (
