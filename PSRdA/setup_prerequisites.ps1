@@ -720,6 +720,7 @@ if (($setuptype -eq "contributor") -or ($setuptype -eq "expert")){
 	}
 }
 if (($setuptype -eq "contributor") -or ($setuptype -eq "expert") -or ($setuptype -eq "server")){
+	$file = "PyCdA.py"
 	#find all home paths:  dir env:\home*
 	$WshShell = New-Object -comObject WScript.Shell
 	$desktopfolder = (Get-Item "Env:USERPROFILE").Value + "\Desktop"
