@@ -18,3 +18,6 @@
 
 "2017\vc_redist.x86.exe" /install /passive /norestart
 "2017\vc_redist.x64.exe" /install /passive /norestart
+
+"msiexec /i \qt\X64 Debuggers And Tools-x64_en-us.msi /norestart /q"
+"msiexec /i \qt\X86 Debuggers And Tools-x86_en-us.msi /norestart /q"
