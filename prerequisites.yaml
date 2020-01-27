@@ -2,7 +2,7 @@ CdA:
 - 1.0.2
 Python37:
   recommended:
-  - 3.7.5
+  - 3.7.6
   minimum:
   - 3.7.4
 Python27:
@@ -10,7 +10,7 @@ Python27:
   - 2.7.17
 Git:
   recommended:
-  - 2.24.1.2
+  - 2.25.0.0
   minimum:
   - 2.24.0.2
 MongoDB42:
@@ -34,9 +34,11 @@ VSEnterprise:
   minimum:
   - 15
 Python37-V3.7.5-Url: https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe
+Python37-V3.7.6-Url: https://www.python.org/ftp/python/3.7.6/python-3.7.6-amd64.exe
 Python38-V3.8.0-Url: https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe
 Python27-V2.7.17-Url: https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi
-Git-V2.24.0.2-Url: https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/PowerShell-6.2.3-win-x64.msi
+Git-V2.24.0.2-Url: 
+Git-V2.25.0.0-Url: https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe
 MongoDB42-V4.2.1-Url: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-4.2.1-signed.msi
 MongoDBCompass-V6.2.3-Url: https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi
 MongoDBCompassReadonly-V6.2.3-Url: https://downloads.mongodb.com/compass/mongodb-compass-readonly-1.19.12-win32-x64.msi
