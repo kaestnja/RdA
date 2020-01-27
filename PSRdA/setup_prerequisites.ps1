@@ -13,7 +13,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.18'
+$version = '0.0.19'
 $myname = 'setup_prerequisites.ps1'
 $prerequisitesyaml = '' 
 $prerequisitesyamlurl = "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml"
@@ -397,16 +397,14 @@ if (Test-Path "$temppath") {
     if (($version -like '*is not recognized*') -or ($pythonexception -eq 1)){
 		Write-Host "$version" -foregroundcolor "yellow"
 		Write-Host "install $pythonfile now" -foregroundcolor "yellow"
-		read-host "python install?"
 	    #$pythonfile = "python-3.7.5-amd64.exe"
 		#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$pythonfile" }
 		if (!("$temppath\$pythonfile" | Test-Path)) { curl "$pythonurl" -OutFile "$temppath\$pythonfile" }
-		read-host "python downloaded?"
 	    if (Test-Path "$temppath\$pythonfile") { 
 			Start-Process -Wait -FilePath "$temppath\$pythonfile" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" 
 			read-host "python installed?"
 			if (!("C:\Python37\python.exe" | Test-Path)){
-				Write-Host "missing Python 3.7.5" -foregroundcolor "red"
+				Write-Host "missing C:\Python37\python.exe" -foregroundcolor "red"
 				read-host "?"
 			}else{
                 $folder = "C:\Python37\Scripts\"
@@ -465,7 +463,7 @@ if (Test-Path "$temppath") {
 	} else {
 		Write-Host "Python is installed as: $version" -foregroundcolor "green"
 	}
-	read-host "python ok?"
+
 	$p = &{python -V} 2>&1
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
         Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
@@ -503,6 +501,19 @@ if (Test-Path "$temppath") {
 	#$file = "python-3.8.0-amd64.exe"
 	#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe -OutFile "$temppath\$file" }
 	#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python38" }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	#install mongodb-compass
