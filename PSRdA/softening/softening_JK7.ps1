@@ -91,15 +91,15 @@ if($PublishSettings) {
     net stop srvnet /y
     reg.exe ADD HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters /v AutoShareServer /t REG_DWORD /d 1 /f
     reg.exe ADD HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters /v AutoShareWks /t REG_DWORD /d 1 /f
-    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" SMB1 -Type DWORD -Value 1 �Force
-    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" SMB2 -Type DWORD -Value 1 �Force
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" SMB1 -Type DWORD -Value 1 –Force
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" SMB2 -Type DWORD -Value 1 –Force
     net start srvnet /y
     net start Server /y
     #Get-WindowsFeature FS-SMB1
     #Enable-WindowsOptionalFeature -Online -FeatureName smb1protocol
     #Disable-WindowsOptionalFeature -Online -FeatureName smb1protocol
     #
-    #Get-WindowsOptionalFeature �Online �FeatureName SMB1Protocol 
+    #Get-WindowsOptionalFeature –Online –FeatureName SMB1Protocol 
     #Enable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol
     #Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol
     #
