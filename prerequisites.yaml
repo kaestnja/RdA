@@ -27,7 +27,7 @@ VSBuildTools:
   recommended:
   - 16
   minimum:
-  - 15
+  - 16
 VSEnterprise:
   recommended:
   - 16
