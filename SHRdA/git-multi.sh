@@ -1,1 +1,2 @@
 cd $USERPROFILE'\source\repos\' && find . -type d -name .git -execdir sh -c "pwd && git pull" \;
+cd $USERPROFILE'\source\repos\' && find . -type d -name .git -execdir sh -c "pwd && git stash && git fetch && git pull" \;
