@@ -359,9 +359,7 @@ if (Test-Path "$temppath") {
 	    $folder = (Get-Item "Env:ProgramFiles").Value + "\Git\mingw64\bin"
 	    if (Test-Path $folder) { if (!("$folder\$file" | Test-Path)) { curl https://eternallybored.org/misc/wget/1.20.3/64/wget.exe -OutFile "$folder\$file" } }
     }
-	read-host "git ok?"
-
-
+	
 
 
 
@@ -391,7 +389,7 @@ if (Test-Path "$temppath") {
 		#$p
 		Write-Host "python version: $p" -foregroundcolor "yellow"
 	}
-	read-host "?"
+	read-host "python ok?"
 	#[System.Version]"2.7.0.19530" -gt [System.Version]"3.0.0.4080"		False
 	#[System.Version]"2.7.0.19530" -lt  [System.Version]"3.0.0.4080"	True
     if ($version -like '*is not recognized*'){
