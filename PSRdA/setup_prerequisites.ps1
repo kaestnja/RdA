@@ -377,30 +377,34 @@ if (Test-Path "$temppath") {
 	#if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
     
     # redirect stderr into stdout
-    $p = &{python -V} 2>&1
+	$p = &{python -V} 2>&1
+	$pythonexception = 0
     # check if an ErrorRecord was returned
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
         Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
         # grab the version string from the error message
 		#$p.Exception.Message
+		$pythonexception = 1
 		Write-Host "python version exception: $p.Exception.Message" -foregroundcolor "red"
     } else {
         # otherwise return as is
 		#$p
 		Write-Host "python version: $p" -foregroundcolor "yellow"
 	}
-	read-host "python ok?"
+	
 	#[System.Version]"2.7.0.19530" -gt [System.Version]"3.0.0.4080"		False
 	#[System.Version]"2.7.0.19530" -lt  [System.Version]"3.0.0.4080"	True
-    if ($version -like '*is not recognized*'){
+    if (($version -like '*is not recognized*') -or ($pythonexception -eq 1)){
 		Write-Host "$version" -foregroundcolor "yellow"
 		Write-Host "install $pythonfile now" -foregroundcolor "yellow"
+		read-host "python install?"
 	    #$pythonfile = "python-3.7.5-amd64.exe"
 		#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$pythonfile" }
 		if (!("$temppath\$pythonfile" | Test-Path)) { curl "$pythonurl" -OutFile "$temppath\$pythonfile" }
+		read-host "python downloaded?"
 	    if (Test-Path "$temppath\$pythonfile") { 
 			Start-Process -Wait -FilePath "$temppath\$pythonfile" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" 
-
+			read-host "python installed?"
 			if (!("C:\Python37\python.exe" | Test-Path)){
 				Write-Host "missing Python 3.7.5" -foregroundcolor "red"
 				read-host "?"
@@ -461,6 +465,7 @@ if (Test-Path "$temppath") {
 	} else {
 		Write-Host "Python is installed as: $version" -foregroundcolor "green"
 	}
+	read-host "python ok?"
 	$p = &{python -V} 2>&1
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
         Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
