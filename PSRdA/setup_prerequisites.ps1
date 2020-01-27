@@ -13,7 +13,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.15'
+$version = '0.0.16'
 $myname = 'setup_prerequisites.ps1'
 $prerequisitesyaml = '' 
 $prerequisitesyamlurl = "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml"
@@ -23,6 +23,12 @@ $Error.clear()
 Write-Host -ForegroundColor Green "version:" + $version
 #$ErrorActionPreference = 'SilentlyContinue'
 #$ErrorActionPreference = 'Continue'
+
+$gitfile = "Git-2.25.0-64-bit.exe"
+$giturl = "https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe"
+$pythonfile = "python-3.7.6-amd64.exe"
+$pythonurl = "https://www.python.org/ftp/python/3.7.6/python-3.7.6-amd64.exe"
+
 
 function Test-Admin {
 	$currentPrincipal = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -112,20 +118,20 @@ if ((Test-Admin) -eq $false){
     } else {
 		Write-Host -ForegroundColor Yellow "try to download the same script for running it local now..."
 		if (!($temppath | Test-Path)) { md -p "$temppath" }
-		if (Test-Path "$temppath") { Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";}
-		if (Test-Path "$temppath\setup_prerequisites_contributor.ps1") { 
+		if (Test-Path "$temppath") { Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites.ps1" -OutFile "$temppath\setup_prerequisites.ps1";}
+		if (Test-Path "$temppath\setup_prerequisites.ps1") { 
             Write-Host  -ForegroundColor Green "have the same script locally."
             if ($setuptype -eq "contributor"){
                 read-host  -ForegroundColor Red "will now try to elevate into a second and administrative, but local instance now...";
-			    #Unblock-File -Path '$temppath\setup_prerequisites_contributor.ps1';
-			    Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f "$temppath\setup_prerequisites_contributor.ps1");
+			    #Unblock-File -Path '$temppath\setup_prerequisites.ps1';
+			    Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f "$temppath\setup_prerequisites.ps1 -setuptype 'contributor'");
                 #Start-Process -FilePath "powershell" -ArgumentList "$('-File ""')$(Get-Location)$('\')$($MyInvocation.MyCommand.Name)$('""')" -Verb runAs;
             }
 		}
-		#Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"
+		#Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites.ps1') }"
 		#Start-Process powershell -verb runas -ArgumentList "-file fullpathofthescript"
         #Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition))
-		#Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1') }"))
+		#Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites.ps1') }"))
 	}
 	exit;
 }
@@ -249,7 +255,7 @@ if (Test-Path "$temppath") {
 	#Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/requirements.txt" -OutFile "$temppath\requirements.txt";
 	#Invoke-WebRequest -Uri "https://$gitserver/$gituser/CdA/blob/master/requirements.txt" -OutFile "$temppath\requirements.txt";
 	#Invoke-WebRequest -Uri "https://raw.githubusercontent.com/kaestnja/CdA/master/requirements.txt" -OutFile "$temppath\requirements.txt";
-	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites_contributor.ps1" -OutFile "$temppath\setup_prerequisites_contributor.ps1";
+	Invoke-WebRequest -Uri "https://$gitserver/$gituser/RdA/raw/master/PSRdA/setup_prerequisites.ps1" -OutFile "$temppath\setup_prerequisites.ps1";
 
 	[string[]]$fileContent = Get-Content "$temppath\prerequisites.yaml"
 	$content = ''
@@ -265,10 +271,10 @@ if (Test-Path "$temppath") {
 	(Test-Path "HKLM:\SYSTEM\ControlSet002\Control\Session Manager\PendingFileRenameOperations") -bor
 	(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\InProgress") ) {
 		read-host "reboot needed! Press ENTER to going to reboot now.";
-		if (Test-Path "$temppath\setup_prerequisites_contributor.ps1") {
+		if (Test-Path "$temppath\setup_prerequisites.ps1") {
 			Write-Host "Changing RunOnce script." -foregroundcolor "magenta"
 			read-host "To continue after reboot, this script is called once after login the same user...";
-	        $Command = "%systemroot%\System32\WindowsPowerShell\v1.0\powershell.exe -executionpolicy bypass -file $temppath\setup_prerequisites_contributor.ps1";
+	        $Command = "%systemroot%\System32\WindowsPowerShell\v1.0\powershell.exe -executionpolicy bypass -file $temppath\setup_prerequisites.ps1 -setuptype 'contributor'";
 			#$Command = "%systemroot%\System32\WindowsPowerShell\v1.0\PowerShell.exe -NoProfile -ExecutionPolicy Unrestricted -Command "& {Start-Process PowerShell -ArgumentList '-NoProfile -ExecutionPolicy Unrestricted -File ""C:\Users\UserName\Desktop\-online.ps1""' -Verb RunAs}";
             $keyValue = $myname
             if (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
@@ -314,15 +320,15 @@ if (Test-Path "$temppath") {
         Write-Host "Git is not installed" -foregroundcolor "red"
     }
 	#$file = "Git-2.24.1.2-64-bit.exe"
-	$file = "Git-2.25.0-64-bit.exe"
-	$url = "https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe" 
+	#$gitfile = "Git-2.25.0-64-bit.exe"
+	#$giturl = "https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe" 
     $isGitInstalled = $null -ne ( (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*) + (Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*) | Where-Object { $null -ne $_.DisplayName -and $_.Displayname.Contains('Git') })
     if ( (!($isGitInstalled )) -or (!($testupdategit -like '*2.24.1*')) -or (!($testupdategit -like '*2.25.0*')) ){
 		#if (!("$temppath\$file" | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe -OutFile "$temppath\$file" }
-		if (!("$temppath\$file" | Test-Path)) { curl "$url" -OutFile "$temppath\$file" }
+		if (!("$temppath\$gitfile" | Test-Path)) { curl "$giturl" -OutFile "$temppath\$gitfile" }
 	    #.\Git-2.24.0.2-64-bit.exe /SILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /COMPONENTS="icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh,autoupdate" /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled
 	    #with ArgumentList as list
-	    if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/SILENT /NORESTART /NOCANCEL /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled /COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
+	    if (Test-Path "$temppath\$gitfile") { Start-Process -Wait -FilePath "$temppath\$gitfile" -WorkingDirectory "$temppath" -ArgumentList "/SILENT /NORESTART /NOCANCEL /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled /COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
 	    #with ArgumentList as string array
 	    #if (Test-Path $path) { Start-Process -Wait -FilePath "$path" -WorkingDirectory "$temppath" -ArgumentList "/SILENT","/NORESTART","/NOCANCEL","/CLOSEAPPLICATIONS","/RESTARTAPPLICATIONS","/NoIcons=0","/SetupType=default","/EditorOption=Nano","/PathOption=Cmd","/SSHOption=OpenSSH","/TortoiseOption=false","/CURLOption=OpenSSL","/CRLFOption=CRLFCommitAsIs","/BashTerminalOption=MinTTY","/PerformanceTweaksFSCache=Enabled","/UseCredentialManager=Enabled","/EnableSymlinks=Disabled","/EnableBuiltinInteractiveAdd=Disabled","/COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
 
@@ -371,11 +377,12 @@ if (Test-Path "$temppath") {
 	#[System.Version]"2.7.0.19530" -lt  [System.Version]"3.0.0.4080"	True
     if ($version -like '*is not recognized*'){
 		Write-Host "$version" -foregroundcolor "yellow"
-		Write-Host "install Python 3.7.5 now" -foregroundcolor "yellow"
-	    $file = "python-3.7.5-amd64.exe"
-	    if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$file" }
-	    if (Test-Path "$temppath\$file") { 
-			Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" 
+		Write-Host "install $pythonfile now" -foregroundcolor "yellow"
+	    #$pythonfile = "python-3.7.5-amd64.exe"
+		#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$pythonfile" }
+		if (!("$temppath\$pythonfile" | Test-Path)) { curl "$pythonurl" -OutFile "$temppath\$pythonfile" }
+	    if (Test-Path "$temppath\$pythonfile") { 
+			Start-Process -Wait -FilePath "$temppath\$pythonfile" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" 
 
 			if (!("C:\Python37\python.exe" | Test-Path)){
 				Write-Host "missing Python 3.7.5" -foregroundcolor "red"
