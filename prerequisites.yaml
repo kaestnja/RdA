@@ -32,7 +32,7 @@ VSEnterprise:
   recommended:
   - 16
   minimum:
-  - 15
+  - 16
 Python37-V3.7.5-Url: https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe
 Python37-V3.7.6-Url: https://www.python.org/ftp/python/3.7.6/python-3.7.6-amd64.exe
 Python38-V3.8.0-Url: https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe
