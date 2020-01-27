@@ -313,10 +313,13 @@ if (Test-Path "$temppath") {
     {
         Write-Host "Git is not installed" -foregroundcolor "red"
     }
-	$file = "Git-2.24.1.2-64-bit.exe"
+	#$file = "Git-2.24.1.2-64-bit.exe"
+	$file = "Git-2.25.0-64-bit.exe"
+	$url = "https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe" 
     $isGitInstalled = $null -ne ( (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*) + (Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*) | Where-Object { $null -ne $_.DisplayName -and $_.Displayname.Contains('Git') })
-    if ( (!($isGitInstalled )) -or (!($testupdategit -like '*2.24.1*')) ){
-		if (!("$temppath\$file" | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe -OutFile "$temppath\$file" }
+    if ( (!($isGitInstalled )) -or (!($testupdategit -like '*2.24.1*')) -or (!($testupdategit -like '*2.25.0*')) ){
+		#if (!("$temppath\$file" | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe -OutFile "$temppath\$file" }
+		if (!("$temppath\$file" | Test-Path)) { curl "$url" -OutFile "$temppath\$file" }
 	    #.\Git-2.24.0.2-64-bit.exe /SILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /COMPONENTS="icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh,autoupdate" /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled
 	    #with ArgumentList as list
 	    if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/SILENT /NORESTART /NOCANCEL /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled /COMPONENTS=`"icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh`"" }
