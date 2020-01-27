@@ -13,7 +13,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.16'
+$version = '0.0.17'
 $myname = 'setup_prerequisites.ps1'
 $prerequisitesyaml = '' 
 $prerequisitesyamlurl = "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml"
@@ -303,6 +303,13 @@ if (Test-Path "$temppath") {
         }
     }
 
+
+
+
+
+
+
+
     #Install Git 
 	Write-Host "check Git---------------------" -foregroundcolor "white"
 	$testupdategit = ''
@@ -352,6 +359,15 @@ if (Test-Path "$temppath") {
 	    $folder = (Get-Item "Env:ProgramFiles").Value + "\Git\mingw64\bin"
 	    if (Test-Path $folder) { if (!("$folder\$file" | Test-Path)) { curl https://eternallybored.org/misc/wget/1.20.3/64/wget.exe -OutFile "$folder\$file" } }
     }
+	read-host "git ok?"
+
+
+
+
+
+
+
+
 
 
 	#install python
