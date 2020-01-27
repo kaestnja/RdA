@@ -368,11 +368,14 @@ if (Test-Path "$temppath") {
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
         Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
         # grab the version string from the error message
-        $p.Exception.Message
+		#$p.Exception.Message
+		Write-Host "python version exception: $p.Exception.Message" -foregroundcolor "red"
     } else {
         # otherwise return as is
-        $p
+		#$p
+		Write-Host "python version: $p" -foregroundcolor "yellow"
 	}
+	read-host "?"
 	#[System.Version]"2.7.0.19530" -gt [System.Version]"3.0.0.4080"		False
 	#[System.Version]"2.7.0.19530" -lt  [System.Version]"3.0.0.4080"	True
     if ($version -like '*is not recognized*'){
