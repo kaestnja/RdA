@@ -13,7 +13,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.19'
+$version = '0.0.20'
 $myname = 'setup_prerequisites.ps1'
 $prerequisitesyaml = '' 
 $prerequisitesyamlurl = "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml"
@@ -411,50 +411,50 @@ if (Test-Path "$temppath") {
                 #--------------------------maschine
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','machine')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine") ,will add it to path now' -foregroundcolor "red"
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine") ,will add it to path now' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Machine)}
                 #--------------------------user
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','user')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user") ,will add it to path now' -foregroundcolor "red"
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user") ,will add it to path now' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::User)}
                 #--------------------------process
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','process')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process") ,will add it to path now' -foregroundcolor "red"
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process") ,will add it to path now' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Process)}
                 #--------------------------session
                 $focused_path = $env:Path -split ';'
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red";
                 $env:path = $folder + ";" + $focused_path}
 
                 $folder = "C:\Python37\"
                 #--------------------------maschine
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','machine')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine")' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine")' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Machine)}
                 #--------------------------user
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','user')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user")' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user")' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::User)}
                 #--------------------------process
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','process')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process")' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process")' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Process)}
                 #--------------------------session
                 $focused_path = $env:Path -split ';'
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";
                 $env:path = $folder + ";" + $focused_path}
             }
 		}else{
