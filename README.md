@@ -34,7 +34,10 @@ cd $USERPROFILE'\source\repos\' && find . -type d -name .git -execdir sh -c "pwd
 
 https://www.w3docs.com/snippets/git/how-to-force-git-pull-to-override-local-files.html
 ```
+git fetch --all
 git reset --hard origin/master
+
+#only if needed:
 git stash
 git stash list
 git stash drop
