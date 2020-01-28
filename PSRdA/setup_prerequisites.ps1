@@ -781,3 +781,4 @@ if (($setuptype -eq "contributor") -or ($setuptype -eq "expert") -or ($setuptype
 		$Shortcut.Save()
 	}
 }
+cd "${env:Userprofile}"
