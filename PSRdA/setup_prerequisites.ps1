@@ -26,8 +26,9 @@ Write-Host -ForegroundColor Green "version:" + $version
 
 $gitfile = "Git-2.25.0-64-bit.exe"
 $giturl = "https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe"
-$pythonfile = "python-3.7.6-amd64.exe"
+
 $pythonurl = "https://www.python.org/ftp/python/3.7.6/python-3.7.6-amd64.exe"
+$pythonurl38 = "https://www.python.org/ftp/python/3.8.2/python-3.8.2-amd64.exe"
 
 
 function Test-Admin {
@@ -58,7 +59,6 @@ Function Pause ($Message = "Press any key to continue...") {
       $Button = $Shell.Popup("Click OK to continue.", 0, "Hello", 0)
       Return
    }
- 
    $Ignore =
       16,  # Shift (left or right)
       17,  # Ctrl (left or right)
@@ -93,10 +93,48 @@ Function Pause ($Message = "Press any key to continue...") {
       $KeyInfo = $Host.UI.RawUI.ReadKey("NoEcho, IncludeKeyDown")
    }
 }
+function get-FileFromUri {
+    param(
+        [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline = $true,ValueFromPipelineByPropertyName = $true)]
+        [string]
+        $Url,
+        [Parameter(Mandatory = $false,Position = 1)]
+        [string]
+        [Alias('Folder')]
+        $FolderPath
+      )
+      process {
+        try {
+          # resolve short URLs
+          $req = [System.Net.HttpWebRequest]::Create($Url)
+          $req.Method = "HEAD"
+          $response = $req.GetResponse()
+          $fUri = $response.ResponseUri
+          $filename = [System.IO.Path]::GetFileName($fUri.LocalPath);
+          $response.Close()
+          # download file
+          $destination = (Get-Item -Path ".\" -Verbose).FullName
+          if ($FolderPath) { $destination = $FolderPath }
+          if ($destination.EndsWith('\')) {
+            $destination += $filename
+          } else {
+            $destination += '\' + $filename
+          }
+          $webclient = New-Object System.Net.webclient
+          $webclient.downloadfile($fUri.AbsoluteUri,$destination)
+          Write-Host -ForegroundColor DarkGreen "downloaded '$($fUri.AbsoluteUri)' to '$($destination)'"
+        } catch {
+          Write-Host -ForegroundColor DarkRed $_.Exception.Message
+        }
+      }
+}
 
 
-
-
+$pythonfile = "python-3.7.6-amd64.exe"
+$python38file = "python-3.8.2-amd64.exe"
+$pythonurl_file = $pythonurl -split '/'
+$pythonurl38_file = $pythonurl38 -split '/'
+get-FileFromUri $Url $FolderPath
 
 
 
@@ -499,7 +537,7 @@ if (Test-Path "$temppath") {
 	#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i python-2.7.17.amd64.msi","/passive","/norestart" }
 
 	#$file = "python-3.8.0-amd64.exe"
-	#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe -OutFile "$temppath\$file" }
+	#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.8.2/python-3.8.2-amd64.exe -OutFile "$temppath\$file" }
 	#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "$temppath\$file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python38" }
 
 
