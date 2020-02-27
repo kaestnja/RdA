@@ -26,8 +26,7 @@ Write-Host -ForegroundColor Green "version:" + $version
 
 $gitfile = "Git-2.25.0-64-bit.exe"
 $giturl = "https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe"
-
-$pythonurl = "https://www.python.org/ftp/python/3.7.6/python-3.7.6-amd64.exe"
+$pythonurl37 = "https://www.python.org/ftp/python/3.7.6/python-3.7.6-amd64.exe"
 $pythonurl38 = "https://www.python.org/ftp/python/3.8.2/python-3.8.2-amd64.exe"
 
 
@@ -104,37 +103,35 @@ function get-FileFromUri {
         $FolderPath
       )
       process {
-        try {
-          # resolve short URLs
-          $req = [System.Net.HttpWebRequest]::Create($Url)
-          $req.Method = "HEAD"
-          $response = $req.GetResponse()
-          $fUri = $response.ResponseUri
-          $filename = [System.IO.Path]::GetFileName($fUri.LocalPath);
-          $response.Close()
-          # download file
-          $destination = (Get-Item -Path ".\" -Verbose).FullName
-          if ($FolderPath) { $destination = $FolderPath }
-          if ($destination.EndsWith('\')) {
-            $destination += $filename
-          } else {
-            $destination += '\' + $filename
-          }
-          $webclient = New-Object System.Net.webclient
-          $webclient.downloadfile($fUri.AbsoluteUri,$destination)
-          Write-Host -ForegroundColor DarkGreen "downloaded '$($fUri.AbsoluteUri)' to '$($destination)'"
-        } catch {
-          Write-Host -ForegroundColor DarkRed $_.Exception.Message
-        }
-      }
+		  # doit
+			try {
+				# resolve short URLs
+				$req = [System.Net.HttpWebRequest]::Create($Url)
+				$req.Method = "HEAD"
+				$response = $req.GetResponse()
+				$fUri = $response.ResponseUri
+				$filename = [System.IO.Path]::GetFileName($fUri.LocalPath);
+				$response.Close()
+				# download file
+				$destination = (Get-Item -Path ".\" -Verbose).FullName
+				if ($FolderPath) { $destination = $FolderPath }
+				if ($destination.EndsWith('\')) {
+				$destination += $filename
+				} else {
+				$destination += '\' + $filename
+				}
+				$webclient = New-Object System.Net.webclient
+				$webclient.downloadfile($fUri.AbsoluteUri,$destination)
+				Write-Host -ForegroundColor DarkGreen "downloaded '$($fUri.AbsoluteUri)' to '$($destination)'"
+			} catch {
+				Write-Host -ForegroundColor DarkRed $_.Exception.Message
+			}
+		return $filename
+		}
 }
 
 
-$pythonfile = "python-3.7.6-amd64.exe"
-$python38file = "python-3.8.2-amd64.exe"
-$pythonurl_file = $pythonurl -split '/'
-$pythonurl38_file = $pythonurl38 -split '/'
-get-FileFromUri $Url $FolderPath
+
 
 
 
@@ -434,12 +431,15 @@ if (Test-Path "$temppath") {
 	#[System.Version]"2.7.0.19530" -lt  [System.Version]"3.0.0.4080"	True
     if (($version -like '*is not recognized*') -or ($pythonexception -eq 1)){
 		Write-Host "$version" -foregroundcolor "yellow"
-		Write-Host "install $pythonfile now" -foregroundcolor "yellow"
+		$pythonurl37_file = get-FileFromUri $pythonurl37 $temppath
+		Write-Host "install $pythonurl37_file now" -foregroundcolor "yellow"
 	    #$pythonfile = "python-3.7.5-amd64.exe"
-		#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$pythonfile" }
-		if (!("$temppath\$pythonfile" | Test-Path)) { curl "$pythonurl" -OutFile "$temppath\$pythonfile" }
-	    if (Test-Path "$temppath\$pythonfile") { 
-			Start-Process -Wait -FilePath "$temppath\$pythonfile" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" 
+
+		#if (!("$temppath\$pythonurl37_file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$pythonurl37_file" }
+		if (!("$temppath\$pythonurl37_file" | Test-Path)) { curl "$pythonurl37" -OutFile "$temppath\$pythonurl37_file" }
+
+	    if (Test-Path "$temppath\$pythonurl37_file") { 
+			Start-Process -Wait -FilePath "$temppath\$pythonurl37_file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" 
 			read-host "python installed?"
 			if (!("C:\Python37\python.exe" | Test-Path)){
 				Write-Host "missing C:\Python37\python.exe" -foregroundcolor "red"
