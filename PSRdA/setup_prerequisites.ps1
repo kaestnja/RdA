@@ -414,6 +414,7 @@ if (Test-Path "$temppath") {
     # redirect stderr into stdout
 	$p = &{python -V} 2>&1
 	$pythonexception = 0
+	$pythonversion = "3.7.5"
     # check if an ErrorRecord was returned
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
         Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
@@ -425,11 +426,18 @@ if (Test-Path "$temppath") {
         # otherwise return as is
 		#$p
 		Write-Host "python version: $p" -foregroundcolor "yellow"
+		$pythonversion = Out-String -InputObject $p
+		Write-Host "python version: $pythonversion" -foregroundcolor "yellow"
+		$pythonversion = $pythonversion.Replace("Python","")
+		Write-Host "python version: $pythonversion" -foregroundcolor "yellow"
+		$pythonversion = $pythonversion.Trim()
+		Write-Host "python version: $pythonversion" -foregroundcolor "yellow"
 	}
+	
 	
 	#[System.Version]"2.7.0.19530" -gt [System.Version]"3.0.0.4080"		False
 	#[System.Version]"2.7.0.19530" -lt  [System.Version]"3.0.0.4080"	True
-    if (($version -like '*is not recognized*') -or ($pythonexception -eq 1)){
+    if (($version -like '*is not recognized*') -or ($pythonexception -eq 1) -or ([System.Version]$pythonversion -lt [System.Version]"3.7.6")){
 		Write-Host "$version" -foregroundcolor "yellow"
 		$pythonurl37_file = get-FileFromUri $pythonurl37 $temppath
 		Write-Host "install $pythonurl37_file now" -foregroundcolor "yellow"
