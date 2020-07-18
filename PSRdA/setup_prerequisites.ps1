@@ -13,7 +13,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.20'
+$version = '0.0.21'
 $myname = 'setup_prerequisites.ps1'
 $prerequisitesyaml = '' 
 $prerequisitesyamlurl = "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml"
@@ -24,10 +24,10 @@ Write-Host -ForegroundColor Green "version:" + $version
 #$ErrorActionPreference = 'SilentlyContinue'
 #$ErrorActionPreference = 'Continue'
 
-$gitfile = "Git-2.25.0-64-bit.exe"
-$giturl = "https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe"
-$pythonurl37 = "https://www.python.org/ftp/python/3.7.6/python-3.7.6-amd64.exe"
-$pythonurl38 = "https://www.python.org/ftp/python/3.8.2/python-3.8.2-amd64.exe"
+$gitfile = "Git-2.27.0-64-bit.exe"
+$giturl = "https://github.com/git-for-windows/git/releases/download/v2.27.0.windows.1/Git-2.27.0-64-bit.exe"
+$pythonurl37 = "https://www.python.org/ftp/python/3.7.8/python-3.7.8-amd64.exe"
+$pythonurl38 = "https://www.python.org/ftp/python/3.8.3/python-3.8.3-amd64.exe"
 
 
 function Test-Admin {
@@ -247,7 +247,7 @@ if ([System.Net.ServicePointManager]::SecurityProtocol -eq [System.Net.SecurityP
 
 ####################################################################################################################################
 Write-Host "check PowerShell---------------------" -foregroundcolor "white"
-if (Get-InstalledModule -Name "PowerShellGet" -MinimumVersion 2.2.1){
+if (Get-InstalledModule -Name "PowerShellGet" -MinimumVersion 2.2.4){
     Write-Host "PowerShellGet is up to date" -foregroundcolor "green"
 } else {
     Write-Host "PowerShellGet will be updated now" -foregroundcolor "yellow"
