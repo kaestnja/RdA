@@ -13,7 +13,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.23'
+$version = '0.0.24'
 $myname = 'setup_prerequisites.ps1'
 $prerequisitesyaml = '' 
 $prerequisitesyamlurl = "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml"
@@ -106,8 +106,6 @@ function get-FileFromUri {
 		)
 		process {
 			# doit
-			Write-Host -foregroundcolor "white" $Url
-			Write-Host -foregroundcolor "white" $FolderPath
 			try {
 				# resolve short URLs
 				$req = [System.Net.HttpWebRequest]::Create($Url)
@@ -135,10 +133,12 @@ function get-FileFromUri {
 		return $filename
 		}
 }
-
 $giturl_file = get-FileFromUri $giturl $temppath
-Write-Host $gitfile
-Write-Host $giturl_file
+$giturl_file = get-FileFromUri $pythonurl37 $temppath
+$giturl_file = get-FileFromUri $pythonurl38 $temppath
+$giturl_file = get-FileFromUri $powershellurl62 $temppath
+$giturl_file = get-FileFromUri $powershellurl70 $temppath
+$giturl_file = get-FileFromUri $pythonurl37 $temppath
 Read-Host -Prompt "Press Enter to exit"
 
 
