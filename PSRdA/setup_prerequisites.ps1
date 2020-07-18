@@ -13,7 +13,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.22'
+$version = '0.0.23'
 $myname = 'setup_prerequisites.ps1'
 $prerequisitesyaml = '' 
 $prerequisitesyamlurl = "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml"
@@ -94,6 +94,7 @@ Function Pause ($Message = "Press any key to continue...") {
    }
 }
 function get-FileFromUri {
+	
     param(
         [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline = $true,ValueFromPipelineByPropertyName = $true)]
         [string]
@@ -102,9 +103,11 @@ function get-FileFromUri {
         [string]
         [Alias('Folder')]
         $FolderPath
-      )
-      process {
-		  # doit
+		)
+		process {
+			# doit
+			Write-Host -foregroundcolor "white" $Url
+			Write-Host -foregroundcolor "white" $FolderPath
 			try {
 				# resolve short URLs
 				$req = [System.Net.HttpWebRequest]::Create($Url)
@@ -132,7 +135,8 @@ function get-FileFromUri {
 }
 
 
-
+Write-Host $giturl
+Write-Host $temppath
 $giturl_file = get-FileFromUri $giturl $temppath
 Write-Host $gitfile
 Write-Host $giturl_file
