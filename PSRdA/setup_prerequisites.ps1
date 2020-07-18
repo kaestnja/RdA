@@ -13,7 +13,7 @@ $force = 0 #"force"
 $temppath = "C:\Temp"
 $gitserver = 'github.com'
 $gituser = 'kaestnja'
-$version = '0.0.21'
+$version = '0.0.22'
 $myname = 'setup_prerequisites.ps1'
 $prerequisitesyaml = '' 
 $prerequisitesyamlurl = "https://$gitserver/$gituser/RdA/raw/master/prerequisites.yaml"
@@ -28,7 +28,8 @@ $gitfile = "Git-2.27.0-64-bit.exe"
 $giturl = "https://github.com/git-for-windows/git/releases/download/v2.27.0.windows.1/Git-2.27.0-64-bit.exe"
 $pythonurl37 = "https://www.python.org/ftp/python/3.7.8/python-3.7.8-amd64.exe"
 $pythonurl38 = "https://www.python.org/ftp/python/3.8.3/python-3.8.3-amd64.exe"
-
+$powershellurl62 = "https://github.com/PowerShell/PowerShell/releases/download/v6.2.7/PowerShell-6.2.7-win-x64.msi"
+$powershellurl70 = "https://github.com/PowerShell/PowerShell/releases/download/v7.0.3/PowerShell-7.0.3-win-x64.msi"
 
 function Test-Admin {
 	$currentPrincipal = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -132,7 +133,10 @@ function get-FileFromUri {
 
 
 
-
+$giturl_file = get-FileFromUri $giturl $temppath
+Write-Host $gitfile
+Write-Host $giturl_file
+exit
 
 
 
