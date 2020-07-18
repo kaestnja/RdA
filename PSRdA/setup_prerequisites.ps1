@@ -352,7 +352,10 @@ if (Test-Path "$temppath") {
     {
         git | Out-Null
 		$testupdategit = git --version
-        Write-Host "Git is installed, $testupdategit" -foregroundcolor "green" #git version 2.24.0.windows.2
+		Write-Host "Git is installed, $testupdategit" -foregroundcolor "green" #git version 2.24.0.windows.2
+		if ( (!($testupdategit -like '*2.27*')) ){
+			git update-git-for-windows
+		}
         #git update-git-for-windows
 		#$testupdategit = ''
 		#$testupdategit = git update-git-for-windows | Out-Null
