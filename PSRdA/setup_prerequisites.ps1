@@ -136,7 +136,7 @@ function get-FileFromUri {
 $giturl_file = get-FileFromUri $giturl $temppath
 Write-Host $gitfile
 Write-Host $giturl_file
-pause
+Read-Host -Prompt "Press Enter to exit"
 
 
 
