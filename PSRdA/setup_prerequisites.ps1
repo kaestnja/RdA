@@ -112,12 +112,11 @@ function get-FileFromUri {
 				$req.Method = "HEAD"
 				$response = $req.GetResponse()
 				$fUri = $response.ResponseUri
-				Write-Host -foregroundcolor "white" $fUri
 				$filename = [System.IO.Path]::GetFileName($fUri.LocalPath);
-				Write-Host -foregroundcolor "white" $filename
 				$response.Close()
 				# download file
 				$destination = (Get-Item -Path ".\" -Verbose).FullName
+				Write-Host -foregroundcolor "white" $destination
 				if ($FolderPath) { $destination = $FolderPath }
 				if ($destination.EndsWith('\')) {
 				$destination += $filename
@@ -130,6 +129,8 @@ function get-FileFromUri {
 			} catch {
 				Write-Host -ForegroundColor DarkRed $_.Exception.Message
 			}
+		Write-Host -foregroundcolor "white" $fUri
+		Write-Host -foregroundcolor "white" $filename
 		return $filename
 		}
 }
