@@ -331,7 +331,7 @@ if (Test-Path "$temppath") {
         if (!(Test-RegistryValue -Path $key -Value $keyValue)){
             Write-Host "Powershell 6 not identified" -foregroundcolor "yellow"
             #iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
-	        $file = "PowerShell-6.2.3-win-x64.msi"
+	        $file = "PowerShell-6.2.7-win-x64.msi"
 	        if (!("$temppath\$file" | Test-Path)) { curl https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/PowerShell-6.2.3-win-x64.msi -OutFile "$temppath\$file" }
 	        #msiexec.exe /l*v mdbinstall.log /qb /i PowerShell-6.2.3-win-x64.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1
 	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i PowerShell-6.2.3-win-x64.msi","/quiet","ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1","ENABLE_PSREMOTING=1","REGISTER_MANIFEST=1" }
@@ -365,7 +365,7 @@ if (Test-Path "$temppath") {
 	#$gitfile = "Git-2.25.0-64-bit.exe"
 	#$giturl = "https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe" 
     $isGitInstalled = $null -ne ( (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*) + (Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*) | Where-Object { $null -ne $_.DisplayName -and $_.Displayname.Contains('Git') })
-    if ( (!($isGitInstalled )) -or (!($testupdategit -like '*2.25*')) ){
+    if ( (!($isGitInstalled )) -or (!($testupdategit -like '*2.27*')) ){
 		#if (!("$temppath\$file" | Test-Path)) { curl https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe -OutFile "$temppath\$file" }
 		if (!("$temppath\$gitfile" | Test-Path)) { curl "$giturl" -OutFile "$temppath\$gitfile" }
 	    #.\Git-2.24.0.2-64-bit.exe /SILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /NoIcons=0 /SetupType=default /COMPONENTS="icons,ext,ext\shellhere,ext\guihere,gitlfs,assoc,assoc_sh,autoupdate" /EditorOption=Nano /PathOption=Cmd /SSHOption=OpenSSH /TortoiseOption=false /CURLOption=OpenSSL /CRLFOption=CRLFCommitAsIs /BashTerminalOption=MinTTY /PerformanceTweaksFSCache=Enabled /UseCredentialManager=Enabled /EnableSymlinks=Disabled /EnableBuiltinInteractiveAdd=Disabled
