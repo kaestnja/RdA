@@ -134,12 +134,18 @@ function get-FileFromUri {
 		return $filename
 		}
 }
-$giturl_file = get-FileFromUri $giturl $temppath
-$giturl_file = get-FileFromUri $pythonurl37 $temppath
-$giturl_file = get-FileFromUri $pythonurl38 $temppath
-$giturl_file = get-FileFromUri $powershellurl62 $temppath
-$giturl_file = get-FileFromUri $powershellurl70 $temppath
-$giturl_file = get-FileFromUri $pythonurl37 $temppath
+$url_file = get-FileFromUri $giturl $temppath
+Write-Host -foregroundcolor "Yellow" $url_file
+$url_file = get-FileFromUri $pythonurl37 $temppath
+Write-Host -foregroundcolor "Yellow" $url_file
+$url_file = get-FileFromUri $pythonurl38 $temppath
+Write-Host -foregroundcolor "Yellow" $url_file
+$url_file = get-FileFromUri $powershellurl62 $temppath
+Write-Host -foregroundcolor "Yellow" $url_file
+$url_file = get-FileFromUri $powershellurl70 $temppath
+Write-Host -foregroundcolor "Yellow" $url_file
+$url_file = get-FileFromUri $pythonurl37 $temppath
+Write-Host -foregroundcolor "Yellow" $url_file
 Read-Host -Prompt "Press Enter to exit"
 
 
