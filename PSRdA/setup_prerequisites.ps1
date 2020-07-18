@@ -114,7 +114,9 @@ function get-FileFromUri {
 				$req.Method = "HEAD"
 				$response = $req.GetResponse()
 				$fUri = $response.ResponseUri
+				Write-Host -foregroundcolor "white" $fUri
 				$filename = [System.IO.Path]::GetFileName($fUri.LocalPath);
+				Write-Host -foregroundcolor "white" $filename
 				$response.Close()
 				# download file
 				$destination = (Get-Item -Path ".\" -Verbose).FullName
@@ -134,9 +136,6 @@ function get-FileFromUri {
 		}
 }
 
-
-Write-Host $giturl
-Write-Host $temppath
 $giturl_file = get-FileFromUri $giturl $temppath
 Write-Host $gitfile
 Write-Host $giturl_file
