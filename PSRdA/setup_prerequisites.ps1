@@ -583,18 +583,18 @@ if (Test-Path "$temppath") {
 	Write-Host "check MongoDB Compass---------------------" -foregroundcolor "white"
     if (($setuptype -eq "contributor") -or ($setuptype -eq "server")){
         if (!("C:\Program Files\MongoDB Compass Community\MongoDBCompassCommunity.exe" | Test-Path)) {
-	        $file = "mongodb-compass-community-1.19.12-win32-x64.msi"
-	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
+	        $file = "mongodb-compass-community-1.21.2-win32-x64.msi"
+	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.21.2-win32-x64.msi -OutFile "$temppath\$file" }
 	        #developer gets a mongodb-compass as application, which is able to edit mongodb completely
-	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
+	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.21.2-win32-x64.msi" }
 	    }
     }
     if ($setuptype -eq "expert"){
         if (!("C:\Program Files\MongoDB Compass Readonly\MongoDBCompassReadonly.exe" | Test-Path)) {
-            $file = "mongodb-compass-readonly-1.19.12-win32-x64.msi"
-	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-readonly-1.19.12-win32-x64.msi -OutFile "$temppath\$file" }
+            $file = "mongodb-compass-readonly-1.21.2-win32-x64.msi"
+	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-readonly-1.21.2-win32-x64.msi -OutFile "$temppath\$file" }
 	        #developer gets a mongodb-compass as application, which is able to edit mongodb completely
-	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.19.12-win32-x64.msi" }
+	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.21.2-win32-x64.msi" }
         }
     }
 
@@ -603,11 +603,11 @@ if (Test-Path "$temppath") {
     if (!("C:\Program Files\MongoDB\Server\4.2\bin\mongod.exe" | Test-Path)) {
 	    if (!("C:\MongoDB\data" | Test-Path)) { md -p "C:\MongoDB\data" }
 	    if (!("C:\MongoDB\log" | Test-Path)) { md -p "C:\MongoDB\log" }
-	    $file = "mongodb-win32-x86_64-2012plus-4.2.1-signed.msi"
-	    if (!("$temppath\$file" | Test-Path)) { curl https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-4.2.1-signed.msi -OutFile "$temppath\$file" }
+	    $file = "mongodb-win32-x86_64-2012plus-4.4.0-signed.msi"
+	    if (!("$temppath\$file" | Test-Path)) { curl https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-4.4.0-signed.msi -OutFile "$temppath\$file" }
 	    #developer gets a mongodb as application (not as service), which have to be startet with a shortcut on the desktop
 	    if ($setuptype -eq "contributor"){
-			if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerNoService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
+			if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.4.0-signed.msi","ADDLOCAL=`"ServerNoService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
 			#C:\MongoDB\Server\4.2\bin\mongod.exe --dbpath "C:\MongoDB\data"  "C:\MongoDB\log" --bind_ip 127.0.0.1 --port 27017
 			#C:\MongoDB\Server\4.2\bin\mongod.exe --bind_ip 127.0.0.1 --port 27017
 			#find all home paths:  dir env:\home*
@@ -629,13 +629,13 @@ if (Test-Path "$temppath") {
 		}
 		#server gets a mongodb as service, which runs from startup
 		if ($setuptype -eq "server"){
-			if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
-			#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"all`"" }
+			if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.4.0-signed.msi","ADDLOCAL=`"ServerService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
+			#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.4.0-signed.msi","ADDLOCAL=`"all`"" }
 		}
 		#expert gets a mongodb as service, not to care about configuring
 		if ($setuptype -eq "expert"){
-			if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"ServerService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
-			#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.2.1-signed.msi","ADDLOCAL=`"all`"" }
+			if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.4.0-signed.msi","ADDLOCAL=`"ServerService,Router,Client,MonitoringTools,ImportExportTools,MiscellaneousTools`"" }
+			#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.4.0-signed.msi","ADDLOCAL=`"all`"" }
 		}
 	}
 
