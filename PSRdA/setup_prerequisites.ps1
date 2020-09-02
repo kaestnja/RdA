@@ -423,15 +423,15 @@ if (Test-Path "$temppath") {
 	#install python
 	Write-Host "check Python---------------------" -foregroundcolor "white"
 	#$windows_path = $env:Path -split ';'
-    #if ($windows_path -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"}
+    #if ($windows_path -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red"}
 	#if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
-    #$folder = "C:\Python37\"
+    #$folder = "C:\Python38\"
 	#if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
     
     # redirect stderr into stdout
 	$p = &{python -V} 2>&1
 	$pythonexception = 0
-	$pythonversion = "3.7.5"
+	$pythonversion = "3.8.3"
     # check if an ErrorRecord was returned
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
         Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
@@ -456,68 +456,68 @@ if (Test-Path "$temppath") {
 	#[System.Version]"2.7.0.19530" -lt  [System.Version]"3.0.0.4080"	True
     if (($version -like '*is not recognized*') -or ($pythonexception -eq 1) -or ([System.Version]$pythonversion -lt [System.Version]"3.7.6")){
 		Write-Host "$version" -foregroundcolor "yellow"
-		$pythonurl37_file = get-FileFromUri $pythonurl37 $temppath
-		Write-Host "install $pythonurl37_file now" -foregroundcolor "yellow"
+		$pythonurl38_file = get-FileFromUri $pythonurl38 $temppath
+		Write-Host "install $pythonurl38_file now" -foregroundcolor "yellow"
 	    #$pythonfile = "python-3.7.5-amd64.exe"
 
-		#if (!("$temppath\$pythonurl37_file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$pythonurl37_file" }
-		if (!("$temppath\$pythonurl37_file" | Test-Path)) { curl "$pythonurl37" -OutFile "$temppath\$pythonurl37_file" }
+		#if (!("$temppath\$pythonurl38_file" | Test-Path)) { curl https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe -OutFile "$temppath\$pythonurl38_file" }
+		if (!("$temppath\$pythonurl38_file" | Test-Path)) { curl "$pythonurl38" -OutFile "$temppath\$pythonurl38_file" }
 
-	    if (Test-Path "$temppath\$pythonurl37_file") { 
-			Start-Process -Wait -FilePath "$temppath\$pythonurl37_file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python37","PrependPath=1" 
+	    if (Test-Path "$temppath\$pythonurl38_file") { 
+			Start-Process -Wait -FilePath "$temppath\$pythonurl38_file" -WorkingDirectory "$temppath" -ArgumentList "/passive","InstallAllUsers=1","TargetDir=C:\Python38","PrependPath=1" 
 			read-host "python installed?"
-			if (!("C:\Python37\python.exe" | Test-Path)){
-				Write-Host "missing C:\Python37\python.exe" -foregroundcolor "red"
+			if (!("C:\Python38\python.exe" | Test-Path)){
+				Write-Host "missing C:\Python38\python.exe" -foregroundcolor "red"
 				read-host "?"
 			}else{
-                $folder = "C:\Python37\Scripts\"
+                $folder = "C:\Python38\Scripts\"
                 #--------------------------maschine
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','machine')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine") ,will add it to path now' -foregroundcolor "red";
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine") ,will add it to path now' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Machine)}
                 #--------------------------user
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','user')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user") ,will add it to path now' -foregroundcolor "red";
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user") ,will add it to path now' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::User)}
                 #--------------------------process
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','process')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process") ,will add it to path now' -foregroundcolor "red";
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process") ,will add it to path now' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Process)}
                 #--------------------------session
                 $focused_path = $env:Path -split ';'
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red";
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red";
                 $env:path = $folder + ";" + $focused_path}
 
-                $folder = "C:\Python37\"
+                $folder = "C:\Python38\"
                 #--------------------------maschine
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','machine')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine")' -foregroundcolor "red";
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine")' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Machine)}
                 #--------------------------user
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','user')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user")' -foregroundcolor "red";
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user")' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::User)}
                 #--------------------------process
                 $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','process')
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process")' -foregroundcolor "red";
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process")' -foregroundcolor "red";
                 $focused_path = $folder + ";" + $focused_path
                 [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Process)}
                 #--------------------------session
                 $focused_path = $env:Path -split ';'
                 $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python37\Scripts\ on $env:Path' -foregroundcolor "red";
+                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on $env:Path' -foregroundcolor "red";
                 $env:path = $folder + ";" + $focused_path}
             }
 		}else{
@@ -536,9 +536,9 @@ if (Test-Path "$temppath") {
     }
 	if ($version -like '*Python 3.7*'){
 		$windows_path = $env:Path -split ';'
-		$folder = "C:\Python37\Scripts\"
+		$folder = "C:\Python38\Scripts\"
 		if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
-		$folder = "C:\Python37\"
+		$folder = "C:\Python38\"
 		if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
 	}
 	Write-Host "check Python Modules---------------------" -foregroundcolor "white"
@@ -839,7 +839,7 @@ if (($setuptype -eq "contributor") -or ($setuptype -eq "expert") -or ($setuptype
 	if (!($desktopfolder | Test-Path)) { $desktopfolder = (Get-Item "Env:OneDrive").Value + "\Desktop" }
 	if (Test-Path $desktopfolder) { 
 		$Shortcut = $WshShell.CreateShortcut("$desktopfolder\PyCdA.lnk") 
-		$Shortcut.TargetPath = "C:\Python37\python.exe"
+		$Shortcut.TargetPath = "C:\Python38\python.exe"
 		$Shortcut.Arguments = "$folder\$project\$file"
 		$Shortcut.Description = "start PyCdA"
 		#$Shortcut.IconLocation = "$folder\$project\cda.ico, 1"
