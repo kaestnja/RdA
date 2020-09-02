@@ -431,7 +431,7 @@ if (Test-Path "$temppath") {
     # redirect stderr into stdout
 	$p = &{python -V} 2>&1
 	$pythonexception = 0
-	$pythonversion = "3.8.3"
+	$pythonversion = "0.1.2"
     # check if an ErrorRecord was returned
     $version = if($p -is [System.Management.Automation.ErrorRecord]){
         Trace-Command -Name CommandDiscovery -Expression {get-command python} -PSHost
@@ -442,11 +442,11 @@ if (Test-Path "$temppath") {
     } else {
         # otherwise return as is
 		#$p
-		Write-Host "python version: $p" -foregroundcolor "yellow"
+		#Write-Host "python version: $p" -foregroundcolor "yellow"
 		$pythonversion = Out-String -InputObject $p
-		Write-Host "python version: $pythonversion" -foregroundcolor "yellow"
+		#Write-Host "python version: $pythonversion" -foregroundcolor "yellow"
 		$pythonversion = $pythonversion.Replace("Python","")
-		Write-Host "python version: $pythonversion" -foregroundcolor "yellow"
+		#Write-Host "python version: $pythonversion" -foregroundcolor "yellow"
 		$pythonversion = $pythonversion.Trim()
 		Write-Host "python version: $pythonversion" -foregroundcolor "yellow"
 	}
@@ -493,31 +493,6 @@ if (Test-Path "$temppath") {
                 $focused_path = $env:Path -split ';'
                 $focused_path_splited = $focused_path -split ';'
                 if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on $env:Path' -foregroundcolor "red";Read-Host "will add it to path now" -foregroundcolor "red";
-                $env:path = $folder + ";" + $focused_path}
-
-                $folder = "C:\Python38\"
-                #--------------------------maschine
-                $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','machine')
-                $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","machine")' -foregroundcolor "red";
-                $focused_path = $folder + ";" + $focused_path
-                [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Machine)}
-                #--------------------------user
-                $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','user')
-                $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","user")' -foregroundcolor "red";
-                $focused_path = $folder + ";" + $focused_path
-                [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::User)}
-                #--------------------------process
-                $focused_path = [System.Environment]::GetEnvironmentVariable('PATH','process')
-                $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on [System.Environment]::GetEnvironmentVariable("PATH","process")' -foregroundcolor "red";
-                $focused_path = $folder + ";" + $focused_path
-                [System.Environment]::SetEnvironmentVariable('PATH',$focused_path,[System.EnvironmentVariableTarget]::Process)}
-                #--------------------------session
-                $focused_path = $env:Path -split ';'
-                $focused_path_splited = $focused_path -split ';'
-                if ($focused_path_splited -notcontains $folder) { Write-Host 'missing C:\Python38\Scripts\ on $env:Path' -foregroundcolor "red";
                 $env:path = $folder + ";" + $focused_path}
             }
 		}else{
