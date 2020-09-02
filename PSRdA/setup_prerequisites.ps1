@@ -454,7 +454,7 @@ if (Test-Path "$temppath") {
 	
 	#[System.Version]"2.7.0.19530" -gt [System.Version]"3.0.0.4080"		False
 	#[System.Version]"2.7.0.19530" -lt  [System.Version]"3.0.0.4080"	True
-    if (($version -like '*is not recognized*') -or ($pythonexception -eq 1) -or ([System.Version]$pythonversion -lt [System.Version]"3.7.6")){
+    if (($version -like '*is not recognized*') -or ($pythonexception -eq 1) -or ([System.Version]$pythonversion -lt [System.Version]"3.8.3")){
 		Write-Host "$version" -foregroundcolor "yellow"
 		$pythonurl38_file = get-FileFromUri $pythonurl38 $temppath
 		Write-Host "install $pythonurl38_file now" -foregroundcolor "yellow"
@@ -534,7 +534,7 @@ if (Test-Path "$temppath") {
     } else {
         $p
     }
-	if ($version -like '*Python 3.7*'){
+	if ($version -like '*Python 3.8*'){
 		$windows_path = $env:Path -split ';'
 		$folder = "C:\Python38\Scripts\"
 		if ($windows_path -notcontains $folder) { if (Test-Path $folder) { $env:path += ";" + $folder } }
