@@ -605,7 +605,7 @@ if (Test-Path "$temppath") {
 	    if (!("C:\MongoDB\data" | Test-Path)) { md -p "C:\MongoDB\data" }
 	    if (!("C:\MongoDB\log" | Test-Path)) { md -p "C:\MongoDB\log" }
 	    $file = "mongodb-win32-x86_64-2012plus-4.4.0-signed.msi"
-	    if (!("$temppath\$file" | Test-Path)) { curl https://fastdl.mongodb.org/windows/mongodb-win32-x86_64-2012plus-4.4.0-signed.msi -OutFile "$temppath\$file" }
+	    if (!("$temppath\$file" | Test-Path)) { curl https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-4.4.0-signed.msi -OutFile "$temppath\$file" }
 	    #developer gets a mongodb as application (not as service), which have to be startet with a shortcut on the desktop
 	    if ($setuptype -eq "contributor"){
 			if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-windows-x86_64-4.4.0-signed.msi","ADDLOCAL=`"ServerNoService,Router,Client,MiscellaneousTools`"" }
