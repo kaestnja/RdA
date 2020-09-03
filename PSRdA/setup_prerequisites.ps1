@@ -554,26 +554,6 @@ if (Test-Path "$temppath") {
 
 
 
-	#install mongodb-compass
-	#from either https://downloads.mongodb.com/compass/mongodb-compass-1.21.2-win32-x64.msi
-	Write-Host "check MongoDB Compass---------------------" -foregroundcolor "white"
-    if (($setuptype -eq "contributor") -or ($setuptype -eq "server")){
-        if (!("C:\Program Files\MongoDB Compass Community\MongoDBCompassCommunity.exe" | Test-Path)) {
-	        $file = "mongodb-compass-community-1.21.2-win32-x64.msi"
-	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.21.2-win32-x64.msi -OutFile "$temppath\$file" }
-	        #developer gets a mongodb-compass as application, which is able to edit mongodb completely
-	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.21.2-win32-x64.msi" }
-	    }
-    }
-    if ($setuptype -eq "expert"){
-        if (!("C:\Program Files\MongoDB Compass Readonly\MongoDBCompassReadonly.exe" | Test-Path)) {
-            $file = "mongodb-compass-readonly-1.21.2-win32-x64.msi"
-	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-readonly-1.21.2-win32-x64.msi -OutFile "$temppath\$file" }
-	        #developer gets a mongodb-compass as application, which is able to edit mongodb completely
-	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-readonly-1.21.2-win32-x64.msi" }
-        }
-    }
-
     #install mongodb from either https://fastdl.mongodb.org/windows/ or https://dl.mongodb.org/dl/win32/x86_64 or https://fastdl.mongodb.org/win32 
 	Write-Host "check MongoDB---------------------" -foregroundcolor "white"
     if (!("C:\Program Files\MongoDB\Server\4.4\bin\mongod.exe" | Test-Path)) {
@@ -614,6 +594,40 @@ if (Test-Path "$temppath") {
 			#if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-win32-x86_64-2012plus-4.4.0-signed.msi","ADDLOCAL=`"all`"" }
 		}
 	}
+
+	#install mongodb-database-tools
+	#from either https://fastdl.mongodb.org/tools/db/mongodb-database-tools-windows-x86_64-100.1.1.msi
+	Write-Host "check MongoDB DatabaseTools---------------------" -foregroundcolor "white"
+    if (($setuptype -eq "contributor") -or ($setuptype -eq "server")){
+        if (!("C:\Program Files\MongoDB\Tools\100\bin\mongodump.exe" | Test-Path)) {
+	        $file = "mongodb-database-tools-windows-x86_64-100.1.1.msi"
+	        if (!("$temppath\$file" | Test-Path)) { curl https://fastdl.mongodb.org/tools/db/mongodb-database-tools-windows-x86_64-100.1.1.msi -OutFile "$temppath\$file" }
+	        #
+	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-database-tools-windows-x86_64-100.1.1.msi" }
+	    }
+    }
+ 
+
+	#install mongodb-compass
+	#from either https://downloads.mongodb.com/compass/mongodb-compass-1.21.2-win32-x64.msi
+	Write-Host "check MongoDB Compass---------------------" -foregroundcolor "white"
+    if (($setuptype -eq "contributor") -or ($setuptype -eq "server")){
+        if (!("C:\Program Files\MongoDB Compass Community\MongoDBCompassCommunity.exe" | Test-Path)) {
+	        $file = "mongodb-compass-community-1.21.2-win32-x64.msi"
+	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-community-1.21.2-win32-x64.msi -OutFile "$temppath\$file" }
+	        #developer gets a mongodb-compass as application, which is able to edit mongodb completely
+	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-community-1.21.2-win32-x64.msi" }
+	    }
+    }
+    if ($setuptype -eq "expert"){
+        if (!("C:\Program Files\MongoDB Compass Readonly\MongoDBCompassReadonly.exe" | Test-Path)) {
+            $file = "mongodb-compass-readonly-1.21.2-win32-x64.msi"
+	        if (!("$temppath\$file" | Test-Path)) { curl https://downloads.mongodb.com/compass/mongodb-compass-readonly-1.21.2-win32-x64.msi -OutFile "$temppath\$file" }
+	        #developer gets a mongodb-compass as application, which is able to edit mongodb completely
+	        if (Test-Path "$temppath\$file") { Start-Process -Wait -FilePath "msiexec.exe" -WorkingDirectory "$temppath" -ArgumentList "/l*v mdbinstall.log","/qb","/i mongodb-compass-readonly-1.21.2-win32-x64.msi" }
+        }
+    }
+
 
 	#developer, expert and server gets an allround editor, if possible the new 7.8.1, or at minimum the 7.7.1
 	Write-Host "check Notepad++ ---------------------" -foregroundcolor "white"
