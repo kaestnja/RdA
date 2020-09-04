@@ -129,6 +129,10 @@ function get-FileFromUri {
 				# resolve short URLs
 				$req = [System.Net.HttpWebRequest]::Create($Url)
 				$req.Method = "HEAD"
+				# to solve 403, test 1
+				#$req.UseDefaultCredentials = TRUE;
+				# to solve 403, test 1
+				#$req.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
 				$response = $req.GetResponse()
 				$fUri = $response.ResponseUri
 				$filename = [System.IO.Path]::GetFileName($fUri.LocalPath);
@@ -147,12 +151,24 @@ function get-FileFromUri {
 				Write-Host -ForegroundColor DarkGreen "downloaded '$($fUri.AbsoluteUri)' to '$($destination)'"
 			} catch {
 				Write-Host -ForegroundColor DarkRed $_.Exception.Message
+				try
+				{
+					$Response = Invoke-WebRequest -Uri $giturl -ErrorAction Stop -OutFile $temppath
+					$StatusCode = $Response.StatusCode
+				}
+				catch
+				{
+					$StatusCode = $_.Exception.Response.StatusCode.value__
+				}
+				Write-Host -foregroundcolor "Yellow" $StatusCode
 			}
 		Write-Host -foregroundcolor "white" $fUri
 		Write-Host -foregroundcolor "white" $filename
 		return $filename
 		}
 }
+
+
 $url_file = get-FileFromUri $giturl $temppath
 Write-Host -foregroundcolor "Yellow" $url_file
 
