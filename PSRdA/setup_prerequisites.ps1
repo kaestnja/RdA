@@ -3,7 +3,7 @@ param([switch]$Elevated,[parameter(HelpMessage="can be one of:expert,server,cont
 #start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites.ps1') }"
 #start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites.ps1') } -setuptype 'contributor' "
 
-#plz replace all wrong characters like – with - " , except in this line. those came from copying snipets from internet.
+# plz replace all wrong characters like – with - " , except in this line. those came from copying snipets from internet.
 
 # workaround for : Command 'PowerShell: Show Session Menu' resulted in an error (Running the contributed command: 'PowerShell.ShowSessionMenu' failed.)
 # Exit VS Code
@@ -13,6 +13,16 @@ param([switch]$Elevated,[parameter(HelpMessage="can be one of:expert,server,cont
 # Once loaded, click on the icon again and Switch to: Windows PowerShell (x64)
 # Rename back C:\Program Files\PowerShell to C:\Program Files\PowerShell
 # Now, when I start VC Code it runs powershell.exe in the terminal and does not hung.
+# or
+# change "default": false to true in
+# "C:\Users\janka\.vscode\extensions\ms-vscode.powershell-2020.6.0\package.json"
+# And in it:
+# "powershell.integratedConsole.suppressStartupBanner": {
+# 					"type": "boolean",
+# 					"default": false,
+# 					"description": "Do not show the Powershell Integrated Console banner on launch"
+# 				},
+
 
 if ( (!($setuptype -like '*expert*')) -and (!($setuptype -like '*server*')) -and (!($setuptype -like '*contributor*')) ) {
 	Write-Host -ForegroundColor Red "setuptype wrong:" + $setuptype
