@@ -4,6 +4,16 @@ param([switch]$Elevated,[parameter(HelpMessage="can be one of:expert,server,cont
 #start it via: Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/master/PSRdA/setup_prerequisites.ps1') } -setuptype 'contributor' "
 
 #plz replace all wrong characters like – with - " , except in this line. those came from copying snipets from internet.
+
+# workaround for : Command 'PowerShell: Show Session Menu' resulted in an error (Running the contributed command: 'PowerShell.ShowSessionMenu' failed.)
+# Exit VS Code
+# Rename C:\Program Files\PowerShell to C:\Program Files\PowerShell_
+# Open VS Code and wait for PS terminal to start. It should start v 5.1 now.
+# Click on the PS version icon (bottom right), and Switch to: Windows PowerShell (x86)
+# Once loaded, click on the icon again and Switch to: Windows PowerShell (x64)
+# Rename back C:\Program Files\PowerShell to C:\Program Files\PowerShell
+# Now, when I start VC Code it runs powershell.exe in the terminal and does not hung.
+
 if ( (!($setuptype -like '*expert*')) -and (!($setuptype -like '*server*')) -and (!($setuptype -like '*contributor*')) ) {
 	Write-Host -ForegroundColor Red "setuptype wrong:" + $setuptype
 	read-host "proceed as contributor now";
