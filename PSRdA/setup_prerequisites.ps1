@@ -15,7 +15,7 @@ param([switch]$Elevated,[parameter(HelpMessage="can be one of:expert,server,cont
 # Now, when I start VC Code it runs powershell.exe in the terminal and does not hung.
 # or
 # change "default": false to true in
-# "C:\Users\janka\.vscode\extensions\ms-vscode.powershell-2020.6.0\package.json"
+# "$HOME\.vscode\extensions\ms-vscode.powershell-2020.6.0\package.json"
 # And in it:
 # "powershell.integratedConsole.suppressStartupBanner": {
 # 					"type": "boolean",
@@ -262,6 +262,7 @@ if (Test-Path $($(Get-Item "Env:USERPROFILE").Value + "\Desktop")) { echo "found
 Get-ExecutionPolicy
 Set-ExecutionPolicy RemoteSigned
 #Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
+#Import-Module $HOME\.vscode\extensions\ms-vscode.powershell*\modules\PowerShellEditorServices\PowerShellEditorServices.psd1
 
 #enable the verry long names for files and paths, just for sure
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "FileSystem@LongPathsEnabled" -Value 1
