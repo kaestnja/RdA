@@ -168,6 +168,26 @@ function get-FileFromUri {
 		}
 }
 
+Function Get-RedirectedUrl {
+
+    Param (
+        [Parameter(Mandatory=$true)]
+        [String]$URL
+    )
+
+    $request = [System.Net.WebRequest]::Create($url)
+    $request.AllowAutoRedirect=$false
+    $response=$request.GetResponse()
+
+    If ($response.StatusCode -eq "Found")
+    {
+        $response.GetResponseHeader("Location")
+    }
+}
+$url_file_redirected = [System.IO.Path]::GetFileName((Get-RedirectedUrl "http://go.microsoft.com/fwlink/?LinkId=393217"))
+Write-Host -foregroundcolor "Yellow" $url_file_redirected
+$url_file_redirected = [System.IO.Path]::GetFileName((Get-RedirectedUrl $giturl))
+Write-Host -foregroundcolor "Yellow" $url_file_redirected
 
 $url_file = get-FileFromUri $giturl $temppath
 Write-Host -foregroundcolor "Yellow" $url_file
