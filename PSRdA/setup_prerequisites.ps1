@@ -239,7 +239,14 @@ $Output = @{
 	DownloadUri = $DownloadUri
 }
 
+Install-Module -Name PackageManagement
+Install-Script Install-VSCode; Install-VSCode.ps1
+Install-Module -Name PythonPowershellUtilities
+#Install-Script -Name Install-VSCode; Install-VSCode.ps1 -LaunchWhenDone
+Install-Script -Name Install-Git
 
+Import-Module PythonPowershellUtilities
+Install-Python 3.8.3 
 
 $url_file_redirected = [System.IO.Path]::GetFileName((Get-RedirectedUrl "http://go.microsoft.com/fwlink/?LinkId=393217"))
 Write-Host -foregroundcolor "Yellow" $url_file_redirected
