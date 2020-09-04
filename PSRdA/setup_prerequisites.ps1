@@ -356,6 +356,8 @@ if (Test-Path "$temppath") {
 		}
 	}
 	Write-Host "check PowerShell Core (V6)---------------------" -foregroundcolor "white"
+	# https://github.com/PowerShell/PowerShell/releases/download/v7.0.3/PowerShell-7.0.3-win-x64.msi
+	# msiexec.exe /package PowerShell-7.0.1-win-x64.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1
 	#Install PScore6 
     #$key = "HKLM:\Software\Microsoft\PowerShell\1\Install"
     #$key = "HKLM:\SOFTWARE\Microsoft\PowerShell\1\PowerShellEngine\PowerShellVersion"
