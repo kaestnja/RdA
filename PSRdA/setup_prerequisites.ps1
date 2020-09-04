@@ -24,8 +24,7 @@ Write-Host -ForegroundColor Green "version:" + $version
 #$ErrorActionPreference = 'SilentlyContinue'
 #$ErrorActionPreference = 'Continue'
 
-$gitfile = "Git-2.27.0-64-bit.exe"
-$giturl = "https://github.com/git-for-windows/git/releases/download/v2.27.0.windows.1/Git-2.27.0-64-bit.exe"
+$giturl = "https://github.com/git-for-windows/git/releases/download/v2.28.0.windows.1/Git-2.28.0-64-bit.exe"
 $pythonurl37 = "https://www.python.org/ftp/python/3.7.8/python-3.7.8-amd64.exe"
 $pythonurl38 = "https://www.python.org/ftp/python/3.8.3/python-3.8.3-amd64.exe"
 $powershellurl62 = "https://github.com/PowerShell/PowerShell/releases/download/v6.2.7/PowerShell-6.2.7-win-x64.msi"
@@ -136,6 +135,7 @@ function get-FileFromUri {
 }
 $url_file = get-FileFromUri $giturl $temppath
 Write-Host -foregroundcolor "Yellow" $url_file
+
 $url_file = get-FileFromUri $pythonurl37 $temppath
 Write-Host -foregroundcolor "Yellow" $url_file
 $url_file = get-FileFromUri $pythonurl38 $temppath
