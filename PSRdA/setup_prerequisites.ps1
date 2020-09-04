@@ -276,7 +276,8 @@ if (Get-InstalledModule -Name "PowerShellGet" -MinimumVersion 2.2.4){
     #Find-Module -Name PowerShellGet*
     #Find-Module -Name PackageManagement*
     #Install-Module PowerShellGet -Scope AllUsers -Force -AllowClobber -ErrorAction Stop | Out-Null
-    #Install-Module -Name PowerShellGet -Force -Verbose
+	#Install-Module -Name PowerShellGet -Force -Verbose
+	#powershell.exe -NoLogo -NoProfile -Command 'Install-Module -Name PackageManagement -Force -MinimumVersion 1.4.6 -Scope CurrentUser -AllowClobber'
     Install-Module -Name PowerShellGet -RequiredVersion 2.2.1 -Force -Scope AllUsers -AllowClobber -ErrorAction Continue -SkipPublisherCheck | Out-Null
     }
 Update-Module -Name PowerShellGet
