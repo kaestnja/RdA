@@ -129,11 +129,8 @@ function get-FileFromUri {
 				# resolve short URLs
 				$req = [System.Net.HttpWebRequest]::Create($Url)
 				$req.Method = "HEAD"
-				# to solve 403, test 1
-				#$req.UseDefaultCredentials = TRUE;
-				# to solve 403, test 1
-				#$req.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
 				$response = $req.GetResponse()
+				Write-Host -ForegroundColor $response.StatusCode
 				$fUri = $response.ResponseUri
 				$filename = [System.IO.Path]::GetFileName($fUri.LocalPath);
 				$response.Close()
@@ -151,16 +148,6 @@ function get-FileFromUri {
 				Write-Host -ForegroundColor DarkGreen "downloaded '$($fUri.AbsoluteUri)' to '$($destination)'"
 			} catch {
 				Write-Host -ForegroundColor DarkRed $_.Exception.Message
-				try
-				{
-					$Response = Invoke-WebRequest -Uri $giturl -ErrorAction Stop -OutFile $temppath
-					$StatusCode = $Response.StatusCode
-				}
-				catch
-				{
-					$StatusCode = $_.Exception.Response.StatusCode.value__
-				}
-				Write-Host -foregroundcolor "Yellow" $StatusCode
 			}
 		Write-Host -foregroundcolor "white" $fUri
 		Write-Host -foregroundcolor "white" $filename
@@ -174,18 +161,100 @@ Function Get-RedirectedUrl {
         [Parameter(Mandatory=$true)]
         [String]$URL
     )
-
     $request = [System.Net.WebRequest]::Create($url)
     $request.AllowAutoRedirect=$false
     $response=$request.GetResponse()
-
+	echo "---------" $response.StatusCode "---------"
     If ($response.StatusCode -eq "Found")
     {
         $response.GetResponseHeader("Location")
+		$filename = [System.IO.Path]::GetFileName($response.GetResponseHeader("Location"));
+		echo "1" $filename
+    }
+	If ($response.StatusCode -eq "Redirect")
+    {
+        $response.GetResponseHeader("Location")
+		$filename = [System.IO.Path]::GetFileName($response.GetResponseHeader("filename"));
+		echo "2" $filename
     }
 }
+$FileName = [System.IO.Path]::GetFileName((Get-RedirectedUrl "http://go.microsoft.com/fwlink/?LinkId=393217"))
+$FileName = [System.IO.Path]::GetFileName((Get-RedirectedUrl "https://github.com/git-for-windows/git/releases/download/v2.28.0.windows.1/Git-2.28.0-64-bit.exe"))
+Function Get-DirectUrl {
+
+    Param (
+        [Parameter(Mandatory=$true)]
+        [String]$URL
+    )
+	# resolve short URLs
+	$req = [System.Net.HttpWebRequest]::Create($Url)
+	$req.Method = "HEAD"
+	$response = $req.GetResponse()
+	echo "---------" $response.StatusCode $response.StatusDescription "---------"
+	$fUri = $response.ResponseUri
+	$filename = [System.IO.Path]::GetFileName($fUri.LocalPath);
+	$response.Close()
+	echo "1" $filename
+}
+$FileName = [System.IO.Path]::GetFileName((Get-DirectUrl "http://go.microsoft.com/fwlink/?LinkId=393217"))
+$FileName = [System.IO.Path]::GetFileName((Get-DirectUrl "https://github.com/git-for-windows/git/releases/download/v2.28.0.windows.1/Git-2.28.0-64-bit.exe"))
+
+$url = "http://go.microsoft.com/fwlink/?LinkId=393217"
+$result = Invoke-WebRequest -Method GET -Uri $url -Headers $headers
+echo "---------" $result.StatusCode $result.StatusDescription "---------"
+$contentDisposition = $result.Headers.'Content-Disposition'
+$filename = $contentDisposition.Split("=")[1].Replace("`"","")
+echo "1" $filename 
+
+$progresspreference = 'silentlyContinue'
+$url = "https://github.com/git-for-windows/git/releases/download/v2.28.0.windows.1/Git-2.28.0-64-bit.exe"
+$result = Invoke-WebRequest -Method GET -Uri $url -Headers $headers
+$contentDisposition = $result.Headers.'Content-Disposition'
+$filename = $contentDisposition.Split("=")[1].Replace("`"","")
+echo "1" $filename 
+$progressPreference = 'Continue'
+$path = Join-Path $yourfoldername $filename
+$file = [System.IO.FileStream]::new($path, [System.IO.FileMode]::Create)
+$file.write($result.Content, 0, $result.RawContentLength)
+$file.close()
+
+$download = Invoke-WebRequest -UserAgent $user_agent -Uri $invoiceURL -Method Post -Body $postParams -TimeoutSec 0 -WebSession $WebSession 
+[System.IO.File]::WriteAllBytes("Filename.pdf", $download.content)
+
+
+Invoke-Webrequest -Uri $uri -OutFile $(Split-Path -Path $uri -Leaf)
+Split-Path -Path "http://go.microsoft.com/fwlink/?LinkId=393217" -Leaf
+Split-Path -Path "https://github.com/git-for-windows/git/releases/download/v2.28.0.windows.1/Git-2.28.0-64-bit.exe" -Leaf
+
+
+
+$MozillaUri = [Uri] 'https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US'
+$Response = Invoke-WebRequest -Method Head -Uri $MozillaUri
+$DownloadUri = $Response.BaseResponse.RequestMessage.RequestUri
+$DownloadFileName = ($DownloadUri.LocalPath -split '\/|\\')[-1]
+# $Pwd.Path can of course be parameterised.
+$DownloadLocation = [IO.FileInfo] (Join-Path $Pwd.Path $DownloadFileName)
+$Output = @{
+	Response = $Response
+	DownloadUri = $DownloadUri
+}
+
+
+
 $url_file_redirected = [System.IO.Path]::GetFileName((Get-RedirectedUrl "http://go.microsoft.com/fwlink/?LinkId=393217"))
 Write-Host -foregroundcolor "Yellow" $url_file_redirected
+
+
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$architecture = '64-bit'
+$assetName = "Git-*-$architecture.exe"
+$gitHubApi = 'https://api.github.com/repos/git-for-windows/git/releases/latest'
+$response = Invoke-WebRequest -Uri $gitHubApi -UseBasicParsing
+$json = $response.Content | ConvertFrom-Json
+$release = $json.assets | Where-Object Name -like $assetName
+Invoke-WebRequest $release.browser_download_url -OutFile ".\$($release.name)"
+
+
 $url_file_redirected = [System.IO.Path]::GetFileName((Get-RedirectedUrl $giturl))
 Write-Host -foregroundcolor "Yellow" $url_file_redirected
 
@@ -204,7 +273,16 @@ $url_file = get-FileFromUri $pythonurl37 $temppath
 Write-Host -foregroundcolor "Yellow" $url_file
 Read-Host -Prompt "Press Enter to exit"
 
-
+				try
+				{
+					$Response = Invoke-WebRequest -Uri $giturl -ErrorAction Stop -OutFile $temppath
+					$StatusCode = $Response.StatusCode
+				}
+				catch
+				{
+					$StatusCode = $_.Exception.Response.StatusCode.value__
+				}
+				Write-Host -foregroundcolor "Yellow" $StatusCode
 
 $keyValue = $myname
 If (Test-RegistryValue -Path $keyRunOnce -Value $keyValue){
