@@ -1,0 +1,78 @@
+#https://docs.microsoft.com/en-us/windows/wsl/install-win10
+#https://github.com/microsoft/WSL
+#https://github.com/sirredbeard/Awesome-WSL
+---------------------------------------------------------------------------------------------------
+PS on windows 10:
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+wsl --set-default-version 2
+wsl --list --verbose
+#wsl --set-version <distribution name> <versionNumber>
+cd ~
+$ProgressPreference = 'SilentlyContinue'
+Invoke-WebRequest -Uri https://aka.ms/wslubuntu2004 -OutFile ubuntu-2004.appx -UseBasicParsing
+#or
+#curl.exe -L -o ubuntu-2004.appx https://aka.ms/wslubuntu2004
+Add-AppxPackage .\ubuntu-2004.appx
+#check, if ubuntu exists in
+#USERPROFILE%\AppData\Local\Packages\CanonicalGroupLimited...
+
+PS on windows server:
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+#https://docs.microsoft.com/en-us/windows/wsl/install-manual
+#https://aka.ms/wslubuntu2004
+$ProgressPreference = 'SilentlyContinue'
+Invoke-WebRequest -Uri https://aka.ms/wslubuntu2004 -OutFile ubuntu-2004.appx -UseBasicParsing
+#or
+#curl.exe -L -o ubuntu-2004.appx https://aka.ms/wslubuntu2004
+Rename-Item .\ubuntu-2004.appx .\ubuntu-2004.zip
+Expand-Archive .\ubuntu-2004.zip .\ubuntu-2004
+#check, if ubuntu.exe exists in .\ubuntu-2004
+$userenv = [System.Environment]::GetEnvironmentVariable("Path", "User")
+[System.Environment]::SetEnvironmentVariable("PATH", $userenv + ";C:\Users\Administrator\ubuntu-2004", "User")
+------------------------------------------------------------------------------------------------------------
+#bash in ubuntu
+lsb_release -a
+sudo apt-get install gcc-multilib
+sudo apt --fix-broken install && sudo apt-get update -y
+sudo apt-get upgrade -y && sudo apt-get clean -y && sudo apt-get dist-upgrade -y && sudo apt-get autoremove -y && sudo apt-get autoclean -y
+export DISPLAY=:0
+cd ~/source/repos/github.com/kaestnja/CdA
+pycallgraph graphviz -- ./PyCdA.py
+
+I copy a libgcc_s.so.1 from other computer to /lib/x86_64-linux-gnu/
+Then the problem solved.
+I install gcc-4.7 again, it succeed
+
+https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly
+
+The authenticity of host 'github.com (140.82.118.3)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no)? yes
+------------------------------------------------------------------------------------------------------------
+PS:
+docker run -d -p 80:80 docker/getting-started
+#check in docker the settings: 
+#	general: Use WSL 2 based engine
+#	Resources: WSL INTEGRATION
+Git SH:
+url=https://github.com/Microsoft/vscode-remote-try-node.git;cd $USERPROFILE'\source\repos\'"$(cut -d'/' -f3 <<<$url)" && mkdir -p "$(cut -d'/' -f4 <<<$url)" && cd $USERPROFILE'\source\repos\'"$(cut -d'/' -f3 <<<$url)"'\'"$(cut -d'/' -f4 <<<$url)" && git clone $url && cd $USERPROFILE'\source\repos\'"$(cut -d'/' -f3 <<<$url)"
+url=https://github.com/Microsoft/vscode-remote-try-node.git;cd ~'\source\repos\'"$(cut -d'/' -f3 <<<$url)" && mkdir -p "$(cut -d'/' -f4 <<<$url)" && cd ~'\source\repos\'"$(cut -d'/' -f3 <<<$url)"'\'"$(cut -d'/' -f4 <<<$url)" && git clone $url && cd ~'\source\repos\'"$(cut -d'/' -f3 <<<$url)"
+
+#open with vs-code:	https://github.com/Microsoft/vscode-remote-try-node
+#Run the Remote-Containers: Open Folder in Container... command and select the local folder.
+# 
+
+#https://code.visualstudio.com/docs/remote/troubleshooting#_resolving-git-line-ending-issues-in-containers-resulting-in-many-modified-files
+#https://code.visualstudio.com/docs/remote/containers#_sharing-git-credentials-with-your-container
+
+
+function PathToUri([string] $path)
+{
+    return new-object Uri('file://' + $path.Replace("%","%25").Replace("#","%23").Replace("$","%24").Replace("+","%2B").Replace(",","%2C").Replace("=","%3D").Replace("@","%40").Replace("~","%7E").Replace("^","%5E"))
+}
+
+function UriToPath([System.Uri] $uri)
+{
+    return [System.Uri]::UnescapeDataString( $uri.ToString() ).Replace([System.IO.Path]::AltDirectorySeparatorChar, [System.IO.Path]::DirectorySeparatorChar)
+}
