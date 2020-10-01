@@ -32,6 +32,11 @@ SH: (Windows GitBash prefered (!))
 cd $USERPROFILE'\source\repos\' && find . -type d -name .git -execdir sh -c "pwd && git stash && git fetch && git pull" \;
 ```
 
+set nano as editor, because sometime the local editor is opened during git "calls" and the closing of the editor prevents the further "calls". Nano can be closed via "strg + x", by the way vim can be closed with "esc" than ":q!". 
+```
+git config --global core.editor "nano"
+```
+
 https://www.w3docs.com/snippets/git/how-to-force-git-pull-to-override-local-files.html
 ```
 git fetch --all
