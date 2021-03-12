@@ -20,10 +20,10 @@ $protocols = @{
 	}
 	'TLS 1.0'= @{
 		'Server-Enabled' = $false
-		'Client-Enabled' = $true
+		'Client-Enabled' = $false
 	}
 	'TLS 1.1'= @{
-		'Server-Enabled' = $true
+		'Server-Enabled' = $false
 		'Client-Enabled' = $true
 	}
 	'TLS 1.2'= @{
