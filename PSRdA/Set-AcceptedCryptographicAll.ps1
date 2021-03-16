@@ -119,6 +119,11 @@ Disable-TlsCipherSuite -Name "TLS_PSK_WITH_AES_128_CBC_SHA256"
 Disable-TlsCipherSuite -Name "TLS_PSK_WITH_NULL_SHA384"
 Disable-TlsCipherSuite -Name "TLS_PSK_WITH_NULL_SHA256"
 
+#maybe
+#Disable-TlsCipherSuite -Name "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA"
+#Disable-TlsCipherSuite -Name "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"
+
+
 Get-TlsCipherSuite | Format-Table Name, Exchange, Cipher, Hash, Certificate
 
 
