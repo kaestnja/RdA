@@ -935,6 +935,7 @@ if (Test-Path "$folder\$project") {
 	#git pull "https://username:password@$gitserver/$gituser/CdA.git"
 	git status
 }
+#https://www.activestate.com/resources/quick-reads/how-to-update-all-python-packages/
 $file = "requirements.txt"
 if (Test-Path "$folder\$project\$file") { 
 	cd "$folder\$project"
