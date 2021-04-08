@@ -679,6 +679,9 @@ if (Test-Path "$temppath") {
 	# update all python packages via pip inside powershell command windows
 	#pip freeze | %{$_.split('==')[0]} | %{pip install --upgrade $_}
 
+	# update all python packages via pip inside ubuntu
+	#pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U
+
     #if maybe other python is needed as well, uncomment this:
     #$file = "python-2.7.17.amd64.msi"
 	#if (!("$temppath\$file" | Test-Path)) { curl https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi -OutFile "$temppath\$file" }
