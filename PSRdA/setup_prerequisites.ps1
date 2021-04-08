@@ -675,6 +675,9 @@ if (Test-Path "$temppath") {
 	python -m pip install --upgrade pip $myPipProxy
 	python -m pip install --upgrade setuptools $myPipProxy
 	python -m pip install --upgrade wheel $myPipProxy
+	
+	# update all python packages via pip inside powershell command windows
+	#pip freeze | %{$_.split('==')[0]} | %{pip install --upgrade $_}
 
     #if maybe other python is needed as well, uncomment this:
     #$file = "python-2.7.17.amd64.msi"
