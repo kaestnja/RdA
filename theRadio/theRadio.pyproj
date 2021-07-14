@@ -1,0 +1,298 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>60dade3b-866d-4274-9289-b466210f809f</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>janradio.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>theRadio</Name>
+    <RootNamespace>theRadio</RootNamespace>
+    <TestFramework>Pytest</TestFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="aClock\Clock.py" />
+    <Compile Include="aClock\Clock2.py" />
+    <Compile Include="aClock\grove_rtc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="aClock\readClock.py" />
+    <Compile Include="aClock\tkinterclock.py" />
+    <Compile Include="aGauge\gauge.py" />
+    <Compile Include="aGauge\gauge2.py" />
+    <Compile Include="aMagicEye\MagicEye.py" />
+    <Compile Include="aMagicEye\recipe-577695-1.py" />
+    <Compile Include="anneradio.py" />
+    <Compile Include="aRadio.py" />
+    <Compile Include="aRPi\GPIO.py" />
+    <Compile Include="calib_fan.py" />
+    <Compile Include="dcf77-reader-DF-EA.py" />
+    <Compile Include="dcf77-reader-DF.py" />
+    <Compile Include="fan_ctrl.py" />
+    <Compile Include="gridtest.py" />
+    <Compile Include="janradio.py" />
+    <Compile Include="janradiogrid.py" />
+    <Compile Include="jks.py" />
+    <Compile Include="jkscalendar.py" />
+    <Compile Include="jkscalendarclock.py" />
+    <Compile Include="jksclock.py" />
+    <Compile Include="jksexit.py" />
+    <Compile Include="jksinstall.py" />
+    <Compile Include="jksip.py" />
+    <Compile Include="jkslistcycle.py" />
+    <Compile Include="jksmeter360.py" />
+    <Compile Include="jksmetermg.py" />
+    <Compile Include="jksmetermggif.py" />
+    <Compile Include="jksmeterva.py" />
+    <Compile Include="jksmeterva_cpu.py" />
+    <Compile Include="jksnixieclock-DCF.py" />
+    <Compile Include="jksnixieclock.py" />
+    <Compile Include="jksocr.py" />
+    <Compile Include="jks_grove_rtc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="meterit.py" />
+    <Compile Include="omx-tini-3.py" />
+    <Compile Include="omx-tini.py" />
+    <Compile Include="PmwScrolledListBox.py" />
+    <Compile Include="radioupdatepy.py" />
+    <Compile Include="rpi1radio.py" />
+    <Compile Include="show_color_chart.py" />
+    <Compile Include="Standard_Class.py" />
+    <Compile Include="temperature_log.py" />
+    <Compile Include="test.py" />
+    <Compile Include="test1.py" />
+    <Compile Include="test2.py" />
+    <Compile Include="test3.py" />
+    <Compile Include="test_magiceye.py" />
+    <Compile Include="test_old.py" />
+    <Compile Include="test_tkinter_temperatur.py" />
+    <Compile Include="theRadio.py" />
+    <Compile Include="__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="aClock\" />
+    <Folder Include="aConfig\" />
+    <Folder Include="aFrame\" />
+    <Folder Include="aGauge\" />
+    <Folder Include="aMagicEye\" />
+    <Folder Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\" />
+    <Folder Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\" />
+    <Folder Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\" />
+    <Folder Include="aNixie\" />
+    <Folder Include="aNixie\drawn\" />
+    <Folder Include="aNixie\drawn\png\" />
+    <Folder Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\" />
+    <Folder Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\" />
+    <Folder Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\" />
+    <Folder Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\" />
+    <Folder Include="aRPi\" />
+    <Folder Include="aRPi\__pycache__\" />
+    <Folder Include="aSound\" />
+    <Folder Include="bImages\" />
+    <Folder Include="cDocu\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="aClock\dcf77-test.sh" />
+    <Content Include="aClock\javaclock.js" />
+    <Content Include="aClock\ReadMe.txt" />
+    <Content Include="aConfig\.gaugerc" />
+    <Content Include="aConfig\.htaccess" />
+    <Content Include="aConfig\.tzclockrc" />
+    <Content Include="aConfig\anneradioclock.tzclockrc" />
+    <Content Include="aConfig\anneradionetz.gaugerc" />
+    <Content Include="aConfig\SWR.de.website" />
+    <Content Include="aConfig\swr1bw_mp3_m.m3u" />
+    <Content Include="aFrame\03.png" />
+    <Content Include="aFrame\magiceye_220x220.png" />
+    <Content Include="aFrame\template_220x220.png" />
+    <Content Include="aFrame\template_220x440.png" />
+    <Content Include="aFrame\template_360x440.png" />
+    <Content Include="aFrame\template_440x220.png" />
+    <Content Include="aFrame\template_440x220_all.png" />
+    <Content Include="aFrame\template_440x440.png" />
+    <Content Include="aGauge\bar.png" />
+    <Content Include="aGauge\BellRoss1_X185_GaugeX210.png" />
+    <Content Include="aGauge\BellRoss1_X185_GaugeX210_Sunscreen.png" />
+    <Content Include="aGauge\BellRoss1_X185_GaugeX210_SunscreenX200.png" />
+    <Content Include="aGauge\BellRoss1_X185_GaugeX210_SunscreenX220.png" />
+    <Content Include="aGauge\BellRoss1_X185_GaugeX210_Sunscreen_MagicEyeBG.png" />
+    <Content Include="aGauge\bg-clk.png" />
+    <Content Include="aGauge\center.png" />
+    <Content Include="aGauge\clock.png" />
+    <Content Include="aGauge\frame.png" />
+    <Content Include="aGauge\GaugeB2X136.png" />
+    <Content Include="aGauge\GaugeBX136.png" />
+    <Content Include="aGauge\GaugeCX136.png" />
+    <Content Include="aGauge\GaugeCX138.png" />
+    <Content Include="aGauge\GaugeX100.png" />
+    <Content Include="aGauge\GaugeX150.png" />
+    <Content Include="aGauge\GaugeX200.png" />
+    <Content Include="aGauge\GaugeX210.png" />
+    <Content Include="aGauge\GaugeX250.png" />
+    <Content Include="aGauge\GaugeX300.png" />
+    <Content Include="aGauge\GaugeX50.png" />
+    <Content Include="aGauge\glass.png" />
+    <Content Include="aGauge\img_clock_dot.png" />
+    <Content Include="aMagicEye\6ZE11.gif" />
+    <Content Include="aMagicEye\6ZE11Resized100__1-10.gif" />
+    <Content Include="aMagicEye\6ZE11Resized200__1-10.gif" />
+    <Content Include="aMagicEye\6ZE11Resized200__9a_InPixio.png" />
+    <Content Include="aMagicEye\6ZE11Resized220__1-10.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_01-10Test1.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_01-10Test2.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\00.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\01.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\02.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\03.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\04.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\05.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\06.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\07.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\08.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_gif\09.gif" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\00.jpg" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\01.jpg" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\02.jpg" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\03.jpg" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\04.jpg" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\05.jpg" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\06.jpg" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\07.jpg" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\08.jpg" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_jpg\09.jpg" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\00.png" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\01.png" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\02.png" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\03.png" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\04.png" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\05.png" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\06.png" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\07.png" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\08.png" />
+    <Content Include="aMagicEye\BellRoss1_X185_GaugeX210_SunscreenX220_1-10_png\09.png" />
+    <Content Include="aMagicEye\C_EM2-anim.gif" />
+    <Content Include="aMagicEye\DM21-anim.gif" />
+    <Content Include="aMagicEye\EFM1-anim.gif" />
+    <Content Include="aMagicEye\EM1-anim.gif" />
+    <Content Include="aMagicEye\EM11-anim.gif" />
+    <Content Include="aMagicEye\EM34-anim.gif" />
+    <Content Include="aMagicEye\EM34.gif" />
+    <Content Include="aMagicEye\EM35-anim.gif" />
+    <Content Include="aMagicEye\EM4-blue-anim.gif" />
+    <Content Include="aMagicEye\EM5-anim.gif" />
+    <Content Include="aMagicEye\MagiEye_Half.jpg" />
+    <Content Include="aMagicEye\UM4-anim.gif" />
+    <Content Include="aNixie\drawn\png\0.png" />
+    <Content Include="aNixie\drawn\png\00.png" />
+    <Content Include="aNixie\drawn\png\1.png" />
+    <Content Include="aNixie\drawn\png\2.png" />
+    <Content Include="aNixie\drawn\png\3.png" />
+    <Content Include="aNixie\drawn\png\4.png" />
+    <Content Include="aNixie\drawn\png\5.png" />
+    <Content Include="aNixie\drawn\png\6.png" />
+    <Content Include="aNixie\drawn\png\7.png" />
+    <Content Include="aNixie\drawn\png\8.png" />
+    <Content Include="aNixie\drawn\png\9.png" />
+    <Content Include="aNixie\drawn\png\Dot.png" />
+    <Content Include="aNixie\drawn\png\template_440x220_all.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\0.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\0_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\0_165x220.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\0_192x256.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\0_75x100.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\1.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\1_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\2.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\2_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\3.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\3_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\4.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\4_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\5.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\5_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\6.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\6_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\7.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\7_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\8.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\8_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\9.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\9_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\background_440x220.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\dot.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\dot_135x180.png" />
+    <Content Include="aNixie\nixie_digits_1_0_by_jrandomnoob-d9i6tss\png\template_440x220_all.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\0.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\0_135x180.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\0_90x140.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\1.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\1_135x180.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\1_90x140.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\2.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\2_135x180.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\2_90x140.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\3.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\3_135x180.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\3_90x140.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\4.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\4_135x180.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\4_90x140.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\5.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\5_135x180.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\5_90x140.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\6.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\6_135x180.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\6_90x140.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\7.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\7_135x180.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\7_90x140.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\8.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\8_135x180.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\8_90x140.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\9.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\9_135x180.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\9_90x140.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\dash.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\dot.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\off.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\preview.jpg" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\template_440x220_all.png" />
+    <Content Include="aNixie\nixie_tube_numbers__resource__by_nickpolyarush\png\Unbenannt.png" />
+    <Content Include="cDocu\notes.txt" />
+    <Content Include="cDocu\overview.jpg" />
+    <Content Include="cDocu\raspberry-pi-rev2-gpio-pinout-1024x715.jpg" />
+    <Content Include="dcf77-reader-DF.txt" />
+    <Content Include="filetypes.txt" />
+    <Content Include="Monitor_Temp.sh" />
+    <Content Include="omx.sh" />
+    <Content Include="omxstart.sh" />
+    <Content Include="radioupdateshell.sh" />
+    <Content Include="startit.sh" />
+    <Content Include="startit_old.sh" />
+    <Content Include="stayOn.sh" />
+    <Content Include="temperatur_pi.sh" />
+    <Content Include="theupdate.sh" />
+    <Content Include="transpack.sh" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>

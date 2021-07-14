@@ -1,0 +1,173 @@
+sudo apt-get install screen
+sudo pip3 install --upgrade importlib
+sudo apt-get remove python-rpi.gpio python3-rpi.gpio    # && sudo apt-get update && sudo apt-get install python-rpi.gpio python3-rpi.gpio
+sudo pip3 install -U RPi.GPIO
+#sudo pip3 install -U RPIO
+sudo pip3 install --upgrade Pillow
+
+################################################################################
+sudo nano /etc/systemd/timesyncd.conf
+systemctl start systemd-timesyncd
+systemctl enable systemd-timesyncd
+
+systemctl stop systemd-timesyncd
+systemctl disable systemd-timesyncd
+systemctl mask systemd-timesyncd
+systemctl enable ntpd
+systemctl start ntpd
+
+sudo timedatectl status
+
+    # https://blog.webernetz.net/ntp-server-via-dcf77-on-a-raspberry-pi/
+sudo apt-get install ntp
+sudo nano /etc/apt/sources.list
+    # uncomment the line with "deb-src"
+deb-src http://raspbian.raspberrypi.org/raspbian/ stretch main contrib non-free rpi
+ 
+sudo apt-get update
+sudo apt-get -y build-dep ntp
+ 
+    # download the latest ntp: http://ntp.org/downloads.html in this example it was 4.2.8p13
+wget http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p13.tar.gz
+tar xf ntp-4.2.8p13.tar.gz
+cd ntp-4.2.8p13/
+    # note: the following step takes some time:
+./configure --enable-RAWDCF --prefix=/usr
+    # note: the following "make" takes even longer, especially on an old Pi 1 B
+make
+sudo service ntp stop
+sudo make install
+    # to disable updating ntp via apt-get, echo the following:
+echo "ntp hold" | sudo dpkg --set-selections
+dpkg -l | grep ^h
+dpkg -l | grep ntp
+sudo apt-mark unhold ntp
+
+sudo service ntp start
+ntpq --version
+
+#hard time set
+sudo /etc/init.d/ntp stop
+sudo ntpd -q -g
+sudo /etc/init.d/ntp start
+
+sudo timedatectl set-local-rtc
+sudo date -s "Mon Sep  16 19:38:11 UTC 2019"
+sudo hwclock --systohc --utc
+timedatectl 
+sudo hwclock -r
+
+
+sudo raspi-config
+    navigate to “5 Interface Options” -> “P6 Serial” and:
+    Would you like a login shell to be accessible over serial? –> No
+    Would you like the serial port hardware to be enabled? –> Yes
+    followed by a reboot when exiting raspi-config
+sudo screen /dev/ttyAMA0 9600
+sudo adduser ntp tty
+sudo adduser ntp dialout
+sudo adduser pi tty
+sudo adduser pi dialout
+sudo adduser pi i2c
+sudo adduser root tty
+sudo adduser root dialout
+sudo adduser root i2c
+
+sudo usermod -a -G dialout pi
+sudo usermod -a -G dialout root
+sudo usermod -a -G dialout ntp
+sudo usermod -a -G tty pi
+sudo usermod -a -G tty root
+sudo usermod -a -G tty ntp
+sudo usermod -a -G i2c pi
+sudo usermod -a -G i2c root
+sudo usermod -a -G i2c ntp
+
+cat /etc/group | grep tty
+cat /etc/group | grep dialout
+cat /etc/group | grep root
+
+sudo chgrp dialout /dev/ttyAMA0
+sudo chgrp tty /dev/ttyAMA0
+sudo chgrp tty /dev/refclock-0
+
+ls -la /dev/ttyAMA0
+sudo chmod a+rw /dev/ttyAMA0
+ls -la /dev/ttyAMA0
+
+ls -la /dev/ttyS0
+sudo chmod a+rw /dev/ttyS0
+ls -la /dev/ttyS0
+
+ls -la /dev/serial0
+sudo chmod a+rw /dev/serial0
+ls -la /dev/serial0
+
+ls -la /dev/refclock-0
+sudo chmod a+rw /dev/refclock-0
+ls -la /dev/refclock-0
+
+
+sudo nano /etc/init.d/ntp
+    if [ ! -L /dev/refclock-0 ]; then
+            ln -s /dev/ttyAMA0 /dev/refclock-0
+            sudo chgrp tty /dev/refclock-0
+    fi
+
+    #if [ ! -L /dev/refclock-0 ]; then
+    #        ln -s /dev/serial0 /dev/refclock-0
+    #fi
+    
+    #if [ -e /var/lib/ntp/ntp.conf.dhcp ]; then
+    #       NTPD_OPTS="$NTPD_OPTS -c /var/lib/ntp/ntp.conf.dhcp"
+    #fi
+
+sudoedit /etc/udev/rules.d/75-refclock.rules
+KERNEL=="ttyAMA0",SYMLINK+="refclock-0",MODE="0777",GROUP="tty"
+or
+KERNEL=="serial0",SYMLINK+="refclock-0",MODE="0777",GROUP="tty"
+serial0
+
+#sudoedit /etc/udev/rules.d/50-ttyusb.rules
+#KERNEL=="ttyUSB[0-9]*",NAME="tts/USB%n",SYMLINK+="%k",GROUP="uucp",MODE="0666"
+
+sudo systemctl stop serial-getty@ttyAMA0.service
+sudo systemctl disable serial-getty@ttyAMA0.service
+
+sudo systemctl daemon-reload
+sudo service ntp restart
+
+http://doc.ntp.org/4.2.6/drivers/driver8.html#clocklist
+sudo nano /etc/ntp.conf
+server ptbtime1.ptb.de noselect
+server ptbtime2.ptb.de noselect
+server ptbtime3.ptb.de noselect
+
+server 127.127.8.0 mode 16 prefer
+fudge 127.127.8.0 time1 0.4250
+
+server 127.127.1.0
+fudge  127.127.1.0 stratum 10
+
+server ntp1.t-online.de burst iburst 
+
+watch -n 10 "ntpq -c clocklist; echo; echo; ntpq -p; echo; echo; tail /var/log/ntpd.log; echo; echo; /home/pi/calcfudge.sh"
+################################################################################
+    http://lepanto.at/download/dcf77_clock.c
+################################################################################
+    https://github.com/rene0/dcf77pi
+################################################################################    
+    http://www.raspberry-pi-geek.de/Magazin/2014/01/Raspberry-Pi-als-Funkuhr-und-NTP-Stratum-1-Zeitserver
+sudo apt-get install -y ntpdate cryptsetup
+watch -n 1 ntpq -c as -c cv -c rv
+ntpdate -q ntp1.t-online.de
+    https://eskofier.de/projekte/modellbau/13-wetterstation-am-modellflugplatz-mit-pywws
+    http://www.dl8rds.de/index.php/Dual_Source_GPS/DCF77_NTP-Server_with_AIS_and_ADS-B_receivers
+    https://www.satsignal.eu/ntp/Raspberry-Pi-NTP.html
+    http://www.dl3ukh.de/Bastel-Decoder.htm
+    https://www.dcf77logs.de/live
+    http://www.raspberry-pi-geek.de/Magazin/2014/01/Raspberry-Pi-als-Funkuhr-und-NTP-Stratum-1-Zeitserver/(offset)/2
+    http://www.netzmafia.de/skripten/hardware/RasPi/index.html
+    https://www.pipperr.de/dokuwiki/doku.php?id=raspberry:dcf77_modul
+    http://jurameer.com/elektronik/dcf77generator/dcf77generator.html
+    https://www.raspberrypi.org/forums/viewtopic.php?t=134394

@@ -1,0 +1,89 @@
+speedtest:
+curl https://raw.githubusercontent.com/geerlingguy/raspberry-pi-dramble/master/setup/benchmarks/microsd-benchmarks.sh | sudo bash
+
+http://wiki.seeedstudio.com/Grove_Base_Hat_for_Raspberry_Pi/
+
+https://www.exp-tech.de/plattformen/seeed-studio-grove/?p=1&n=48
+
+http://wiki.seeedstudio.com/Grove_Base_Hat_for_Raspberry_Pi/#software
+curl -sL https://github.com/Seeed-Studio/grove.py/raw/master/install.sh | sudo bash -s -
+
+git clone https://github.com/Seeed-Studio/grove.py
+
+https://www.youtube.com/watch?v=5JrLh7EkQQI
+
+git clone https://github.com/Seeed-Studio/pi-hats.git
+cd pi-hats 
+sudo chmod+x install.sh
+sudo ./install.sh -u rtc_ds1307
+sudo shutdown -h now
+./install.sh -l
+
+sudo ./install.sh -u
+
+sudo nano /boot/config.txt
+dtparam=i2c_arm=on
+#dtparam=i2s=on
+dtparam=spi=off
+dtoverlay=i2c-rtc,ds1307
+
+sudo apt-get install libatlas-base-dev
+sudo apt install python3-numpy
+sudo apt install python3-scipy
+
+#Read hardware clock and print result 
+sudo hwclock -r  
+ 
+#Set the system time from the hardware clock 
+sudo hwclock -s  
+ 
+#Set the hardware clock from the current system time 
+sudo hwclock -w  
+ 
+#More usage  
+hwclock --help
+
+#https://pypi.org/project/rpi_TM1638/
+
+
+git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git"
+cd /home/pi/aRadio && git pull && sudo python3 /home/pi/aRadio/theRadio/dcf77-reader-DF.py
+
+cd ~
+git clone https://github.com/DexterInd/GrovePi.git
+cd ~/GrovePi/Software/Python
+python3 grove_i2c_rtc.py
+cd /home/pi/aRadio && git pull && sudo python3 /home/pi/aRadio/theRadio/jks_grove_rtc.py
+
+http://wiki.seeedstudio.com/Grove-LED_Bar/
+
+
+
+
+Sometimes you need to use API Keys to use things like the Speech API. And then you Google a bit and follow all the instructions. But the Chromium Project's API Keys page does a not-so-great of explaining how to do this, so I will.
+
+Download Chromium.
+You'll notice a yellow disclaimer message appear as a doorhanger: Google API Keys are missing. Some functionality of Chromium will be disabled. Learn More.
+Clicking on that link takes you to the confusing API Keys docs page. http://www.chromium.org/developers/how-tos/api-keys 
+If you aren't already, subscribe to the chromium-dev@chromium.org mailing list. (You can just subscribe to the list and choose to not receive any mail. FYI: the Chromium project restricts the APIs to those subscribed to that group - that is, Chromium devs.)
+Make sure you are logged in with the Google account associated with the email address that you used to subscribe to chromium-dev.
+Log in to the Google Cloud Platform https://console.cloud.google.com/ , and select an existing project or press the "Create Project" button.
+From the project's API Manager https://console.cloud.google.com/apis/library , select the Credentials tab in the sidebar https://console.cloud.google.com/apis/credentials.
+Create a Browser API Key. https://console.cloud.google.com/apis/credentials/key?type=CLIENT_SIDE
+You'll see a modal with an API key. Copy and paste that somewhere.
+Now create an OAuth Client ID.
+After you complete all the steps and the "content screen," you'll be presented with a modal with your Google Client ID and Client Secret.
+You'll need to set three environment variables:
+On Windows: Launch cmd.exe and enter the following commands:
+
+setx GOOGLE_API_KEY your_key_goes_here
+setx GOOGLE_DEFAULT_CLIENT_ID your_client_id_goes_here
+setx GOOGLE_DEFAULT_CLIENT_SECRET your_client_secret_goes_here
+On Mac OS X / Linux: Plop these in your ~/.profile file:
+
+export GOOGLE_API_KEY="your_key_goes_here"
+export GOOGLE_DEFAULT_CLIENT_ID="your_client_id_goes_here"
+export GOOGLE_DEFAULT_CLIENT_SECRET="your_client_secret_goes_here"
+Now launch Chromium:
+
+On Windows: Launch Chromium normally.
