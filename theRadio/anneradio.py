@@ -492,7 +492,9 @@ def ping_process_task(root):
                 ctemp_file.write("last|" + str(sender_key.get('last')) + '\n')
     root.after(2000, ping_process_task, root)
 def process_kill(channel):
-    if sender_key.get('sound'):
+    traceback.print_exc()
+    print('ping_requests exception from: %s' % (str(sender_key.get('sound'))))
+    if (sender_key.get('sound') == True):
         effect_shutdown.play()
         #while pygame.mixer.music.get_busy() == True:
         while pygame.mixer.get_busy():
