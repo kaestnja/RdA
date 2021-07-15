@@ -133,6 +133,14 @@ sender_key = {}
 sender_key['last'] = 'swr3'
 sender_key['state'] = 'True'
 sender_key['sound'] = 'True'
+path_aGauge = os.path.join(sys.path[0],'aGauge')
+path_aNixie = os.path.join(sys.path[0],'aNixie')
+path_bImages = os.path.join(sys.path[0],'bImages')
+path_aFrame = os.path.join(sys.path[0],'aFrame')
+path_aSound = os.path.join(sys.path[0],'aSound')
+path_aMagicEye = os.path.join(sys.path[0],'aMagicEye')
+path_file_senders = os.path.join(sys.path[0], 'senderlist.txt')
+path_file_sender = os.path.join(sys.path[0], 'sender.txt')
 try:
     import pygame #    sudo pip3 install --upgrade pygame
     import pygame.mixer
@@ -145,6 +153,9 @@ try:
     #pygame.mixer.__init__()
     # pygame.mixer.Sound.init(self, buffer=self.build_samples())
     # pygame.mixer.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load(os.path.join(path_aSound,'on1.wav'))
+    #effect_on = pygame.mixer.Sound(os.path.join(path_aSound,'on1.wav'))
 except:
     sender_key['sound'] = 'False'
 ###########################################################################
@@ -186,14 +197,6 @@ process_do('sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1')
 root.overrideredirect(1)
 root.wm_attributes("-topmost", True)
 ########################################################################################
-path_aGauge = os.path.join(sys.path[0],'aGauge')
-path_aNixie = os.path.join(sys.path[0],'aNixie')
-path_bImages = os.path.join(sys.path[0],'bImages')
-path_aFrame = os.path.join(sys.path[0],'aFrame')
-path_aSound = os.path.join(sys.path[0],'aSound')
-path_aMagicEye = os.path.join(sys.path[0],'aMagicEye')
-path_file_senders = os.path.join(sys.path[0], 'senderlist.txt')
-path_file_sender = os.path.join(sys.path[0], 'sender.txt')
 charging_trueImage = tkinter.PhotoImage(os.path.join(path_bImages,'button_true_105x42.png'))
 charging_trueImagePIL = PIL.ImageTk.PhotoImage(file = os.path.join(path_bImages,'button_true_105x42.png'))
 charging_falseImage = tkinter.PhotoImage(os.path.join(path_bImages,'button_false_105x42.png'))
