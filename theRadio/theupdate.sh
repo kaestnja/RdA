@@ -376,6 +376,17 @@ pip config set global.no-cache-dir false
 pip cache purge
 rm -d -r "$(pip cache dir)"
 
+
+rm -fr "aRadio"
+git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git"
+cd aRadio
+git remote add origin git@github.com:kaestnja/aRadio.git
+git config --unset-all remote.origin.fetch
+git fetch --all
+git reset --hard origin/master
+git pull -r
+#rm -fr ".git/rebase-apply"
+
 git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kästner"
 cd /home/pi && rm -r /home/pi/aRadio
 cd /home/pi && git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/aRadio
