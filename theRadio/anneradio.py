@@ -102,7 +102,8 @@ trafic_stat_show = 0
 # check if 
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
-    os.environ.__setitem__('DISPLAY', ':0.0')
+    #os.environ.__setitem__('DISPLAY', ':0.0')
+    os.environ['DISPLAY']=':0.0'
 
 if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
     sound_out_type = 'hdmi'
@@ -141,7 +142,7 @@ try:
     pygame.init()
     # pygame.__init__()
     pygame.mixer.pre_init(44100, -16, 2, 2048) # setup mixer to avoid sound lag #pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffersize=4096)
-    pygame.mixer.__init__()
+    #pygame.mixer.__init__()
     # pygame.mixer.Sound.init(self, buffer=self.build_samples())
     # pygame.mixer.init()
 except:
@@ -492,11 +493,12 @@ def ping_process_task(root):
                 ctemp_file.write("last|" + str(sender_key.get('last')) + '\n')
     root.after(2000, ping_process_task, root)
 def process_kill(channel):
-    if sender_key.get('sound'):
+    if (sender_key.get('sound') == True):
         effect_shutdown.play()
         #while pygame.mixer.music.get_busy() == True:
         while pygame.mixer.get_busy():
             continue
+    
 def onselect(evt):
     w = evt.widget
     index = int(w.curselection()[0])
@@ -576,12 +578,12 @@ if sender_key.get('sound'):
     jitter=round(jitter /6)
     #print (jitter)
     effect_relay.play(loops=10)
-    root.after(jitter, effect_relay.play,3)
-    root.after(2*jitter, effect_relay.play,1)
-    root.after(3*jitter, effect_relay.play,2)
-    root.after(4*jitter, effect_relay.play,3)
-    root.after(5*jitter, effect_relay.play,8)
-    root.after(6*jitter, effect_relay.play,5)
+    #root.after(jitter, effect_relay.play,3)
+    #root.after(2*jitter, effect_relay.play,1)
+    #root.after(3*jitter, effect_relay.play,2)
+    #root.after(4*jitter, effect_relay.play,3)
+    #root.after(5*jitter, effect_relay.play,8)
+    #root.after(6*jitter, effect_relay.play,5)
     effect_shutdown = pygame.mixer.Sound(os.path.join(path_aSound,'shutdown1.wav'))
     effect_shutdown.set_volume(1)
 
@@ -652,10 +654,10 @@ try:
 
     ButtonAnAus = 22 # GPIO-18 pin 12
     GPIO.setup(ButtonAnAus, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.add_event_detect(ButtonAnAus, GPIO.FALLING, callback=process_kill, bouncetime=500)
+    #GPIO.add_event_detect(ButtonAnAus, GPIO.FALLING, callback=process_kill, bouncetime=500)
         
-    #ButtonOff = 18 # GPIO-4 pin 7
-    #GPIO.setup(ButtonOff, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    ButtonOff = 18 # GPIO-4 pin 7
+    GPIO.setup(ButtonOff, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     #GPIO.add_event_detect(ButtonOff, GPIO.FALLING, callback=powerOff, bouncetime=5)
 except:
     print()
