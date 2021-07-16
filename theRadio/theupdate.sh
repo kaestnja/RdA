@@ -392,7 +392,7 @@ git pull -r
 #bash
 find . -type f -exec sed -i -e 's/ /_/g' {} \;
 #ps
-cd C:\Users\janka\source\repos\github.com\kaestnja\aRadio
+cd C:\Users\janka\source\repos\github.com\kaestnja\aRadio\theRadio\fonts
 Dir | Rename-Item –NewName { $_.name –replace “ “,”_” }
 Get-ChildItem -Directory | Rename-Item –NewName { $_.name –replace “ “,”_” }
 
