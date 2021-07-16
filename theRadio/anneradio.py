@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=187
+version=188
 
 #      nano /home/pi/.config/lxsession/LXDE-pi/autostart # and enter the following lines or:
 # sudo nano /etc/xdg/lxsession/LXDE-pi/autostart # and enter the following lines:
