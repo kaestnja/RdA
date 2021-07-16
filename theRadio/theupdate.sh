@@ -388,7 +388,10 @@ git reset --hard origin/master
 git pull -r
 #rm -fr ".git/rebase-apply"
 
-#
+# exchange alle spaces in filenames for all files in a directory
+find . -type f -exec sed -i -e 's/ /_/g' {} \;
+
+# export and import/install all installed apps
 sudo dpkg-query -f '${binary:Package}\n' -W > packages_list_$HOSTNAME.txt
 sudo xargs -a packages_list.txt apt install -y
 
