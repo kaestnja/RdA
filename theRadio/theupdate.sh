@@ -389,7 +389,12 @@ git pull -r
 #rm -fr ".git/rebase-apply"
 
 # exchange alle spaces in filenames for all files in a directory
+#bash
 find . -type f -exec sed -i -e 's/ /_/g' {} \;
+#ps
+cd C:\Users\janka\source\repos\github.com\kaestnja\aRadio
+Dir | Rename-Item –NewName { $_.name –replace “ “,”_” }
+Get-ChildItem -Directory | Rename-Item –NewName { $_.name –replace “ “,”_” }
 
 # export and import/install all installed apps
 sudo dpkg-query -f '${binary:Package}\n' -W > packages_list_$HOSTNAME.txt
