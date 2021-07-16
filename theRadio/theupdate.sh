@@ -376,12 +376,13 @@ pip config set global.no-cache-dir false
 pip cache purge
 rm -d -r "$(pip cache dir)"
 
-
+sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1
+cd /home/pi
 rm -fr "aRadio"
 git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git"
 cd aRadio
 git remote add origin git@github.com:kaestnja/aRadio.git
-git config --unset-all remote.origin.fetch
+#git config --unset-all remote.origin.fetch
 git fetch --all
 git reset --hard origin/master
 git pull -r
