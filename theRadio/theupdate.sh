@@ -389,7 +389,7 @@ git pull -r
 #rm -fr ".git/rebase-apply"
 
 #
-sudo dpkg-query -f '${binary:Package}\n' -W > packages_list.txt
+sudo dpkg-query -f '${binary:Package}\n' -W > packages_list_$HOSTNAME.txt
 sudo xargs -a packages_list.txt apt install -y
 
 git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kästner"
