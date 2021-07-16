@@ -388,6 +388,10 @@ git reset --hard origin/master
 git pull -r
 #rm -fr ".git/rebase-apply"
 
+#
+sudo dpkg-query -f '${binary:Package}\n' -W > packages_list.txt
+sudo xargs -a packages_list.txt apt install -y
+
 git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kästner"
 cd /home/pi && rm -r /home/pi/aRadio
 cd /home/pi && git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/aRadio
