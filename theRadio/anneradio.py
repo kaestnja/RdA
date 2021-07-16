@@ -262,7 +262,7 @@ def exitfunc():
             continue
     GPIO.cleanup(dt)
     GPIO.cleanup(clk)
-    # GPIO.cleanup(ButtonAnAus)
+    GPIO.cleanup(ButtonAnAus)
     root.quit()
     quit()
     # sys.exit() #exit with exception, used to exit treads
@@ -414,7 +414,7 @@ def ping_requests(ip, prot='http'):
 def ping_gateway_task(root):
     ip_sender = dicsendershost.get(str(sender_key.get('last')))
     time_sender = 0
-    #time_sender = ping_requests(ip_sender)
+    time_sender = ping_requests(ip_sender)
     time_sender_show = time_sender
     t3a.delete(1.0, tkinter.END)
     t3a.insert("%d.%d" % (1, 0), "JK Radio (2018) V:%s" % str(version),'JK')
@@ -572,7 +572,7 @@ sender_listbox.focus()
 sender_listbox.event_generate("<<ListboxSelect>>")
 ####################################################################
 
-if sender_key.get('sound'):
+if (sender_key.get('sound')== True):
     effect_on = pygame.mixer.Sound(os.path.join(path_aSound,'on1.wav'))
     effect_on.set_volume(1)
     effect_relay = pygame.mixer.Sound(os.path.join(path_aSound,'relay.wav'))
@@ -659,11 +659,11 @@ try:
 
     ButtonAnAus = 22 # GPIO-18 pin 12
     GPIO.setup(ButtonAnAus, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    #GPIO.add_event_detect(ButtonAnAus, GPIO.FALLING, callback=process_kill, bouncetime=500)
+    GPIO.add_event_detect(ButtonAnAus, GPIO.FALLING, callback=process_kill, bouncetime=500)
         
     ButtonOff = 18 # GPIO-4 pin 7
     GPIO.setup(ButtonOff, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    #GPIO.add_event_detect(ButtonOff, GPIO.FALLING, callback=powerOff, bouncetime=5)
+    GPIO.add_event_detect(ButtonOff, GPIO.FALLING, callback=powerOff, bouncetime=5)
 except:
     print()
 root.after(4000, ping_gateway_task, root)
