@@ -67,13 +67,19 @@ plink -ssh pi@raspberrypi -pw raspberry sudo apt-get upgrade -y && sudo apt-get 
 #ln -s /usr/local/bin/pip3.7 /usr/bin/pip3
 
 echo "PATH="${PATH}:/home/pi/aRadio/theRadio:/home/pi/grove.py:/usr/local/lib/python3.5:/usr/local/lib/python3.5/site-packages"
-export PATH
+#export PATH
 #:/home/pi/lib/python:/usr/local/lib/python2.7/site-packages
-PYTHONPATH="${PYTHONPATH}:/home/pi/aRadio/theRadio:/home/pi/grove.py:/usr/local/lib/python3.5:/usr/local/lib/python3.5/site-packages"
-export PYTHONPATH
+#PYTHONPATH="${PYTHONPATH}:/home/pi/aRadio/theRadio:/home/pi/grove.py:/usr/local/lib/python3.5:/usr/local/lib/python3.5/site-packages"
+#export PYTHONPATH
+
+## PiSDR Variables
+#export PYTHONPATH="/usr/local/lib/python3/dist-packages:$PYTHONPATH"
+#export PATH="$HOME/.local/bin:$PATH"
+#export DISPLAY=0:0
+export DISPLAY=:0.0
 
 alias reboot='sudo pkill -f python* && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/* && sudo reboot'
-alias updategit='cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio'
+alias updategit='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1; cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio && /home/pi/aRadio/GitRepoUpdateTimestamp.sh'
 alias update='sudo pkill -f python && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/ && sudo apt --fix-broken install && sudo apt-get install --fix-missing && sudo apt-get update -y && sudo apt-get upgrade -y --force-yes && sudo apt-get clean -y --force-yes && sudo apt-get dist-upgrade -y --force-yes && sudo apt-get autoremove -y --force-yes && sudo apt-get autoclean -y --force-yes && sudo reboot'
 alias swr1bw='omxplayer -o local http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
 alias dasding='omxplayer -o local http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3'
