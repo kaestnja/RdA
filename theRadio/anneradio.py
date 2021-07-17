@@ -155,15 +155,17 @@ try:
     # pygame.mixer.Sound.init(self, buffer=self.build_samples())
 
     #try
-    pygame.mixer.init(frequency=24000, channels=2, buffer=8192)
+    #pygame.mixer.init(frequency=24000, channels=2, buffer=8192)
     # or
-    #pygame.mixer.init()
+    pygame.mixer.init()
 
     mixer.music.set_volume(0.95)
 
     pygame.mixer.music.load(os.path.join(path_aSound,'on1.wav'))
     #effect_on = pygame.mixer.Sound(os.path.join(path_aSound,'on1.wav'))
 except:
+    print ("jk-pygame.mixer failed, traceback:")
+    traceback.print_exc()
     sender_key['sound'] = 'False'
 ###########################################################################
 # https://bugs.python.org/issue28165 The 'subprocess' module leaks memory when called in certain ways
