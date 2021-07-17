@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=184
+version=185
 
 # pip3 install --upgrade versioneer https://github.com/warner/python-versioneer
 # pip3 install --upgrade versioneer2
@@ -59,7 +59,7 @@ import jksmetermg as metermg
 import jksmeterva as meterva
 import jksnixieclock as nixieclock
 
-
+#sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1
 #"omxplayer -o local /home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4"
 # omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
 # omxplayer -o local '/home/pi/aRadio/theRadio/bImages/Electronics_At_Work_1943_Part_3.mp4' --win '0 0 248 180' --no-osd

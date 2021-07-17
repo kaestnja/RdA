@@ -72,9 +72,9 @@ sudo passwd root
 sudo sed -i 's/#PermitRootLogin without-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
 sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
 # Then we need to enable ssh connections using root, by running :
-sudo nano /etc/ssh/sshd_config
+#sudo nano /etc/ssh/sshd_config
 # and adding a line that reads:
-PermitRootLogin yes
+#PermitRootLogin yes
 # reboot the pi: 
 sudo reboot
 
@@ -165,7 +165,7 @@ done
 #sudo apt-get -s remove wicd
 #sudo apt-get -s remove python-wicd
 
-sudo apt-get install -y sysstat unclutter watchdog
+sudo apt-get install -y sysstat unclutter watchdog libsdl2-mixer-2.0-0
 #sudo nano /etc/default/sysstat
 #change ENABLED="false" to ENABLED="true"
 if ! sudo grep -q 'ENABLED="true"' "/etc/default/sysstat"; then
@@ -200,8 +200,8 @@ sudo apt install -y libgirepository1.0-dev
 # https://kivy.readthedocs.io/en/master/installation/installation-rpi.html
 sudo apt build-dep libsdl2
 sudo apt-get install -y libsdl2-2.0 
-sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
-sudo apt-get install -y libsdl2-2.0-0-dbgsym libsdl2-mixer-2.0-0  
+sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libsdl2-2.0-0-dbgsym 
+
 sudo adduser "$USER" render
 
 sudo apt-get install -y lxhotkey-plugin-openbox
@@ -260,14 +260,14 @@ safe_mode_gpio=4
 EOF
 fi
 
-if ! sudo grep -q gpio-fan "/boot/config.txt"; then
+if ! sudo grep -q 'gpio-fan' "/boot/config.txt"; then
   echo "set setting"
   #echo 'dtoverlay=gpio-fan,gpiopin=14,temp=50000' >> /boot/config.txt
   sudo cat <<EOF >> /boot/config.txt
 dtoverlay=gpio-fan,gpiopin=14,temp=50000
 EOF
 fi
-if sudo grep -q gpio-fan "/boot/config.txt"; then
+if sudo grep -q 'gpio-fan' "/boot/config.txt"; then
   echo "set setting"
   #echo 'dtoverlay=gpio-fan,gpiopin=14,temp=50000' >> /boot/config.txt
   sudo sed -i 's/dtoverlay=gpio-fan,gpiopin=14,temp=50000/dtoverlay=gpio-fan,gpiopin=14,temp=55000/g' /boot/config.txt
@@ -308,7 +308,7 @@ if ! sudo grep -q watchdog-timeout "/etc/watchdog.conf"; then
 watchdog-timeout=15
 EOF
 fi
-if sudo grep -q WantedBy "/lib/systemd/system/watchdog.service"; then
+if sudo grep -q 'WantedBy=default.target' "/lib/systemd/system/watchdog.service"; then
   echo "set setting"
   sudo sed -i 's/WantedBy=default.target/WantedBy=multi-user.target/g' /lib/systemd/system/watchdog.service
 fi
@@ -398,6 +398,7 @@ rm -d -r "$(pip cache dir)"
 sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1
 cd /home/pi
 rm -fr "aRadio"
+git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kästner"
 git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git"
 cd aRadio
 git remote add origin git@github.com:kaestnja/aRadio.git

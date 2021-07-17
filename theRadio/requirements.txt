@@ -21,7 +21,3 @@ PyGObject
 gpiozero
 matplotlib
 pyaudio
-pyocr
-
-
-
