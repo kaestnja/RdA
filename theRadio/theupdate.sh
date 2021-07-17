@@ -1,5 +1,5 @@
 #!/bin/bash
-#version=145
+#version=146
 
 #https://winscp.net/eng/docs/file_mask#basic
 
@@ -66,26 +66,36 @@ plink -ssh pi@raspberrypi -pw raspberry sudo reboot
 plink -ssh pi@raspberrypi -pw raspberry sudo apt --fix-broken install && sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get clean -y && sudo apt-get dist-upgrade -y && sudo apt-get autoremove -y && sudo apt-get autoclean -y && sudo reboot
 plink -ssh pi@raspberrypi -pw raspberry sudo apt-get upgrade -y && sudo apt-get clean -y && sudo apt-get dist-upgrade -y && sudo apt-get autoremove -y && sudo apt-get autoclean -y && sudo reboot
 
+
+# For this, we need to first set a password for the root user in your pi, which you can do by running:
+sudo passwd root
+sudo sed -i 's/#PermitRootLogin without-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+# Then we need to enable ssh connections using root, by running :
+sudo nano /etc/ssh/sshd_config
+# and adding a line that reads:
+PermitRootLogin yes
+# reboot the pi: 
+sudo reboot
+
+
 #ln -s /usr/local/bin/python3.7 /usr/bin/python3
 #ln -s /usr/local/bin/pip3.7 /usr/bin/pip3
 
-echo "PATH="${PATH}:/home/pi/aRadio/theRadio:/home/pi/grove.py:/usr/local/lib/python3.5:/usr/local/lib/python3.5/site-packages"
-#export PATH
-#:/home/pi/lib/python:/usr/local/lib/python2.7/site-packages
-#PYTHONPATH="${PYTHONPATH}:/home/pi/aRadio/theRadio:/home/pi/grove.py:/usr/local/lib/python3.5:/usr/local/lib/python3.5/site-packages"
-#export PYTHONPATH
-
-#/usr/lib/python3/dist-packages
-/usr/lib/python3/dist-packages
 sudo apt-get install -y python3-rpi.gpio
 pip3 install rpi-gpio
 sudo pip3 install rpi-gpio
 python3 -m pip install --upgrade rpi-gpio 
 sudo python3 -m pip install --upgrade rpi-gpio 
 
+sudo cat <<EOF >> $HOME/.bashrc
+
+PATH="${PATH}:$HOME/aRadio/theRadio:$HOME/.local/bin:/usr/local/lib/python3.7:/usr/local/lib/python3.7/dist-packages"
+export PATH
+PYTHONPATH="${PYTHONPATH}:$HOME/aRadio/theRadio:$HOME/.local/bin:/usr/local/lib/python3.7:/usr/local/lib/python3.7/dist-packages"
+export PYTHONPATH
+
 ## PiSDR Variables
-#export PYTHONPATH="/usr/local/lib/python3/dist-packages:$PYTHONPATH"
-#export PATH="$HOME/.local/bin:$PATH"
 #DISPLAY=:0.0
 #export DISPLAY
 #export DISPLAY=0:0
@@ -103,7 +113,7 @@ alias mdasding='mplayer -quiet -cache 100 http://swr-dasding-live.cast.addradio.
 alias mswr3='mplayer -quiet -cache 100 http://swr-swr3-live.cast.addradio.de/swr/swr3/live/mp3/128/stream.mp3'
 alias mrbb='mplayer -quiet -cache 100 http://rbb-fritz-live.cast.addradio.de/rbb/fritz/live/mp3/128/stream.mp3'
 xset s off > /dev/null 2>&1
-" > /home/pi/.bashrc
+EOF
 
 #maybe
 #sudo apt-get install -y pi-bluetooth bluetooth bluez blueman
@@ -155,7 +165,7 @@ done
 #sudo apt-get -s remove wicd
 #sudo apt-get -s remove python-wicd
 
-sudo apt-get install -y sysstat
+sudo apt-get install -y sysstat unclutter watchdog
 #sudo nano /etc/default/sysstat
 #change ENABLED="false" to ENABLED="true"
 if ! sudo grep -q 'ENABLED="true"' "/etc/default/sysstat"; then
@@ -176,14 +186,15 @@ sar –r TimeInterval NoOfTimes
 sar –r 60 60
 safd -d /var/log/sa/sa20140903 -- -n DEV | grep -v lo
 
-#check python paths
+#check python paths: /usr/bin/python3 -> python3.7
 ls -lh /usr/bin/python3
 
 
 #In order to use xset & dpms commands, the screen blanking must be enabled in the GUI Raspberry pi config tool or sudo raspi-config
 #Also xscreensaver must not be installed..
 sudo apt remove -y xscreensaver
-#sudo apt-get install -y python-gpiozero python3-gpiozero
+#sudo apt-get install -y python-gpiozero 
+#sudo apt-get install -y python3-gpiozero
 sudo apt install -y libgirepository1.0-dev
 
 # https://kivy.readthedocs.io/en/master/installation/installation-rpi.html
@@ -193,30 +204,31 @@ sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-
 sudo apt-get install -y libsdl2-2.0-0-dbgsym libsdl2-mixer-2.0-0  
 sudo adduser "$USER" render
 
-sudo apt-get install -y unclutter watchdog lxhotkey-plugin-openbox
+sudo apt-get install -y lxhotkey-plugin-openbox
 sudo apt-get install -y cubicsdr
 sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt full-upgrade
 
 #https://askubuntu.com/questions/1025189/pip-is-not-working-importerror-no-module-named-pip-internal
-sudo apt-get install -y python3-dev python3-pil python3-pip python3-pil.imagetk 
+#sudo apt-get install -y python3-dev python3-pil python3-pip 
+#sudo apt-get install -y python3-pil.imagetk 
 #or 
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python3 get-pip.py --force-reinstall
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
 python get-pip.py --force-reinstall
 
-sudo pip config set global.no-cache-dir true
-sudo pip3 config set global.no-cache-dir true
-pip config set global.no-cache-dir true
-pip3 config set global.no-cache-dir true
-sudo reboot
+#sudo pip config set global.no-cache-dir true
+#sudo pip3 config set global.no-cache-dir true
+#pip config set global.no-cache-dir true
+#pip3 config set global.no-cache-dir true
+#sudo reboot
 
-pip cache purge
-pip3 cache purge
-python -m pip cache purge
-python3 -m pip cache purge
-sudo python -m pip cache purge
-sudo python3 -m pip cache purge
+#pip cache purge
+#pip3 cache purge
+#python -m pip cache purge
+#python3 -m pip cache purge
+#sudo python -m pip cache purge
+#sudo python3 -m pip cache purge
 
 sudo pip config set global.no-cache-dir false
 sudo pip3 config set global.no-cache-dir false
@@ -230,11 +242,6 @@ sudo python3 -m pip install --upgrade pip
 
 python3 -m pip install --upgrade numpy pi3d svg.path rpi-gpio pygame
 sudo python3 -m pip install --upgrade numpy pi3d svg.path rpi-gpio pygame
-
-
-
-
-
 
 
 sudo su
@@ -282,15 +289,15 @@ if ! sudo grep -q watchdog "/boot/config.txt"; then
 dtparam=watchdog=on
 EOF
 fi
-if sudo grep -q max-load-1 "/etc/watchdog.conf"; then
+if sudo grep -q '#max-load-1' "/etc/watchdog.conf"; then
   echo "set setting"
   sudo sed -i 's/#max-load-1/max-load-1/g' /etc/watchdog.conf
 fi
-if sudo grep -q min-memory "/etc/watchdog.conf"; then
+if sudo grep -q '#min-memory' "/etc/watchdog.conf"; then
   echo "set setting"
   sudo sed -i 's/#min-memory/min-memory/g' /etc/watchdog.conf
 fi
-if sudo grep -q watchdog-device "/etc/watchdog.conf"; then
+if sudo grep -q '#watchdog-device' "/etc/watchdog.conf"; then
   echo "set setting"
   sudo sed -i 's/#watchdog-device/watchdog-device/g' /etc/watchdog.conf
 fi
@@ -378,14 +385,7 @@ EOF
 # Install the VS remote debugger on your Pi by running this command:
 curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
 # To debug you will need to run the program as root, so we'll need to be able to remote launch the program as root as well.
-# For this, we need to first set a password for the root user in your pi, which you can do by running:
-sudo passwd root
-# Then we need to enable ssh connections using root, by running :
-sudo nano /etc/ssh/sshd_config
-# and adding a line that reads:
-PermitRootLogin yes
-# reboot the pi: 
-sudo reboot
+
 
 # https://www.linkedin.com/pulse/python-remote-debugging-visual-studio-code-raspberry-pi-mircea-dogaru
 
@@ -451,8 +451,6 @@ cd /home/pi && git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637
 #sudo nano /home/pi/.config/lxsession/LXDE-pi/autostart
 #sudo su 
 #passwd
-sudo sed -i 's/#PermitRootLogin without-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
-sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
 
 #sudo sed -i 's+#/home/pi/SDRplay/EASYplay.py+/home/pi/SDRplay/EASYplay.py+g' /etc/xdg/lxsession/LXDE-pi/autostart
 #sudo sed -i 's+/home/pi/aRadio/theRadio/janradio.py+#/home/pi/aRadio/theRadio/janradio.py+g' /etc/xdg/lxsession/LXDE-pi/autostart
