@@ -9,16 +9,28 @@ sudo dpkg-reconfigure openssh-server
 
 #on boot ssh anlegen mit Powershell unter Windows
 #------------------------------------------------------------
-echo "nothing" > e:\ssh
+echo "nothing" > f:\ssh
 echo 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=DE
 
 network={
   ssid="SKY"
+  scan_ssid=1
   psk="67665741872262767142"
   key_mgmt=WPA-PSK
-}' > e:\wpa_supplicant.conf
+  priority=1
+  id_str="Schoellbronn"
+}
+
+network={
+  ssid="EARTH"
+  scan_ssid=1
+  psk="41010552551631877628"
+  key_mgmt=WPA-PSK
+  priority=2
+  id_str="Voelkersbach"
+}' > f:\wpa_supplicant.conf
 #------------------------------------------------------------
 
 #ssh-keygen -t rsa -b 2048
@@ -46,16 +58,7 @@ network={
 #sudo ln -s /lib/systemd/system/vncserver-x11-serviced.service /etc/systemd/system/multi-user.target.wants/vncserver-x11-serviced.service
 #sudo systemctl start vncserver-x11-serviced
 
-#on boot wpa_supplicant.conf anlegen und dann folgendes
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=DE
 
-network={
-  ssid="SKY"
-  psk="67665741872262767142"
-  key_mgmt=WPA-PSK
-}
 plink -ssh pi@raspberrypi -pw raspberry sudo ln -s /lib/systemd/system/vncserver-x11-serviced.service /etc/systemd/system/multi-user.target.wants/vncserver-x11-serviced.service
 plink -ssh pi@raspberrypi -pw raspberry sudo systemctl start vncserver-x11-serviced
 plink -ssh pi@raspberrypi -pw raspberry sudo reboot
@@ -83,6 +86,8 @@ sudo python3 -m pip install --upgrade rpi-gpio
 ## PiSDR Variables
 #export PYTHONPATH="/usr/local/lib/python3/dist-packages:$PYTHONPATH"
 #export PATH="$HOME/.local/bin:$PATH"
+#DISPLAY=:0.0
+#export DISPLAY
 #export DISPLAY=0:0
 export DISPLAY=:0.0
 

@@ -41,3 +41,6 @@ cat /proc/asound/cards
  1 [Headphones     ]: bcm2835_headpho - bcm2835 Headphones
                       bcm2835 Headphones
 
+
+
+smsc95xx.turbo_mode=N dwc_otg.dma_enable=1 dwc_otg.dma_burst_size=256 dwc_otg.lpm_enable=0 console=serial0,115200 console=tty1 root=PARTUUID=e64496a0-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait consoleblank=0
