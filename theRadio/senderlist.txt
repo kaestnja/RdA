@@ -1,10 +1,8 @@
-version=156
+version=157
 swr1 bw|http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3
 DASDING|http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3
 swr3|http://swr-swr3-live.cast.addradio.de/swr/swr3/live/mp3/128/stream.mp3
-energy test|http://nrj.de/stuttgart
-energy bw|https://f5-pa6.nrjaudio.fm/de/33005/mp3_128.mp3
-energy|https://www.energy.de/energy.m3u
+energy|http://nrj.de/stuttgart
 rbb|http://rbb-fritz-live.cast.addradio.de/rbb/fritz/live/mp3/128/stream.mp3
 oldies|http://178.32.62.163:8130/stream
 FFH|http://mp3.ffh.de/radioffh/hqlivestream.mp3
@@ -13,3 +11,4 @@ MDR Jump|http://mdr-284320-0.cast.mdr.de/mdr/284320/0/mp3/high/stream.mp3
 MDR Sputnik|http://mdr-284331-6.cast.mdr.de/mdr/284331/6/mp3/high/stream.mp3
 MDR Rock|http://mdr-284321-1.cast.mdr.de/mdr/284321/1/mp3/high/stream.mp3
 MDR Mix|http://mdr-284321-2.cast.mdr.de/mdr/284321/2/mp3/high/stream.mp3
+Celtic|http://ice1.somafm.com/thistle-128-mp3
