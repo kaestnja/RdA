@@ -72,6 +72,14 @@ echo "PATH="${PATH}:/home/pi/aRadio/theRadio:/home/pi/grove.py:/usr/local/lib/py
 #PYTHONPATH="${PYTHONPATH}:/home/pi/aRadio/theRadio:/home/pi/grove.py:/usr/local/lib/python3.5:/usr/local/lib/python3.5/site-packages"
 #export PYTHONPATH
 
+#/usr/lib/python3/dist-packages
+/usr/lib/python3/dist-packages
+sudo apt-get install -y python3-rpi.gpio
+pip3 install rpi-gpio
+sudo pip3 install rpi-gpio
+python3 -m pip install --upgrade rpi-gpio 
+sudo python3 -m pip install --upgrade rpi-gpio 
+
 ## PiSDR Variables
 #export PYTHONPATH="/usr/local/lib/python3/dist-packages:$PYTHONPATH"
 #export PATH="$HOME/.local/bin:$PATH"

@@ -142,8 +142,13 @@ path_aMagicEye = os.path.join(sys.path[0],'aMagicEye')
 path_file_senders = os.path.join(sys.path[0], 'senderlist.txt')
 path_file_sender = os.path.join(sys.path[0], 'sender.txt')
 try:
+    
+
+    mixer.init()
+    mixer.music.set_volume(0.95)
     import pygame #    sudo pip3 install --upgrade pygame
-    import pygame.mixer
+    from pygame import mixer
+    #import pygame.mixer
     # import time
     # from array import array
     # from pygame.locals import *
@@ -152,8 +157,12 @@ try:
     pygame.mixer.pre_init(44100, -16, 2, 2048) # setup mixer to avoid sound lag #pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffersize=4096)
     #pygame.mixer.__init__()
     # pygame.mixer.Sound.init(self, buffer=self.build_samples())
-    # pygame.mixer.init()
+    
+    #try
+    pygame.mixer.init(frequency=24000, channels=2, buffer=8192)
+    # or
     pygame.mixer.init()
+
     pygame.mixer.music.load(os.path.join(path_aSound,'on1.wav'))
     #effect_on = pygame.mixer.Sound(os.path.join(path_aSound,'on1.wav'))
 except:
