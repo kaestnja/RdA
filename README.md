@@ -21,6 +21,10 @@ enable-shm = no
 default-fragments = 5
 default-fragment-size-msec = 2
 
+default-fragments = 5
+default-fragment-size-msec = 25
+
+
 sudo nano /home/pi/.asoundrc
 
 

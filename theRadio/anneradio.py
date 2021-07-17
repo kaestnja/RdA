@@ -161,7 +161,7 @@ try:
     #try
     pygame.mixer.init(frequency=24000, channels=2, buffer=8192)
     # or
-    pygame.mixer.init()
+    #pygame.mixer.init()
 
     pygame.mixer.music.load(os.path.join(path_aSound,'on1.wav'))
     #effect_on = pygame.mixer.Sound(os.path.join(path_aSound,'on1.wav'))
@@ -505,9 +505,9 @@ def ping_process_task(root):
                 ctemp_file.write("last|" + str(sender_key.get('last')) + '\n')
     root.after(2000, ping_process_task, root)
 def process_kill(channel):
-    traceback.print_exc()
-    print('sender_key sound: %s' % (str(sender_key.get('sound'))))
     if (sender_key.get('sound') == True):
+        traceback.print_exc()
+        print('sender_key sound: %s' % (str(sender_key.get('sound'))))
         effect_shutdown.play()
         #while pygame.mixer.music.get_busy() == True:
         while pygame.mixer.get_busy():
