@@ -27,3 +27,5 @@ sudo nano /home/pi/.asoundrc
 
 sudo apt-get install -y mpg123
 mpg123 http://ice1.somafm.com/u80s-128-mp3
+mpg123 http://ice1.somafm.com/seventies-128-mp3
+mpg123 http://ice1.somafm.com/thistle-128-mp3
