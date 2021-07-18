@@ -1,30 +1,7 @@
 #!/usr/bin/python3
 version=189
 
-#      nano /home/pi/.config/lxsession/LXDE-pi/autostart # and enter the following lines or:
-# sudo nano /etc/xdg/lxsession/LXDE-pi/autostart # and enter the following lines:
-
-# sudo nano /etc/xdg/lxsession/LXDE-pi/sshpwd.sh # and enter the following line as second line:
-#return ${retVal} 2>/dev/null || exit ${retVal}
-
-# pip3 install --upgrade versioneer https://github.com/warner/python-versioneer
-# pip3 install --upgrade versioneer2
-
-# python -m pip install --upgrade pygame
-# python -m pip install --upgrade requests
-# python -m pip install git+https://github.com/sn4k3/FakeRPi
-
-# sudo apt-get install pop-theme
-# sudo apt-get install -y fontconfig-config
-
-## sudo apt install unclutter
-# 
-
-
 modulname = 'anneradio'
-# to better debug: on crash enter: import pdb; pdb.pm()
-# check allocated memory: ps --sort -rss -eo rss,pid,command | head
-# sudo apt-get remove -y libuim0 libuim0-nox uim-common
 import datetime
 import os
 import pathlib
@@ -36,31 +13,14 @@ import importlib.util #pip3 install --upgrade importlib
 import threading
 import time  # , struct, datetime
 import timeit
-
-#import fontconfig
-#import fontTools
-#from fontTools import ttLib
-#import fontTools.ttLib
 ########################################################################################
 import tkinter
 import traceback
-import urllib
 from tkinter import font, ttk
-from urllib import parse  # ,request
 
 import PIL      #sudo apt-get install python3-pil.imagetk  or  pip3 install pillow  or  python -m pip install pillow
 import psutil   #sudo apt-get install python3-psutil
-#import resource
-#subprocess.Popen(['omxplayer','-b',os.path.join(path_aNixie,'shutdown.wav')], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
-#https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.get_length
-import pygame
-#import re
-##################################
-import requests
 from PIL import ImageTk  # ,Image
-
-#import urllib.parse
-#from urllib.parse import urlsplit, urlunsplit
 ##################################
 import jksip as jksip
 import jksmeter360 as meter360
@@ -83,21 +43,6 @@ global trafic_stat_old
 trafic_stat_old = 0
 global trafic_stat_show
 trafic_stat_show = 0
-
-#https://docs.python.org/3/library/pathlib.html
-#if sys.platform == "win32":
-#    import ntpath
-#    pathmodule = ntpath
-#else:
-#    import posixpath
-#    pathmodule = posixpath
-#print ('jk-pathmodule: %s' % str(pathmodule))
-##########################################################################
-# # https://pi-buch.info/raspbian-stretch/
-# gpiozero oder pigpio via: 
-# # https://gpiozero.readthedocs.org/en/rest-docs/
-# # python -m pip install gpiozero
-# # sudo apt-get install python-gpiozero python3-gpiozero
 
 # check if 
 if os.environ.get('DISPLAY','') == '':
@@ -141,32 +86,7 @@ path_aSound = os.path.join(sys.path[0],'aSound')
 path_aMagicEye = os.path.join(sys.path[0],'aMagicEye')
 path_file_senders = os.path.join(sys.path[0], 'senderlist.txt')
 path_file_sender = os.path.join(sys.path[0], 'sender.txt')
-try:
-    import pygame #    sudo pip3 install --upgrade pygame
-    from pygame import mixer
-    #import pygame.mixer
-    # import time
-    # from array import array
-    # from pygame.locals import *
-    pygame.init()
-    # pygame.__init__()
-    pygame.mixer.pre_init(44100, -16, 2, 2048) # setup mixer to avoid sound lag #pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffersize=4096)
-    #pygame.mixer.__init__()
-    # pygame.mixer.Sound.init(self, buffer=self.build_samples())
 
-    #try
-    #pygame.mixer.init(frequency=24000, channels=2, buffer=8192)
-    # or
-    pygame.mixer.init()
-
-    mixer.music.set_volume(0.95)
-
-    pygame.mixer.music.load(os.path.join(path_aSound,'on1.wav'))
-    #effect_on = pygame.mixer.Sound(os.path.join(path_aSound,'on1.wav'))
-except:
-    print ("jk-pygame.mixer failed, traceback:")
-    traceback.print_exc()
-    sender_key['sound'] = 'False'
 ###########################################################################
 # https://bugs.python.org/issue28165 The 'subprocess' module leaks memory when called in certain ways
 def process_exists(proc_name):
@@ -222,10 +142,7 @@ with open(path_file_senders,"r") as atemp_file:
             dicsenders[akey] = avalue.strip('\n')
             #print ("%s | %s" % (akey,dicsenders[akey]))
             temp_host = urllib.parse.urlsplit(avalue)
-            try:
-                temp_ip = socket.gethostbyname(temp_host.hostname)
-            except:
-                temp_ip = temp_host.hostname
+            temp_ip = temp_host.hostname
             dicsendershost[akey] = temp_host.hostname
             dicsendersip[akey] = temp_ip
             dicsendersping[akey] = 0
@@ -264,11 +181,6 @@ def exitfunc():
         #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
         process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
         process_do('sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1')
-    if sender_key.get('sound'):
-        effect_shutdown.play()
-        #while pygame.mixer.music.get_busy() == True:
-        while pygame.mixer.get_busy():
-            continue
     GPIO.cleanup(dt)
     GPIO.cleanup(clk)
     GPIO.cleanup(ButtonAnAus)
@@ -393,47 +305,16 @@ sender_listbox = tkinter.Listbox(senderlistboxframe
 sender_listbox.pack(side=tkinter.LEFT, expand=tkinter.YES)
 senderscrollbar.config(command=sender_listbox.yview)
 ####################################################################
-def ping_requests(ip, prot='http'):
-    retvalue = 0
-    response = 0
-    time_response = 0
-    time_diff1 = 0
 
-    try:
-        start_time1 = timeit.default_timer()
-        #http://docs.python-requests.org/en/master/user/advanced/#advanced
-        #response = requests.get('http://swr-swr1-bw.cast.addradio.de')
-        response = requests.get(prot + '://' + ip, timeout=0.2)
-        time_response = response.elapsed
-        time_diff1 = timeit.default_timer() - start_time1
-    except:
-        traceback.print_exc()
-        print('ping_requests exception from: %s' % (prot + '://' + ip))
-        time_diff1 = 0
-    if not(time_diff1 == 0):
-        if int(round(time_diff1 * 1000)) < int(round(time_response.microseconds / 1000)):
-            retvalue = 0
-        else:
-            retvalue = int(round(time_response.microseconds / 1000))
-    response = 0
-    time_response = 0
-    time_diff1 = 0
-    return retvalue
 ###########################
 def ping_gateway_task(root):
     ip_sender = dicsendershost.get(str(sender_key.get('last')))
-    time_sender = 0
-    time_sender = ping_requests(ip_sender)
-    time_sender_show = time_sender
+
     t3a.delete(1.0, tkinter.END)
     t3a.insert("%d.%d" % (1, 0), "JK Radio (2018) V:%s" % str(version),'JK')
     t3a.tag_config('address', foreground='yellow')
     t3a.insert("%d.%d" % (2, 0), "\n%s" % ip_sender, 'address')
-    if ((time_sender > 150) or (time_sender <= 0)):
-        time_sender_show=150
-        t3a.tag_config('address', foreground='red')
-    else:
-        t3a.tag_config('address', foreground='green')
+    t3a.tag_config('address', foreground='green')
     lastCPU = 0,14
     try:
         lastCPU = int(psutil.cpu_percent(interval=None, percpu=False))
@@ -504,14 +385,6 @@ def ping_process_task(root):
             with open(path_file_sender,"w") as ctemp_file:
                 ctemp_file.write("last|" + str(sender_key.get('last')) + '\n')
     root.after(2000, ping_process_task, root)
-def process_kill(channel):
-    if (sender_key.get('sound') == True):
-        traceback.print_exc()
-        print('sender_key sound: %s' % (str(sender_key.get('sound'))))
-        effect_shutdown.play()
-        #while pygame.mixer.music.get_busy() == True:
-        while pygame.mixer.get_busy():
-            continue
     
 def onselect(evt):
     w = evt.widget
@@ -531,12 +404,6 @@ def onselect(evt):
                 process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
                 process_do('sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1')
 
-def volumeUp():
-    print ("Button volumeUp")
-    #subprocess.call("volup", shell=True)
-def volumeDown():
-    print ("Button volumeDown")
-    #subprocess.call("voldown", shell=True)
 def channelDown(channel):
     selection_indices = sender_listbox.curselection()
     next_selection = 0
@@ -581,43 +448,6 @@ sender_listbox.focus()
 sender_listbox.event_generate("<<ListboxSelect>>")
 ####################################################################
 
-if (sender_key.get('sound')== True):
-    effect_on = pygame.mixer.Sound(os.path.join(path_aSound,'on1.wav'))
-    effect_on.set_volume(1)
-    effect_relay = pygame.mixer.Sound(os.path.join(path_aSound,'relay.wav'))
-    effect_relay.set_volume(1)
-    #print (effect_relay.get_length())
-    jitter=effect_relay.get_length() * 1000
-    #print (jitter)
-    jitter=round(jitter /6)
-    #print (jitter)
-    effect_relay.play(loops=10)
-    #root.after(jitter, effect_relay.play,3)
-    #root.after(2*jitter, effect_relay.play,1)
-    #root.after(3*jitter, effect_relay.play,2)
-    #root.after(4*jitter, effect_relay.play,3)
-    #root.after(5*jitter, effect_relay.play,8)
-    #root.after(6*jitter, effect_relay.play,5)
-    effect_shutdown = pygame.mixer.Sound(os.path.join(path_aSound,'shutdown1.wav'))
-    effect_shutdown.set_volume(1)
-
-def readVolume():
-    cmd = "amixer get PCM|grep -o [0-9]*%|sed 's/%//'"
-    p3 = subprocess.Popen("exec " + cmd, stdout=subprocess.PIPE, shell=True)
-    #p2 = subprocess.Popen("exec " + cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    p3output = p3.communicate()[0]
-    if (p3.returncode == 1 ):
-        retvalue = False
-    p3.kill()
-    value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
-    return int(value)
-def rotaryChange(direction):
-    volume_step = 5
-    volume = readVolume()
-    if direction == 1:
-        os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
-    else:
-        os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
 def powerOff(ButtonOff):
     #subprocess.call(['poweroff'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     #subprocess.call(['reboot'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
