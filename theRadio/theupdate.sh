@@ -32,11 +32,16 @@ network={
   id_str="Voelkersbach"
 }' > f:\wpa_supplicant.conf
 #------------------------------------------------------------
+ssh-keyscan -t rsa pi4radio1
+ssh -o HostKeyAlias=pi4radio1 pi@pi4radio1
+sudo nano ~/.ssh/config
+ssh -o StrictHostKeyChecking=no pi@pi4radio1
+ssh-keygen -R pi4radio1.fritz.box && ssh -o StrictHostKeyChecking=no pi4radio1.fritz.box echo SSH host key updated.
 
 #ssh-keygen -t rsa -b 2048
-#ssh-copy-id pi@pi4radio1
-#ssh-copy-id root@pi4radio1
-#ssh -i ~/.ssh/id_rsa pi@pi4radio1
+ssh-copy-id pi@pi4radio1
+ssh-copy-id root@pi4radio1
+ssh -i ~/.ssh/id_rsa pi@pi4radio1
 
 #ssh-keygen -t dsa -b 1024
 #ssh-copy-id pi@pi4radio1
