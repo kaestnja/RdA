@@ -5,10 +5,24 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: theRadio/GPIOTest.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/theRadio/GPIOTest.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: GPIOTest.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/GPIOTest.py",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Setup install File",
             "type": "python",
             "request": "launch",
-            "program":"${file}",
+            "program": "${file}",
             "args": [
                 "install"
             ],
