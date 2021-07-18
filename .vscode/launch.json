@@ -8,7 +8,10 @@
             "name": "Python: Setup install File",
             "type": "python",
             "request": "launch",
-            "program": "${file} -install",
+            "program":"${file}",
+            "args": [
+                "install"
+            ],
             "console": "integratedTerminal"
         }
     ]
