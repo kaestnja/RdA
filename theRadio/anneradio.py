@@ -13,6 +13,7 @@ import importlib.util #pip3 install --upgrade importlib
 import threading
 import time  # , struct, datetime
 import timeit
+import urllib
 ########################################################################################
 import tkinter
 import traceback
