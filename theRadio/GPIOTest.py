@@ -12,13 +12,13 @@ SWITCHPIN2 = 22
 
 
 def rotaryChange1(direction):
-    print("turned - " + str(direction))
+    print("turned 1 - " + str(direction))
 def switchPressed1():
-    print("button pressed")
+    print("button 1 pressed")
 def rotaryChange2(direction):
-    print("turned - " + str(direction))
+    print("turned 2 - " + str(direction))
 def switchPressed2():
-    print("button pressed")
+    print("button 2 pressed")
 
 
 GPIO.setmode(GPIO.BCM)
