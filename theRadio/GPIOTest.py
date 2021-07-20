@@ -23,7 +23,7 @@ def switchPressed2():
 
 GPIO.setmode(GPIO.BCM)
 
-ky0401 = KY040(CLOCKPIN1, DATAPIN1, SWITCHPIN1, rotaryChange1, switchPressed1, rotaryBouncetime=50, switchBouncetime=200)
+ky0401 = KY040(CLOCKPIN1, DATAPIN1, SWITCHPIN1, rotaryChange1, switchPressed1, rotaryBouncetime=50, switchBouncetime=500)
 #ky0402 = KY040(CLOCKPIN2, DATAPIN2, SWITCHPIN2, rotaryChange2, switchPressed2) #, rotaryBouncetime=40, switchBouncetime=40)
 
 ky0401.start()
