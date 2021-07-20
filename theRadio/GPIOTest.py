@@ -8,7 +8,7 @@ SWITCHPIN1 = 18
 
 CLOCKPIN2 = 4 #27
 DATAPIN2 = 17
-SWITCHPIN2 = 22
+SWITCHPIN2 = 25 #22
 
 
 def rotaryChange1(direction):
