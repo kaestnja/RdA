@@ -23,11 +23,11 @@ def switchPressed2():
 
 GPIO.setmode(GPIO.BCM)
 
-#ky0401 = KY040(CLOCKPIN1, DATAPIN1, SWITCHPIN1, rotaryChange1, switchPressed1, rotaryBouncetime=50, switchBouncetime=500)
+ky0401 = KY040(CLOCKPIN1, DATAPIN1, SWITCHPIN1, rotaryChange1, switchPressed1, rotaryBouncetime=50, switchBouncetime=500)
 #ky0402 = KY040(CLOCKPIN2, DATAPIN2, rotaryCallback=rotaryChange2, rotaryBouncetime=50)
 ky0402 = KY040(CLOCKPIN2, DATAPIN2, SWITCHPIN2, rotaryChange2, switchPressed2, rotaryBouncetime=50, switchBouncetime=500)
 
-#ky0401.start()
+ky0401.start()
 ky0402.start()
 
 try:
@@ -35,7 +35,7 @@ try:
         #sleep(0.1)
         sleep(1)
 finally:
-    #ky0401.stop()
+    ky0401.stop()
     ky0402.stop()
     GPIO.cleanup()
 
