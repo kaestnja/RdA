@@ -299,7 +299,7 @@ sender_listbox = tkinter.Listbox(senderlistboxframe
                         ,selectmode=tkinter.SINGLE,background='black',borderwidth=0,foreground='saddle brown',selectforeground='orange',selectbackground='black'
                         ,highlightcolor='saddle brown',highlightbackground='sandy brown',highlightthickness=0,disabledforeground='red'
                         ,activestyle=tkinter.DOTBOX
-                        ,exportselection=False,yscrollcommand=senderscrollbar.set,font=global_font,height=7,width=12)
+                        ,exportselection=False,yscrollcommand=senderscrollbar.set,font=global_font,height=8,width=12)
 sender_listbox.pack(side=tkinter.LEFT, expand=tkinter.YES)
 senderscrollbar.config(command=sender_listbox.yview)
 ####################################################################
