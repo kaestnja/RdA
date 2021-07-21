@@ -1,7 +1,6 @@
 #KY040 Python Class
 #Martin O'Hanlon
 #stuffaboutcode.com
-
 import RPi.GPIO as GPIO
 
 

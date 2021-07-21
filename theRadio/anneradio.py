@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=189
+version=191
 
 modulname = 'anneradio'
 import datetime
@@ -7,10 +7,9 @@ import os
 import pathlib
 import socket
 import subprocess
-#
+# https://www.bogotobogo.com/python/Multithread/python_multithreading_Synchronization_Lock_Objects_Acquire_Release.php
 import sys
 import importlib.util #pip3 install --upgrade importlib
-import threading
 import time  # , struct, datetime
 import timeit
 import urllib
@@ -29,52 +28,25 @@ import jksmetermg as metermg
 #from theRadio import jksmeterva as meterva
 import jksmeterva as meterva
 import jksnixieclock as nixieclock
+from ky040.KY040 import KY040
 
-global the_hostname
+#global the_hostname
 the_hostname = socket.gethostname()
-global sound_exist
 sound_exist = 0
-global sound_out_type
 sound_out_type = 'local'
-global gpio_exist
 gpio_exist = 0
-global printredirect
 printredirect = 0
-global trafic_stat_old
 trafic_stat_old = 0
-global trafic_stat_show
 trafic_stat_show = 0
 
-# check if 
-if os.environ.get('DISPLAY','') == '':
-    print('no display found. Using :0.0')
-    #os.environ.__setitem__('DISPLAY', ':0.0')
-    os.environ['DISPLAY']=':0.0'
+CLOCKPINVOLUMN = 23
+DATAPINVOLUMN = 24
+SWITCHPINVOLUMN = 18
 
-if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
-    sound_out_type = 'hdmi'
+CLOCKPINSTATION = 27
+DATAPINSTATION = 17
+SWITCHPINSTATION = 22
 
-try:
-    # Check and import real RPi.GPIO library
-    importlib.util.find_spec('RPi.GPIO') # sudo apt install -y python3-rpi.gpio
-    import RPi.GPIO as GPIO # sudo apt install -y python3-rpi.gpio
-    GPIO.setmode(GPIO.BCM)# GPIO.BOARD)
-    GPIO.cleanup()
-    gpio_exist=1
-except Exception as e:
-    print ("jk-import RPi.GPIO failed, Exception as e:")
-    print (e)
-except ImportError:
-    # If real RPi.GPIO library fails, load one of the fake one
-    # import FakeRPi.RPiO as RPiO
-    # or
-    import FakeRPi.GPIO as GPIO
-    # # ## pip install git+https://github.com/sn4k3/FakeRPi
-    # # ## pip3 install --upgrade git+https://github.com/sn4k3/FakeRPi
-except:
-    print ("jk-import RPi.GPIO failed, traceback:")
-    traceback.print_exc()
-##################################
 sender_key = {}
 sender_key['last'] = 'swr3'
 sender_key['state'] = 'True'
@@ -87,6 +59,21 @@ path_aSound = os.path.join(sys.path[0],'aSound')
 path_aMagicEye = os.path.join(sys.path[0],'aMagicEye')
 path_file_senders = os.path.join(sys.path[0], 'senderlist.txt')
 path_file_sender = os.path.join(sys.path[0], 'sender.txt')
+
+# check if 
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using :0.0')
+    #os.environ.__setitem__('DISPLAY', ':0.0')
+    os.environ['DISPLAY']=':0.0'
+
+if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
+    sound_out_type = 'hdmi'
+    CLOCKPINSTATION = 4 #27
+    DATAPINSTATION = 17
+    SWITCHPINSTATION = 25 #22
+
+
+
 
 ###########################################################################
 # https://bugs.python.org/issue28165 The 'subprocess' module leaks memory when called in certain ways
@@ -107,6 +94,7 @@ def process_exists(proc_name):
     except:
         retvalue = True
     return retvalue
+
 def process_do(cmd):
     retvalue = True
     try:
@@ -122,8 +110,12 @@ def process_do(cmd):
 ###########################################################################
 root = tkinter.Tk()
 #os.system('pkill omxplayer')
-process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
-process_do('sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1')
+if (process_exists('omxplayer') == True):
+    #os.system('pkill omxplayer')
+    #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
+    process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
+    process_do('sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1')
+
 root.overrideredirect(1)
 root.wm_attributes("-topmost", True)
 ########################################################################################
@@ -162,7 +154,7 @@ if os.path.isfile(path_file_sender):
 #    exitfunc()
 #def button1bclick():
 #    button1b.configure(image=charging_falseImagePIL)
-#def button3aclick(ButtonAnAus=18):
+#def button3aclick(SWITCHPINSTATION=18):
 #    os.system('pkill omxplayer')
 #    if (str(sender_key.get('state')) == '1'):
 #        set_last_sender_to_file( path_file_sender, str(sender_key.get('last')),'0' )
@@ -176,24 +168,29 @@ if os.path.isfile(path_file_sender):
 
 ##########################
 def exitfunc():
+    print ("exitfunc()")
     #print ("file open to write: %s" % path_file_sender)
     if (process_exists('omxplayer') == True):
         #os.system('pkill omxplayer')
         #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
         process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
         process_do('sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1')
-    GPIO.cleanup(dt)
-    GPIO.cleanup(clk)
-    GPIO.cleanup(ButtonAnAus)
+    ky040Volumn.stop()
+    ky040Station.stop()
+    GPIO.cleanup(DATAPINSTATION)
+    GPIO.cleanup(CLOCKPINSTATION)
+    GPIO.cleanup(SWITCHPINSTATION)
     root.quit()
     quit()
     # sys.exit() #exit with exception, used to exit treads
     # root.destroy()
 
 def exit(event):
+    print ("exit(event):   %s" % (str(event)))
     exitfunc()
 
 def on_closing():
+    print ("on_closing()")
     exitfunc()
     
 sys.exitfunc = exitfunc
@@ -339,7 +336,7 @@ def ping_gateway_task(root):
     
     t1b.delete(1.0, tkinter.END)
     try:
-        t1b.insert("%d.%d" % (1, 0), "GPIO: %s" % str(bool( GPIO.input(ButtonAnAus))),'gpio')
+        t1b.insert("%d.%d" % (1, 0), "GPIO: %s" % str(bool( GPIO.input(SWITCHPINSTATION))),'gpio')
         t1b.tag_config('gpio', foreground='green')
     except:
         t1b.insert("%d.%d" % (1, 0), "GPIO: %s" % str("chrashed"),'gpio')
@@ -367,10 +364,10 @@ def ping_gateway_task(root):
     ##        meter2_meter360.set(int(get_bandwidh(interface='wlan0',direction='rx')))
 ####################################################################
 def ping_process_task(root):
-    #sender_key['state'] = str(bool( GPIO.input(ButtonAnAus))) 
+    #sender_key['state'] = str(bool( GPIO.input(SWITCHPINSTATION))) 
     #print ("ping_process_task, last: %s state : %s" % (str(sender_key.get('last')),str(sender_key.get('state'))))
     #if ('True' in str(sender_key.get('state'))): 
-    if GPIO.input(ButtonAnAus):
+    if GPIO.input(SWITCHPINSTATION):
         if (process_exists('omxplayer') == False):
             radio_station=dicsenders.get(str(sender_key.get('last')))
             #subprocess.Popen(['omxplayer', '-o','local', radio_station,'&'])
@@ -397,7 +394,7 @@ def onselect(evt):
         w.selection_anchor(index)    #normally not needed, because allready correct
         if not str(sender_key.get('last')) == list_value:   #str(w.get(tkinter.ANCHOR)):
             sender_key['last'] = str(list_value)
-            #sender_key['state'] = str(bool( GPIO.input(ButtonAnAus)))
+            #sender_key['state'] = str(bool( GPIO.input(SWITCHPINSTATION)))
             #print ("onselect, last: %s state : %s" % (str(sender_key.get('last')),str(sender_key.get('state'))))
             if (process_exists('omxplayer') == True):
                 #os.system('pkill omxplayer')
@@ -405,7 +402,7 @@ def onselect(evt):
                 process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
                 process_do('sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1')
 
-def channelDown(channel):
+def channelDown():
     selection_indices = sender_listbox.curselection()
     next_selection = 0
     if len(selection_indices) > 0:
@@ -416,7 +413,7 @@ def channelDown(channel):
         sender_listbox.activate(next_selection)
         sender_listbox.selection_set(next_selection)
         sender_listbox.event_generate("<<ListboxSelect>>")
-def channelUp(channel):
+def channelUp():
     selection_indices = sender_listbox.curselection()
     next_selection = sender_listbox.size()-1
     if len(selection_indices) > 0:
@@ -427,6 +424,11 @@ def channelUp(channel):
         sender_listbox.activate(next_selection)
         sender_listbox.selection_set(next_selection)
         sender_listbox.event_generate("<<ListboxSelect>>")
+
+def volumnDown():
+    print("turned Volumn - " )
+def volumnUp():
+    print("turned Volumn - " )
 
 ####################################################################
 sender_listbox.config(yscrollcommand=senderscrollbar.set, selectmode = tkinter.SINGLE, exportselection=False )
@@ -449,65 +451,54 @@ sender_listbox.focus()
 sender_listbox.event_generate("<<ListboxSelect>>")
 ####################################################################
 
-def powerOff(SWITCHPINVOLUMN):
+
+def rotaryChangeVolumn(direction):
+    print("turned Volumn - " + str(direction))
+    if (direction == 1):
+        volumnUp()
+    else:
+        volumnDown()
+def switchPressedVolumn():          #powerOff
+    print("button Volumn pressed")
     #subprocess.call(['poweroff'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     #subprocess.call(['reboot'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process_do('reboot > /dev/null 2>&1')
+def rotaryChangeStation(direction):
+    print("turned Station - " + str(direction))
+    if (direction == 1):
+        channelUp()
+    else:
+        channelDown()
+def switchPressedStation():         #process_kill
+    print("button Station pressed")
 
-Rotary_counter = 0              # Start counting from 0, starting point for the running directional counter
-Current_A = 1                   # Assume that rotary switch is not
-Current_B = 1                   # moving while we init software
-LockRotary = threading.Lock()
-def rotary_interrupt(A_or_B):
-    global Rotary_counter, Current_A, Current_B, LockRotary
-    Switch_A = GPIO.input(clk)
-    Switch_B = GPIO.input(dt)
-    # now check if state of A or B has changed # if not that means that bouncing caused it
-    if Current_A == Switch_A and Current_B == Switch_B: # Same interrupt as before (Bouncing)?
-        return                                          # ignore interrupt!
-    Current_A = Switch_A                                # remember new state
-    Current_B = Switch_B                                # for next bouncing check
-    if (Switch_A and Switch_B):                     # Both one active? Yes -> end of sequence
-        LockRotary.acquire()                        # get lock
-        if A_or_B == dt:                            # Turning direction depends on
-            Rotary_counter += 1                     # which input gave last interrupt
-            #print ("Clockwise -> ListUp %s" % str(Rotary_counter))
-            channelDown(Rotary_counter)
-        else:                                       # so depending on direction either
-            Rotary_counter -= 1                     # increase or decrease counter
-            #print ("Anticlockwise <- ListDown %s" % str(Rotary_counter))
-            channelUp(Rotary_counter)
-        LockRotary.release()                        # and release lock
-    return
 
-#CLK - GPIO23 (pin16)         GPIO17 (pin 11)
-#DT  - GPIO24 (pin18)         GPIO18 (pin 12)
-#+   - 3v3 (pin1)
-#GND - GND (pin6)
 try:
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    # https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=133740
-    clk = 27  # Encoder input A: input GPIO23 (active high) pin 16
-    dt = 17  # Encoder input B: input GPIO24 (active high) pin 18  pull_up_down=GPIO.PUD_DOWN
-    GPIO.setup(clk, GPIO.IN)
-    GPIO.setup(dt, GPIO.IN)
-    # setup an event detection thread for the A encoder switch   RISING ,FALLING bouncetime=5 bouncetime in mSec
-    GPIO.add_event_detect(clk, GPIO.RISING, callback=rotary_interrupt) 
-    GPIO.add_event_detect(dt, GPIO.RISING, callback=rotary_interrupt)
-    #GPIO.remove_event_detect(clk)
-    #GPIO.remove_event_detect(dt)
-    #root.after(1000, readEncoder)
-
-    ButtonAnAus = 22 # GPIO-18 pin 12
-    GPIO.setup(ButtonAnAus, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    #GPIO.add_event_detect(ButtonAnAus, GPIO.FALLING, callback=process_kill, bouncetime=500)
-        
-    SWITCHPINVOLUMN = 18 # GPIO-4 pin 7
-    GPIO.setup(SWITCHPINVOLUMN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(SWITCHPINVOLUMN, GPIO.FALLING, callback=powerOff, bouncetime=5)
+    importlib.util.find_spec('RPi.GPIO')    # Check and import real RPi.GPIO library
+    import RPi.GPIO as GPIO                 # sudo apt install -y python3-rpi.gpio
+    GPIO.setmode(GPIO.BCM)# GPIO.BOARD)
+    #GPIO.setwarnings(False)
+    ky040Volumn = KY040(CLOCKPINVOLUMN, DATAPINVOLUMN, SWITCHPINVOLUMN, rotaryChangeVolumn, switchPressedVolumn, rotaryBouncetime=50, switchBouncetime=500)
+    #ky040Station = KY040(CLOCKPINSTATION, DATAPINSTATION, rotaryCallback=rotaryChangeStation, rotaryBouncetime=50)
+    ky040Station = KY040(CLOCKPINSTATION, DATAPINSTATION, SWITCHPINSTATION, rotaryChangeStation, switchPressedStation, rotaryBouncetime=50, switchBouncetime=500)
+    ky040Volumn.start()
+    ky040Station.start()
+    gpio_exist=1
+except Exception as e:
+    print ("jk-import RPi.GPIO failed, Exception as e:")
+    print (e)
+except ImportError:
+    # If real RPi.GPIO library fails, load one of the fake one
+    # import FakeRPi.RPiO as RPiO
+    # or
+    import FakeRPi.GPIO as GPIO
+    # # ## pip install git+https://github.com/sn4k3/FakeRPi
+    # # ## pip3 install --upgrade git+https://github.com/sn4k3/FakeRPi
 except:
-    print()
+    print ("jk-import RPi.GPIO failed, traceback:")
+    traceback.print_exc()
+##################################
+
 root.after(4000, ping_gateway_task, root)
 root.after(5000, ping_process_task, root)
 root.focus_set()

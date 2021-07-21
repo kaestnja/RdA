@@ -22,11 +22,11 @@ if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
 
 def rotaryChangeVolumn(direction):
     print("turned Volumn - " + str(direction))
-def switchPressedVolumn():
+def switchPressedVolumn():          #powerOff
     print("button Volumn pressed")
 def rotaryChangeStation(direction):
     print("turned Station - " + str(direction))
-def switchPressedStation():
+def switchPressedStation():         #process_kill
     print("button Station pressed")
 
 GPIO.setmode(GPIO.BCM)
