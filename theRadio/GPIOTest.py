@@ -30,6 +30,7 @@ def switchPressedStation():
     print("button Station pressed")
 
 GPIO.setmode(GPIO.BCM)
+#GPIO.setwarnings(False)
 
 ky040Volumn = KY040(CLOCKPINVOLUMN, DATAPINVOLUMN, SWITCHPINVOLUMN, rotaryChangeVolumn, switchPressedVolumn, rotaryBouncetime=50, switchBouncetime=500)
 #ky040Station = KY040(CLOCKPINSTATION, DATAPINSTATION, rotaryCallback=rotaryChangeStation, rotaryBouncetime=50)

@@ -449,7 +449,7 @@ sender_listbox.focus()
 sender_listbox.event_generate("<<ListboxSelect>>")
 ####################################################################
 
-def powerOff(ButtonOff):
+def powerOff(SWITCHPINVOLUMN):
     #subprocess.call(['poweroff'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     #subprocess.call(['reboot'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process_do('reboot > /dev/null 2>&1')
@@ -503,9 +503,9 @@ try:
     GPIO.setup(ButtonAnAus, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     #GPIO.add_event_detect(ButtonAnAus, GPIO.FALLING, callback=process_kill, bouncetime=500)
         
-    ButtonOff = 18 # GPIO-4 pin 7
-    GPIO.setup(ButtonOff, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(ButtonOff, GPIO.FALLING, callback=powerOff, bouncetime=5)
+    SWITCHPINVOLUMN = 18 # GPIO-4 pin 7
+    GPIO.setup(SWITCHPINVOLUMN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(SWITCHPINVOLUMN, GPIO.FALLING, callback=powerOff, bouncetime=5)
 except:
     print()
 root.after(4000, ping_gateway_task, root)
