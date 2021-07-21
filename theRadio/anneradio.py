@@ -495,6 +495,8 @@ try:
     # setup an event detection thread for the A encoder switch   RISING ,FALLING bouncetime=5 bouncetime in mSec
     GPIO.add_event_detect(clk, GPIO.RISING, callback=rotary_interrupt) 
     GPIO.add_event_detect(dt, GPIO.RISING, callback=rotary_interrupt)
+    #GPIO.remove_event_detect(clk)
+    #GPIO.remove_event_detect(dt)
     #root.after(1000, readEncoder)
 
     ButtonAnAus = 22 # GPIO-18 pin 12

@@ -1,42 +1,50 @@
 from time import sleep
 import RPi.GPIO as GPIO
 from ky040.KY040 import KY040
+import socket
 
-CLOCKPIN1 = 23
-DATAPIN1 = 24
-SWITCHPIN1 = 18
+# https://sourceforge.net/p/raspberry-gpio-python/wiki/Inputs/
 
-CLOCKPIN2 = 4 #27
-DATAPIN2 = 17
-SWITCHPIN2 = 25 #22
+the_hostname = socket.gethostname()
 
+CLOCKPINVOLUMN = 23
+DATAPINVOLUMN = 24
+SWITCHPINVOLUMN = 18
 
-def rotaryChange1(direction):
-    print("turned 1 - " + str(direction))
-def switchPressed1():
-    print("button 1 pressed")
-def rotaryChange2(direction):
-    print("turned 2 - " + str(direction))
-def switchPressed2():
-    print("button 2 pressed")
+CLOCKPINSTATION = 27
+DATAPINSTATION = 17
+SWITCHPINSTATION = 22
 
+if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
+    CLOCKPINSTATION = 4 #27
+    DATAPINSTATION = 17
+    SWITCHPINSTATION = 25 #22
+
+def rotaryChangeVolumn(direction):
+    print("turned Volumn - " + str(direction))
+def switchPressedVolumn():
+    print("button Volumn pressed")
+def rotaryChangeStation(direction):
+    print("turned Station - " + str(direction))
+def switchPressedStation():
+    print("button Station pressed")
 
 GPIO.setmode(GPIO.BCM)
 
-ky0401 = KY040(CLOCKPIN1, DATAPIN1, SWITCHPIN1, rotaryChange1, switchPressed1, rotaryBouncetime=50, switchBouncetime=500)
-#ky0402 = KY040(CLOCKPIN2, DATAPIN2, rotaryCallback=rotaryChange2, rotaryBouncetime=50)
-ky0402 = KY040(CLOCKPIN2, DATAPIN2, SWITCHPIN2, rotaryChange2, switchPressed2, rotaryBouncetime=50, switchBouncetime=500)
+ky040Volumn = KY040(CLOCKPINVOLUMN, DATAPINVOLUMN, SWITCHPINVOLUMN, rotaryChangeVolumn, switchPressedVolumn, rotaryBouncetime=50, switchBouncetime=500)
+#ky040Station = KY040(CLOCKPINSTATION, DATAPINSTATION, rotaryCallback=rotaryChangeStation, rotaryBouncetime=50)
+ky040Station = KY040(CLOCKPINSTATION, DATAPINSTATION, SWITCHPINSTATION, rotaryChangeStation, switchPressedStation, rotaryBouncetime=50, switchBouncetime=500)
 
-ky0401.start()
-ky0402.start()
+ky040Volumn.start()
+ky040Station.start()
 
 try:
     while True:
         #sleep(0.1)
         sleep(1)
 finally:
-    ky0401.stop()
-    ky0402.stop()
+    ky040Volumn.stop()
+    ky040Station.stop()
     GPIO.cleanup()
 
 
