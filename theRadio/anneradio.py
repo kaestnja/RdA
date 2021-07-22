@@ -462,20 +462,20 @@ sender_listbox.focus()
 sender_listbox.event_generate("<<ListboxSelect>>")
 ####################################################################
 
-
+#https://github.com/kaestnja/pyKY040#device-or-gpio-polling
+#https://pypi.org/project/pyky040/
 def rotaryChangeVolumn(direction):
     print("turned Volumn - " + str(direction))
     if (direction == 1):
         volumnUp()
     else:
         volumnDown()
-
-
 def switchPressedVolumn():          #powerOff
     print("button Volumn pressed")
     #subprocess.call(['poweroff'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     #subprocess.call(['reboot'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process_do('reboot > /dev/null 2>&1')
+
 def rotaryChangeStation(direction):
     print("turned Station - " + str(direction))
     if (direction == 1):
