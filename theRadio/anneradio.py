@@ -425,11 +425,22 @@ def channelUp():
         sender_listbox.selection_set(next_selection)
         sender_listbox.event_generate("<<ListboxSelect>>")
 
+def readVolume():
+    value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
+    return int(value)
+
 def volumnDown():
     print("turned Volumn - " )
+    volume_step = 5
+    volume = readVolume()
+    os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
+    
 def volumnUp():
     print("turned Volumn - " )
-
+    volume_step = 5
+    volume = readVolume()
+    os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
+        
 ####################################################################
 sender_listbox.config(yscrollcommand=senderscrollbar.set, selectmode = tkinter.SINGLE, exportselection=False )
 senderscrollbar.config(command=sender_listbox.yview)
@@ -458,6 +469,8 @@ def rotaryChangeVolumn(direction):
         volumnUp()
     else:
         volumnDown()
+
+
 def switchPressedVolumn():          #powerOff
     print("button Volumn pressed")
     #subprocess.call(['poweroff'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
