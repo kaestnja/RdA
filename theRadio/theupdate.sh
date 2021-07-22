@@ -63,7 +63,8 @@ ssh -i ~/.ssh/id_rsa pi@pi4radio1
 #sudo ln -s /lib/systemd/system/vncserver-x11-serviced.service /etc/systemd/system/multi-user.target.wants/vncserver-x11-serviced.service
 #sudo systemctl start vncserver-x11-serviced
 
-
+plink -ssh pi@raspberrypi -pw raspberry rm /home/pi/.cache/lxsession/LXDE-pi/run.log
+plink -ssh pi@raspberrypi -pw raspberry ln -s /dev/null /home/pi/.cache/lxsession/LXDE-pi/run.log
 plink -ssh pi@raspberrypi -pw raspberry sudo ln -s /lib/systemd/system/vncserver-x11-serviced.service /etc/systemd/system/multi-user.target.wants/vncserver-x11-serviced.service
 plink -ssh pi@raspberrypi -pw raspberry sudo systemctl start vncserver-x11-serviced
 plink -ssh pi@raspberrypi -pw raspberry sudo reboot
@@ -360,6 +361,7 @@ su pi
 # sudo nano /etc/xdg/lxsession/LXDE-pi/autostart # and enter the following lines below the cat command:
 #https://stackoverflow.com/questions/11279335/bash-write-to-file-without-echo
 sudo cat <<EOF > /etc/xdg/lxsession/LXDE-pi/autostart
+#@lxpanel 2>/dev/null #to prevent filling up run.log
 @lxpanel --profile LXDE-pi
 @pcmanfm --desktop --profile LXDE-pi
 @xscreensaver -no-splash
