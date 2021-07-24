@@ -737,9 +737,9 @@ echo "[Desktop Entry]
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Name=jan radio
-Comment=Jan Radio
-Exec=sh -c 'sudo pkill -SIGKILL -f omxplayer';$SHELL
+Name=kill radio
+Comment=Kill Radio
+Exec=sh -c 'sudo pkill -SIGKILL -f python & sudo pkill -SIGKILL -f omxplayer'
 Path=/home/pi/aRadio/theRadio
 Icon=/home/pi/aRadio/theRadio/bImages/emblem-dropbox-unsyncable.png
 StartupNotify=true
