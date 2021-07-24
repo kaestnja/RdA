@@ -739,12 +739,12 @@ Version=1.0
 Type=Application
 Name=Kill Radio
 Comment=Kill Radio
-Exec=sudo pkill -SIGKILL -f "python" && sudo pkill -SIGKILL -f "omxplayer"
-#Exec=gnome-terminal -e "bash -c '/home/pi/aRadio/theRadio/radioupdateshell.sh;$SHELL'"
+Exec=sh -c 'sudo pkill -SIGKILL -f omxplayer';$SHELL
+#Exec=gnome-terminal -e "/home/pi/aRadio/theRadio/killradio.sh";$SHELL
 Path=/home/pi/aRadio/theRadio
 Icon=/home/pi/aRadio/theRadio/bImages/emblem-dropbox-unsyncable.png
 StartupNotify=true
-Terminal=false
+Terminal=true
 Hidden=false" > /home/pi/Desktop/killradio.desktop && sudo chown -R pi /home && chmod -R 6777 /home/pi/Desktop/killradio.desktop && chmod +x /home/pi/Desktop/killradio.desktop
 
 echo "[Desktop Entry]
