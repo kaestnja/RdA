@@ -735,23 +735,23 @@ Categories=Network;HamRadio;" > /usr/share/applications/cubicsdr.desktop && sudo
 
 echo "[Desktop Entry]
 Encoding=UTF-8
+Version=1.0
 Type=Application
-Name=jan radio 
-Exec=python3 /home/pi/aRadio/theRadio/janradio.py
-#old
+Name=Kill Radio
+Comment=Kill Radio
+Exec=sudo pkill -SIGKILL -f "python" && sudo pkill -SIGKILL -f "omxplayer"
 #Exec=gnome-terminal -e "bash -c '/home/pi/aRadio/theRadio/radioupdateshell.sh;$SHELL'"
 Path=/home/pi/aRadio/theRadio
-#Icon=/usr/share/pixmaps/python.xpm
-Icon=/home/pi/aRadio/theRadio/bImages/earth-spinning-rotating-animation-24.gif
+Icon=/home/pi/aRadio/theRadio/bImages/emblem-dropbox-unsyncable.png
 StartupNotify=true
-Terminal=no
-Hidden=false" > /usr/share/applications/janradio.desktop && sudo chown -R pi /home && chmod -R 6777 /home/pi/Desktop/janradio.desktop
+Terminal=false
+Hidden=false" > /home/pi/Desktop/killradio.desktop && sudo chown -R pi /home && chmod -R 6777 /home/pi/Desktop/killradio.desktop && chmod +x /home/pi/Desktop/killradio.desktop
 
 echo "[Desktop Entry]
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Name=jan radio new
+Name=jan radio
 Comment=Jan Radio
 Exec=python3 /home/pi/aRadio/theRadio/janradio.py
 #Exec=gnome-terminal -e "bash -c '/home/pi/aRadio/theRadio/radioupdateshell.sh;$SHELL'"
@@ -759,13 +759,13 @@ Path=/home/pi/aRadio/theRadio
 Icon=/home/pi/aRadio/theRadio/bImages/earth-spinning-rotating-animation-24.gif
 StartupNotify=true
 Terminal=false
-Hidden=false" > /home/pi/Desktop/janradionew.desktop && sudo chown -R pi /home && chmod -R 6777 /home/pi/Desktop/janradionew.desktop && chmod +x /home/pi/Desktop/janradionew.desktop
+Hidden=false" > /home/pi/Desktop/janradio.desktop && sudo chown -R pi /home && chmod -R 6777 /home/pi/Desktop/janradio.desktop && chmod +x /home/pi/Desktop/janradio.desktop
 
 echo "[Desktop Entry]
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Name=anne radio new
+Name=anne radio
 Comment=Anne Radio
 Exec=python3 /home/pi/aRadio/theRadio/anneradio.py
 #Exec=gnome-terminal -e "bash -c '/home/pi/aRadio/theRadio/radioupdateshell.sh;$SHELL'"
@@ -773,7 +773,7 @@ Path=/home/pi/aRadio/theRadio
 Icon=/home/pi/aRadio/theRadio/bImages/earth-spinning-rotating-animation-24.gif
 StartupNotify=true
 Terminal=false
-Hidden=false" > /home/pi/Desktop/anneradionew.desktop && sudo chown -R pi /home && chmod -R 6777 /home/pi/Desktop/anneradionew.desktop && chmod +x /home/pi/Desktop/anneradionew.desktop
+Hidden=false" > /home/pi/Desktop/anneradio.desktop && sudo chown -R pi /home && chmod -R 6777 /home/pi/Desktop/anneradio.desktop && chmod +x /home/pi/Desktop/anneradio.desktop
 
 #stream cast
 sudo apt-get update -y && sudo apt-get upgrade -y
