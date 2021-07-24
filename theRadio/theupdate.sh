@@ -737,14 +737,13 @@ echo "[Desktop Entry]
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Name=Kill Radio
-Comment=Kill Radio
+Name=jan radio
+Comment=Jan Radio
 Exec=sh -c 'sudo pkill -SIGKILL -f omxplayer';$SHELL
-#Exec=gnome-terminal -e "/home/pi/aRadio/theRadio/killradio.sh";$SHELL
 Path=/home/pi/aRadio/theRadio
 Icon=/home/pi/aRadio/theRadio/bImages/emblem-dropbox-unsyncable.png
 StartupNotify=true
-Terminal=true
+Terminal=false
 Hidden=false" > /home/pi/Desktop/killradio.desktop && sudo chown -R pi /home && chmod -R 6777 /home/pi/Desktop/killradio.desktop && chmod +x /home/pi/Desktop/killradio.desktop
 
 echo "[Desktop Entry]
@@ -754,7 +753,6 @@ Type=Application
 Name=jan radio
 Comment=Jan Radio
 Exec=python3 /home/pi/aRadio/theRadio/janradio.py
-#Exec=gnome-terminal -e "bash -c '/home/pi/aRadio/theRadio/radioupdateshell.sh;$SHELL'"
 Path=/home/pi/aRadio/theRadio
 Icon=/home/pi/aRadio/theRadio/bImages/earth-spinning-rotating-animation-24.gif
 StartupNotify=true
@@ -768,7 +766,6 @@ Type=Application
 Name=anne radio
 Comment=Anne Radio
 Exec=python3 /home/pi/aRadio/theRadio/anneradio.py
-#Exec=gnome-terminal -e "bash -c '/home/pi/aRadio/theRadio/radioupdateshell.sh;$SHELL'"
 Path=/home/pi/aRadio/theRadio
 Icon=/home/pi/aRadio/theRadio/bImages/earth-spinning-rotating-animation-24.gif
 StartupNotify=true
