@@ -149,6 +149,8 @@ sudo fc-cache -r
 
 dmesg | grep "Machine model:"
 gpio -v
+gpio readall
+i2cdetect -y 1
 cat /proc/device-tree/model && echo ""
 uname -m
 cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}'
