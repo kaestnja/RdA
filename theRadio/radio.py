@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 #Reference code obtained from "https://www.raspberrypi.org/forums/viewtopic.php?t=53680" by user: LinuxCircle
+# https://www.instructables.com/FM-Radio-Raspberry-Pi/
+# https://www.piddlerintheroot.com/fm-radio-tea5767/
 # https://www.netways.de/blog/2019/03/13/fm-empfaenger-mit-dem-raspberry-pi-3/
 import smbus as smbus 
 import subprocess
