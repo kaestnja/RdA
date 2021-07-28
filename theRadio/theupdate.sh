@@ -1,5 +1,5 @@
 #!/bin/bash
-#version=146
+#version=148
 
 #https://winscp.net/eng/docs/file_mask#basic
 
