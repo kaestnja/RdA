@@ -407,8 +407,8 @@ rm -d -r "$(pip cache dir)"
 sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1
 cd /home/pi
 rm -fr "aRadio"
-git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kästner"
-git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git"
+git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kaestner"
+git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git"
 cd aRadio
 git remote add origin git@github.com:kaestnja/aRadio.git
 #git config --unset-all remote.origin.fetch
