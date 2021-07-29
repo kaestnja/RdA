@@ -29,7 +29,9 @@ import jksmetermg as metermg
 import jksmeterva as meterva
 import jksnixieclock as nixieclock
 from ky040.KY040 import KY040
-from omxplayer.player import OMXPlayer
+from omxplayer.player import OMXPlayer  #https://github.com/willprice/python-omxplayer-wrapper
+# https://python-omxplayer-wrapper.readthedocs.io/en/latest/omxplayer/# 
+# https://python-omxplayer-wrapper.readthedocs.io/en/latest/omxplayer/#module-omxplayer.player
 from pathlib import Path
 from time import sleep
 
@@ -452,6 +454,8 @@ def readVolume():
     #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed -n 1p").read()
     value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
     #value = os.popen("amixer get Capture | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
+    #value = os.popen("amixer -D pulse get Master | awk -F 'Left:|[][]' 'BEGIN {RS=""}{ print $3 }' | sed 's/%//'").read()
+    #value = os.popen("amixer -D pulse get Master | awk -F 'Right:|[][]' 'BEGIN {RS=""}{ print $3 }' | sed 's/%//'").read()
     print("current sound:",str(value))
     #print("amixer get Master|grep -o [0-9]*%|sed 's/%//'")
     #print("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1")

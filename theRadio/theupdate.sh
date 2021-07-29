@@ -409,6 +409,7 @@ cd /home/pi
 rm -fr "aRadio"
 git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kaestner"
 git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git"
+git clone "https://github.com/willprice/python-omxplayer-wrapper.git"
 cd aRadio
 git remote add origin git@github.com:kaestnja/aRadio.git
 #git config --unset-all remote.origin.fetch
