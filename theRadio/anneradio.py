@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=193
+version=194
 
 modulname = 'anneradio'
 import datetime
@@ -64,7 +64,7 @@ path_file_sender = os.path.join(sys.path[0], 'sender.txt')
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
     #os.environ.__setitem__('DISPLAY', ':0.0')
-    os.environ['DISPLAY']=':0.0'
+os.environ['DISPLAY']=':0.0'
 
 if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
     sound_out_type = 'hdmi'
