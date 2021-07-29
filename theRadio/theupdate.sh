@@ -404,6 +404,15 @@ pip config set global.no-cache-dir false
 pip cache purge
 rm -d -r "$(pip cache dir)"
 
+# https://www.atlassian.com/git/tutorials/setting-up-a-repository/git-config
+# https://stackoverflow.com/questions/44246876/how-to-remove-cached-credentials-from-git
+git config --global --unset credential.helper
+git config --local --unset credential.helper
+git config --system --unset credential.helper
+git config --system --list
+git config --local --list
+git config --global --list
+
 sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1
 cd /home/pi
 rm -fr "aRadio"
