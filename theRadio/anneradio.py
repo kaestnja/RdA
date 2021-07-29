@@ -428,7 +428,7 @@ def channelUp():
 def readVolume():
     #value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
     value = os.popen("amixer get Master|grep -o [0-9]*%|sed 's/%//'").read()
-    return int(value)
+    return int(float(value)) #int(value) 
 
 def volumnDown():
     print("turned Volumn - " )
