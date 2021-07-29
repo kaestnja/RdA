@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=196
+version=197
 
 modulname = 'anneradio'
 import datetime
@@ -451,12 +451,9 @@ def volumnDown():
         #os.system("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
         os.popen("amixer set 'Master' "+str(min(100,max(0,volume - volume_step)))+"%")
         os.popen("pactl -- set-sink-volume 0 +"+str(min(100,max(0,volume - volume_step)))+"%")
-
-        #os.system("amixer set 'Master' 00%")
     except:
         print ("amixer set Master failed, traceback:")
         traceback.print_exc()
-    
     
 def volumnUp():
     volume_step = 5
@@ -467,7 +464,6 @@ def volumnUp():
         #os.system("sudo amixer set Master "+str(min(100,max(0,volume + volume_step)))+"%")
         os.popen("amixer set 'Master' "+str(min(100,max(0,volume + volume_step)))+"%")
         os.popen("pactl -- set-sink-volume 0 -"+str(min(100,max(0,volume - volume_step)))+"%")
-        #os.system("amixer set 'Master' 00%")
     except:
         print ("amixer set Master failed, traceback:")
         traceback.print_exc()
