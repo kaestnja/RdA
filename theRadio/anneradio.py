@@ -472,7 +472,7 @@ def volumnDown():
     volume_step = 5
     volume = readVolume()
     setvolume = min(100,max(0,volume - volume_step))
-    setvolumeplayer = setvolume/10
+    setvolumeplayer = setvolume/100
     if setvolumeplayer<0:
         setvolumeplayer=0
     if setvolumeplayer>1:
@@ -498,8 +498,8 @@ def volumnUp():
     setvolumeplayer = setvolume/10
     if setvolumeplayer<0:
         setvolumeplayer=0
-    if setvolumeplayer>1:
-        setvolumeplayer=1
+    if setvolumeplayer>10:
+        setvolumeplayer=10
     print("will turned Volumn:",str(setvolume))
     print("will turned Volumn:",str(setvolumeplayer))
     try:
