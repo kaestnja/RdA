@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=197
+version=198
 
 modulname = 'anneradio'
 import datetime
