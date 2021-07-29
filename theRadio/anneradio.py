@@ -448,6 +448,7 @@ def readVolume():
     #aplay -l
     #amixer scontrols
     #amixer -c 1 scontrols
+    #cat /proc/asound/cards
     #value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
     #value = os.popen("amixer get Master|grep -o [0-9]*%|sed 's/%//'").read()
     #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1").read()
@@ -460,6 +461,10 @@ def readVolume():
     #print("amixer get Master|grep -o [0-9]*%|sed 's/%//'")
     #print("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1")
     return int(float(value)) #int(value) 
+
+    #GET volume: "amixer -M sget PCM"
+    #SET volume: "amixer -q -M sset PCM 50%"
+    #The "-M" switch switches to the useful values.
 
 # https://python-omxplayer-wrapper.readthedocs.io/en/latest/
 # pip3 install omxplayer-wrapper
