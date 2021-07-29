@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=194
+version=195
 
 modulname = 'anneradio'
 import datetime
@@ -426,30 +426,48 @@ def channelUp():
         sender_listbox.event_generate("<<ListboxSelect>>")
 
 def readVolume():
+    #aplay -l
+    #amixer scontrols
+    #amixer -c 1 scontrols
     #value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
     #value = os.popen("amixer get Master|grep -o [0-9]*%|sed 's/%//'").read()
     #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1").read()
     #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed -n 1p").read()
     value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
+    #value = os.popen("amixer get Capture | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
     print("current sound:",str(value))
     #print("amixer get Master|grep -o [0-9]*%|sed 's/%//'")
     #print("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1")
     return int(float(value)) #int(value) 
 
 def volumnDown():
-    print("turned Volumn - " )
     volume_step = 5
     volume = readVolume()
-    #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
-    os.system("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
-    print("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
+    print("will turned Volumn:",str(min(100,max(0,volume - volume_step))))
+    #print("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
+    #print("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
+    try:
+        #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
+        #os.system("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
+        os.popen("amixer set 'Master' "+str(min(100,max(0,volume - volume_step)))+"%")
+        #os.system("amixer set 'Master' 00%")
+    except:
+        print ("amixer set Master failed, traceback:")
+        traceback.print_exc()
+    
     
 def volumnUp():
-    print("turned Volumn - " )
     volume_step = 5
     volume = readVolume()
-    #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
-    os.system("sudo amixer set Master -- "+str(min(100,max(0,volume + volume_step)))+"%")
+    print("will turned Volumn:",str(min(100,max(0,volume + volume_step))))
+    try:
+        #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
+        #os.system("sudo amixer set Master "+str(min(100,max(0,volume + volume_step)))+"%")
+        os.popen("amixer set 'Master' "+str(min(100,max(0,volume + volume_step)))+"%")
+        #os.system("amixer set 'Master' 00%")
+    except:
+        print ("amixer set Master failed, traceback:")
+        traceback.print_exc()
         
 ####################################################################
 sender_listbox.config(yscrollcommand=senderscrollbar.set, selectmode = tkinter.SINGLE, exportselection=False )
@@ -475,33 +493,33 @@ sender_listbox.event_generate("<<ListboxSelect>>")
 #https://github.com/kaestnja/pyKY040#device-or-gpio-polling
 #https://pypi.org/project/pyky040/
 def rotaryChangeVolumn(direction):
-    print("turned Volumn - " + str(direction))
+    print("turned Volumn " + str(direction))
     if (direction == 1):
         volumnUp()
     else:
         volumnDown()
 def switchPressedVolumn():          #powerOff
-    print("button Volumn pressed")
+    print("press Volumn ")
     #subprocess.call(['poweroff'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     #subprocess.call(['reboot'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process_do('reboot > /dev/null 2>&1')
 
 def rotaryChangeStation(direction):
-    print("turned Station - " + str(direction))
+    print("turned Station " + str(direction))
     if (direction == 1):
         channelUp()
     else:
         channelDown()
 def switchPressedStation():         #process_kill
-    print("button Station pressed")
-
+    print("press Station ")
+    exitfunc()
 
 try:
     importlib.util.find_spec('RPi.GPIO')    # Check and import real RPi.GPIO library
     import RPi.GPIO as GPIO                 # sudo apt install -y python3-rpi.gpio
     GPIO.setmode(GPIO.BCM)# GPIO.BOARD)
     #GPIO.setwarnings(False)
-    ky040Volumn = KY040(CLOCKPINVOLUMN, DATAPINVOLUMN, SWITCHPINVOLUMN, rotaryChangeVolumn, switchPressedVolumn, rotaryBouncetime=50, switchBouncetime=500)
+    ky040Volumn = KY040(CLOCKPINVOLUMN, DATAPINVOLUMN, SWITCHPINVOLUMN, rotaryChangeVolumn, switchPressedVolumn, rotaryBouncetime=100, switchBouncetime=500)
     #ky040Station = KY040(CLOCKPINSTATION, DATAPINSTATION, rotaryCallback=rotaryChangeStation, rotaryBouncetime=50)
     ky040Station = KY040(CLOCKPINSTATION, DATAPINSTATION, SWITCHPINSTATION, rotaryChangeStation, switchPressedStation, rotaryBouncetime=50, switchBouncetime=500)
     ky040Volumn.start()
