@@ -427,7 +427,13 @@ def channelUp():
 
 def readVolume():
     #value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
-    value = os.popen("amixer get Master|grep -o [0-9]*%|sed 's/%//'").read()
+    #value = os.popen("amixer get Master|grep -o [0-9]*%|sed 's/%//'").read()
+    #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1").read()
+    #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed -n 1p").read()
+    value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
+    print("current sound:",str(value))
+    #print("amixer get Master|grep -o [0-9]*%|sed 's/%//'")
+    #print("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1")
     return int(float(value)) #int(value) 
 
 def volumnDown():
@@ -436,6 +442,7 @@ def volumnDown():
     volume = readVolume()
     #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
     os.system("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
+    print("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
     
 def volumnUp():
     print("turned Volumn - " )
