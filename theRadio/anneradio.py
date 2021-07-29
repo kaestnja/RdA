@@ -29,6 +29,9 @@ import jksmetermg as metermg
 import jksmeterva as meterva
 import jksnixieclock as nixieclock
 from ky040.KY040 import KY040
+from omxplayer.player import OMXPlayer
+from pathlib import Path
+from time import sleep
 
 #global the_hostname
 the_hostname = socket.gethostname()
@@ -59,7 +62,12 @@ path_aSound = os.path.join(sys.path[0],'aSound')
 path_aMagicEye = os.path.join(sys.path[0],'aMagicEye')
 path_file_senders = os.path.join(sys.path[0], 'senderlist.txt')
 path_file_sender = os.path.join(sys.path[0], 'sender.txt')
-
+global VIDEO_PATH
+VIDEO_PATH = Path("/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4")
+global STREAM_URI
+STREAM_URI = 'rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov'
+global player 
+#player = OMXPlayer(VIDEO_PATH)
 # check if 
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
@@ -372,10 +380,13 @@ def ping_process_task(root):
             radio_station=dicsenders.get(str(sender_key.get('last')))
             #subprocess.Popen(['omxplayer', '-o','local', radio_station,'&'])
             subprocess.Popen(['omxplayer', '-o',sound_out_type, radio_station,'&'])
+            #player = OMXPlayer(VIDEO_PATH)
+            player = OMXPlayer(STREAM_URI)
             with open(path_file_sender,"w") as ctemp_file:
                 ctemp_file.write("last|" + str(sender_key.get('last')) + '\n')
     else:
         if (process_exists('omxplayer') == True):
+            player.quit()
             #os.system('pkill omxplayer')
             #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
             process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
@@ -397,6 +408,7 @@ def onselect(evt):
             #sender_key['state'] = str(bool( GPIO.input(SWITCHPINSTATION)))
             #print ("onselect, last: %s state : %s" % (str(sender_key.get('last')),str(sender_key.get('state'))))
             if (process_exists('omxplayer') == True):
+                player.quit()
                 #os.system('pkill omxplayer')
                 #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
                 process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
