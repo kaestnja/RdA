@@ -67,7 +67,9 @@ VIDEO_PATH = Path("/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.m
 global STREAM_URI
 STREAM_URI = 'rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov'
 global player 
-#player = OMXPlayer(VIDEO_PATH)
+player = OMXPlayer(VIDEO_PATH)
+sleep(1)
+player.quit()
 # check if 
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
@@ -119,6 +121,7 @@ def process_do(cmd):
 root = tkinter.Tk()
 #os.system('pkill omxplayer')
 if (process_exists('omxplayer') == True):
+    player.quit()
     #os.system('pkill omxplayer')
     #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
     process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
@@ -179,6 +182,7 @@ def exitfunc():
     print ("exitfunc()")
     #print ("file open to write: %s" % path_file_sender)
     if (process_exists('omxplayer') == True):
+        player.quit()
         #os.system('pkill omxplayer')
         #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
         process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
@@ -379,9 +383,10 @@ def ping_process_task(root):
         if (process_exists('omxplayer') == False):
             radio_station=dicsenders.get(str(sender_key.get('last')))
             #subprocess.Popen(['omxplayer', '-o','local', radio_station,'&'])
-            subprocess.Popen(['omxplayer', '-o',sound_out_type, radio_station,'&'])
+            #subprocess.Popen(['omxplayer', '-o',sound_out_type, radio_station,'&'])
             #player = OMXPlayer(VIDEO_PATH)
-            player = OMXPlayer(STREAM_URI)
+            #player = OMXPlayer(STREAM_URI)
+            player = OMXPlayer(radio_station)
             with open(path_file_sender,"w") as ctemp_file:
                 ctemp_file.write("last|" + str(sender_key.get('last')) + '\n')
     else:
@@ -452,17 +457,26 @@ def readVolume():
     #print("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1")
     return int(float(value)) #int(value) 
 
+# https://python-omxplayer-wrapper.readthedocs.io/en/latest/
+# pip3 install omxplayer-wrapper
 def volumnDown():
     volume_step = 5
     volume = readVolume()
-    print("will turned Volumn:",str(min(100,max(0,volume - volume_step))))
+    setvolume = min(100,max(0,volume - volume_step))
+    setvolumeplayer = setvolume/100
+    if setvolumeplayer<0:
+        setvolumeplayer=0
+    if setvolumeplayer>1:
+        setvolumeplayer=1
+    print("will turned Volumn:",str(setvolume))
     #print("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
     #print("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
     try:
         #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
         #os.system("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
-        os.popen("amixer set 'Master' "+str(min(100,max(0,volume - volume_step)))+"%")
-        os.popen("pactl -- set-sink-volume 0 +"+str(min(100,max(0,volume - volume_step)))+"%")
+        os.popen("amixer set 'Master' "+str(setvolume)+"%")
+        #os.popen("pactl -- set-sink-volume 0 +"+str(setvolume)+"%")
+        player.set_volume(setvolumeplayer)
     except:
         print ("amixer set Master failed, traceback:")
         traceback.print_exc()
@@ -470,12 +484,19 @@ def volumnDown():
 def volumnUp():
     volume_step = 5
     volume = readVolume()
-    print("will turned Volumn:",str(min(100,max(0,volume + volume_step))))
+    setvolume = min(100,max(0,volume + volume_step))
+    setvolumeplayer = setvolume/100
+    if setvolumeplayer<0:
+        setvolumeplayer=0
+    if setvolumeplayer>1:
+        setvolumeplayer=1
+    print("will turned Volumn:",str(setvolume))
     try:
         #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
         #os.system("sudo amixer set Master "+str(min(100,max(0,volume + volume_step)))+"%")
-        os.popen("amixer set 'Master' "+str(min(100,max(0,volume + volume_step)))+"%")
-        os.popen("pactl -- set-sink-volume 0 -"+str(min(100,max(0,volume - volume_step)))+"%")
+        os.popen("amixer set 'Master' "+str(setvolume)+"%")
+        #os.popen("pactl -- set-sink-volume 0 -"+str(min(100,max(0,volume - volume_step)))+"%")
+        player.set_volume(setvolumeplayer)
     except:
         print ("amixer set Master failed, traceback:")
         traceback.print_exc()
