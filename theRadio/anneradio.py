@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=193
+version=198
 
 modulname = 'anneradio'
 import datetime
@@ -29,6 +29,11 @@ import jksmetermg as metermg
 import jksmeterva as meterva
 import jksnixieclock as nixieclock
 from ky040.KY040 import KY040
+from omxplayer.player import OMXPlayer  #https://github.com/willprice/python-omxplayer-wrapper
+# https://python-omxplayer-wrapper.readthedocs.io/en/latest/omxplayer/# 
+# https://python-omxplayer-wrapper.readthedocs.io/en/latest/omxplayer/#module-omxplayer.player
+from pathlib import Path
+from time import sleep
 
 #global the_hostname
 the_hostname = socket.gethostname()
@@ -59,12 +64,19 @@ path_aSound = os.path.join(sys.path[0],'aSound')
 path_aMagicEye = os.path.join(sys.path[0],'aMagicEye')
 path_file_senders = os.path.join(sys.path[0], 'senderlist.txt')
 path_file_sender = os.path.join(sys.path[0], 'sender.txt')
-
+global VIDEO_PATH
+VIDEO_PATH = Path("/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4")
+global STREAM_URI
+STREAM_URI = 'rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov'
+global player 
+player = OMXPlayer(VIDEO_PATH)
+sleep(1)
+player.quit()
 # check if 
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
     #os.environ.__setitem__('DISPLAY', ':0.0')
-    os.environ['DISPLAY']=':0.0'
+os.environ['DISPLAY']=':0.0'
 
 if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
     sound_out_type = 'hdmi'
@@ -111,6 +123,7 @@ def process_do(cmd):
 root = tkinter.Tk()
 #os.system('pkill omxplayer')
 if (process_exists('omxplayer') == True):
+    player.quit()
     #os.system('pkill omxplayer')
     #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
     process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
@@ -171,6 +184,7 @@ def exitfunc():
     print ("exitfunc()")
     #print ("file open to write: %s" % path_file_sender)
     if (process_exists('omxplayer') == True):
+        player.quit()
         #os.system('pkill omxplayer')
         #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
         process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
@@ -371,11 +385,15 @@ def ping_process_task(root):
         if (process_exists('omxplayer') == False):
             radio_station=dicsenders.get(str(sender_key.get('last')))
             #subprocess.Popen(['omxplayer', '-o','local', radio_station,'&'])
-            subprocess.Popen(['omxplayer', '-o',sound_out_type, radio_station,'&'])
+            #subprocess.Popen(['omxplayer', '-o',sound_out_type, radio_station,'&'])
+            #player = OMXPlayer(VIDEO_PATH)
+            #player = OMXPlayer(STREAM_URI)
+            player = OMXPlayer(radio_station)
             with open(path_file_sender,"w") as ctemp_file:
                 ctemp_file.write("last|" + str(sender_key.get('last')) + '\n')
     else:
         if (process_exists('omxplayer') == True):
+            player.quit()
             #os.system('pkill omxplayer')
             #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
             process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
@@ -397,6 +415,7 @@ def onselect(evt):
             #sender_key['state'] = str(bool( GPIO.input(SWITCHPINSTATION)))
             #print ("onselect, last: %s state : %s" % (str(sender_key.get('last')),str(sender_key.get('state'))))
             if (process_exists('omxplayer') == True):
+                player.quit()
                 #os.system('pkill omxplayer')
                 #subprocess.call('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1', shell=True)
                 process_do('sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1')
@@ -426,23 +445,72 @@ def channelUp():
         sender_listbox.event_generate("<<ListboxSelect>>")
 
 def readVolume():
+    #aplay -l
+    #amixer scontrols
+    #amixer -c 1 scontrols
+    #cat /proc/asound/cards
     #value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
-    value = os.popen("amixer get Master|grep -o [0-9]*%|sed 's/%//'").read()
-    return int(value)
+    #value = os.popen("amixer get Master|grep -o [0-9]*%|sed 's/%//'").read()
+    #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1").read()
+    #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed -n 1p").read()
+    value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
+    #value = os.popen("amixer get Capture | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
+    #value = os.popen("amixer -D pulse get Master | awk -F 'Left:|[][]' 'BEGIN {RS=""}{ print $3 }' | sed 's/%//'").read()
+    #value = os.popen("amixer -D pulse get Master | awk -F 'Right:|[][]' 'BEGIN {RS=""}{ print $3 }' | sed 's/%//'").read()
+    print("current sound:",str(value))
+    #print("amixer get Master|grep -o [0-9]*%|sed 's/%//'")
+    #print("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1")
+    return int(float(value)) #int(value) 
 
+    #GET volume: "amixer -M sget PCM"
+    #SET volume: "amixer -q -M sset PCM 50%"
+    #The "-M" switch switches to the useful values.
+
+# https://python-omxplayer-wrapper.readthedocs.io/en/latest/
+# pip3 install omxplayer-wrapper
 def volumnDown():
-    print("turned Volumn - " )
     volume_step = 5
     volume = readVolume()
-    #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
-    os.system("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
+    setvolume = min(100,max(0,volume - volume_step))
+    setvolumeplayer = setvolume/10
+    if setvolumeplayer<0:
+        setvolumeplayer=0
+    if setvolumeplayer>10:
+        setvolumeplayer=10
+    print("will turned Volumn:",str(setvolume))
+    print("will turned Volumn:",str(setvolumeplayer))
+    #print("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
+    #print("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
+    try:
+        #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
+        #os.system("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
+        os.popen("amixer set 'Master' "+str(setvolume)+"%")
+        #os.popen("pactl -- set-sink-volume 0 +"+str(setvolume)+"%")
+        player.set_volume(setvolumeplayer)
+    except:
+        print ("amixer set Master failed, traceback:")
+        traceback.print_exc()
     
 def volumnUp():
-    print("turned Volumn - " )
     volume_step = 5
     volume = readVolume()
-    #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
-    os.system("sudo amixer set Master -- "+str(min(100,max(0,volume + volume_step)))+"%")
+    setvolume = min(100,max(0,volume + volume_step))
+    setvolumeplayer = setvolume/10
+    if setvolumeplayer<0:
+        setvolumeplayer=0
+    if setvolumeplayer>10:
+        setvolumeplayer=10
+    print("will turned Volumn:",str(setvolume))
+    print("will turned Volumn:",str(setvolumeplayer))
+    try:
+        #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
+        #os.system("sudo amixer set Master "+str(min(100,max(0,volume + volume_step)))+"%")
+        os.popen("amixer set 'Master' "+str(setvolume)+"%")
+        #os.popen("pactl -- set-sink-volume 0 -"+str(min(100,max(0,volume - volume_step)))+"%")
+        player.set_volume(setvolumeplayer)
+    except:
+        print ("amixer set Master failed, traceback:")
+        traceback.print_exc()
         
 ####################################################################
 sender_listbox.config(yscrollcommand=senderscrollbar.set, selectmode = tkinter.SINGLE, exportselection=False )
@@ -468,33 +536,33 @@ sender_listbox.event_generate("<<ListboxSelect>>")
 #https://github.com/kaestnja/pyKY040#device-or-gpio-polling
 #https://pypi.org/project/pyky040/
 def rotaryChangeVolumn(direction):
-    print("turned Volumn - " + str(direction))
+    print("turned Volumn " + str(direction))
     if (direction == 1):
         volumnUp()
     else:
         volumnDown()
 def switchPressedVolumn():          #powerOff
-    print("button Volumn pressed")
+    print("press Volumn ")
     #subprocess.call(['poweroff'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     #subprocess.call(['reboot'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process_do('reboot > /dev/null 2>&1')
 
 def rotaryChangeStation(direction):
-    print("turned Station - " + str(direction))
+    print("turned Station " + str(direction))
     if (direction == 1):
         channelUp()
     else:
         channelDown()
 def switchPressedStation():         #process_kill
-    print("button Station pressed")
-
+    print("press Station ")
+    exitfunc()
 
 try:
     importlib.util.find_spec('RPi.GPIO')    # Check and import real RPi.GPIO library
     import RPi.GPIO as GPIO                 # sudo apt install -y python3-rpi.gpio
     GPIO.setmode(GPIO.BCM)# GPIO.BOARD)
     #GPIO.setwarnings(False)
-    ky040Volumn = KY040(CLOCKPINVOLUMN, DATAPINVOLUMN, SWITCHPINVOLUMN, rotaryChangeVolumn, switchPressedVolumn, rotaryBouncetime=50, switchBouncetime=500)
+    ky040Volumn = KY040(CLOCKPINVOLUMN, DATAPINVOLUMN, SWITCHPINVOLUMN, rotaryChangeVolumn, switchPressedVolumn, rotaryBouncetime=100, switchBouncetime=500)
     #ky040Station = KY040(CLOCKPINSTATION, DATAPINSTATION, rotaryCallback=rotaryChangeStation, rotaryBouncetime=50)
     ky040Station = KY040(CLOCKPINSTATION, DATAPINSTATION, SWITCHPINSTATION, rotaryChangeStation, switchPressedStation, rotaryBouncetime=50, switchBouncetime=500)
     ky040Volumn.start()

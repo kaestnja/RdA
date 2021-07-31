@@ -21,3 +21,4 @@ PyGObject
 gpiozero
 matplotlib
 pyaudio
+omxplayer-wrapper
