@@ -432,6 +432,8 @@ sudo xargs -a packages_list.txt apt install -y
 git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kästner"
 cd /home/pi && rm -r /home/pi/aRadio
 cd /home/pi && git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/aRadio
+cd /home/pi && git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer
+cd /home/pi/tboplayer && ./setup.sh
 #
 cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
 cd /home/pi/aRadio && git fetch --all >/dev/null && git reset --hard origin/master >/dev/null && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
