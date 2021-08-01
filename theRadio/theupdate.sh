@@ -121,6 +121,9 @@ alias mswr3='mplayer -quiet -cache 100 http://swr-swr3-live.cast.addradio.de/swr
 alias mrbb='mplayer -quiet -cache 100 http://rbb-fritz-live.cast.addradio.de/rbb/fritz/live/mp3/128/stream.mp3'
 xset s off > /dev/null 2>&1
 EOF
+source ~/.bashrc
+dos2unix ~/.bashrc
+sudo apt-get install dos2unix
 
 #maybe
 #sudo apt-get install -y pi-bluetooth bluetooth bluez blueman
