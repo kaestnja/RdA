@@ -1,6 +1,6 @@
 version=160
 swr1 bw|https://liveradio.swr.de/sw282p3/swr1bw/play.mp3
-DASDING|http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3
+DASDING|https://liveradio.swr.de/sw282p3/dasding/play.mp3
 swr3|https://liveradio.swr.de/sw282p3/swr3/play.mp3
 energy|http://nrj.de/stuttgart
 rbb|http://rbb-fritz-live.cast.addradio.de/rbb/fritz/live/mp3/128/stream.mp3
