@@ -9,7 +9,7 @@ sudo dpkg-reconfigure openssh-server
 
 #on boot ssh anlegen mit Powershell unter Windows
 #------------------------------------------------------------
-echo "nothing" > f:\ssh
+echo "nothing" > d:\ssh
 echo 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=DE
@@ -30,7 +30,7 @@ network={
   key_mgmt=WPA-PSK
   priority=2
   id_str="Voelkersbach"
-}' > f:\wpa_supplicant.conf
+}' > d:\wpa_supplicant.conf
 #------------------------------------------------------------
 ssh-keyscan -t rsa pi4radio1
 ssh -o HostKeyAlias=pi4radio1 pi@pi4radio1
@@ -96,9 +96,9 @@ sudo python3 -m pip install --upgrade rpi-gpio
 
 sudo cat <<EOF >> $HOME/.bashrc
 
-PATH="${PATH}:$HOME/aRadio/theRadio:$HOME/.local/bin:/usr/local/lib/python3.7:/usr/local/lib/python3.7/dist-packages"
+PATH="${PATH}:$HOME/aRadio/theRadio:$HOME/.local/bin:/usr/local/lib/python3.9:/usr/local/lib/python3.9/dist-packages"
 export PATH
-PYTHONPATH="${PYTHONPATH}:$HOME/aRadio/theRadio:$HOME/.local/bin:/usr/local/lib/python3.7:/usr/local/lib/python3.7/dist-packages"
+PYTHONPATH="${PYTHONPATH}:$HOME/aRadio/theRadio:$HOME/.local/bin:/usr/local/lib/python3.9:/usr/local/lib/python3.9/dist-packages"
 export PYTHONPATH
 
 ## PiSDR Variables
@@ -111,19 +111,33 @@ alias reboot='sudo pkill -f python* && sudo chmod -R 6777 /home && sudo chmod -R
 alias updategit='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio && /home/pi/aRadio/GitRepoUpdateTimestamp.sh'
 alias updatetbo='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer && /home/pi/tboplayer/setup.sh'
 alias update='sudo pkill -f python && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/ && sudo apt --fix-broken install && sudo apt-get install --fix-missing && sudo apt-get update -y && sudo apt-get upgrade -y --force-yes && sudo apt-get clean -y --force-yes && sudo apt-get dist-upgrade -y --force-yes && sudo apt-get autoremove -y --force-yes && sudo apt-get autoclean -y --force-yes && rm /home/pi/.cache/lxsession/LXDE-pi/run.log && sudo reboot'
-alias swr1bw='omxplayer -o local http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+alias swr1bw='omxplayer -o local https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
 alias dasding='omxplayer -o local http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3'
-alias swr3='omxplayer -o local http://swr-swr3-live.cast.addradio.de/swr/swr3/live/mp3/128/stream.mp3'
+alias swr3='omxplayer -o local https://liveradio.swr.de/sw282p3/swr3/play.mp3'
 alias rbb='omxplayer -o local http://rbb-fritz-live.cast.addradio.de/rbb/fritz/live/mp3/128/stream.mp3'
-alias mswr1bw='mplayer -quiet -cache 100 http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+alias mswr1bw='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
 alias mdasding='mplayer -quiet -cache 100 http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3'
-alias mswr3='mplayer -quiet -cache 100 http://swr-swr3-live.cast.addradio.de/swr/swr3/live/mp3/128/stream.mp3'
+alias mswr3='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr3/play.mp3'
 alias mrbb='mplayer -quiet -cache 100 http://rbb-fritz-live.cast.addradio.de/rbb/fritz/live/mp3/128/stream.mp3'
 xset s off > /dev/null 2>&1
 EOF
 source ~/.bashrc
 dos2unix ~/.bashrc
 sudo apt-get install dos2unix
+
+#maybe, to get omxplayer back:
+sudo su
+cd /usr/lib/arm-linux-gnueabihf
+ln -s libmmal_core.so.0 libmmal_core.so
+ln -s libmmal_util.so.0 libmmal_util.so
+ln -s libmmal_vc_client.so.0 libmmal_vc_client.so
+ln -s libbcm_host.so.0 libbcm_host.so
+ln -s libvcsm.so.0 libvcsm.so
+ln -s libvchiq_arm.so.0 libvchiq_arm.so
+ln -s libvcos.so.0 libvcos.so
+curl -sSfLO 'https://raw.githubusercontent.com/raspberrypi/firmware/master/opt/vc/lib/libbrcmEGL.so'
+curl -sSfLO 'https://raw.githubusercontent.com/raspberrypi/firmware/master/opt/vc/lib/libbrcmGLESv2.so'
+curl -sSfLO 'https://raw.githubusercontent.com/raspberrypi/firmware/master/opt/vc/lib/libopenmaxil.so'
 
 #maybe
 #sudo apt-get install -y pi-bluetooth bluetooth bluez blueman
