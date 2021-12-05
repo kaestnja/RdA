@@ -14,7 +14,6 @@ ptvsd
 pyocr
 pysftp
 PyYAML
-RPi
 RPIO
 smbus
 PyGObject
@@ -22,3 +21,4 @@ gpiozero
 matplotlib
 pyaudio
 omxplayer-wrapper
+RPi
