@@ -8,7 +8,7 @@ crontab -e
 sudo python3 ./dcf77-reader-DF.py
 sudo python3 /home/pi/aRadio/theRadio/dcf77-reader-DF.py
 sudo python3 /home/pi/aRadio/theRadio/aClock/Clock.py
-git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git"
+git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git"
 cd /home/pi/aRadio && git pull && sudo python3 /home/pi/aRadio/theRadio/dcf77-reader-DF.py
 
     for windows:

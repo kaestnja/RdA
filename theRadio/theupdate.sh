@@ -459,17 +459,17 @@ sudo xargs -a packages_list.txt apt install -y
 
 git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kästner"
 cd /home/pi && rm -r /home/pi/aRadio
-cd /home/pi && git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/aRadio
-cd /home/pi && git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer
+cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/aRadio
+cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer
 cd /home/pi/tboplayer && ./setup.sh
 #
-cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
+cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
 cd /home/pi/aRadio && git fetch --all >/dev/null && git reset --hard origin/master >/dev/null && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
 
 cd /home/pi/aRadio/theRadio/fonts && sudo cp -r /home/pi/aRadio/theRadio/fonts/ /usr/local/share/
 
 
-cd /home/pi && git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/adafruit/Pi_Eyes.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/Pi_Eyes
+cd /home/pi && git clone "https://kaestnja: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@github.com/adafruit/Pi_Eyes.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/Pi_Eyes
 
 
 ## to prepare to generate requirements.txt, if not already there:
@@ -570,9 +570,9 @@ tboplayer.cfg
 # https://github.com/marcogrecopriolo/guglielmo
 sudo apt-get install -y libsndfile-dev libsamplerate-dev libfaad-dev
 cd /home/pi && rm -r /home/pi/guglielmo
-cd /home/pi && git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/marcogrecopriolo/guglielmo.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/guglielmo
+cd /home/pi && git clone "https://kaestnja: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@github.com/marcogrecopriolo/guglielmo.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/guglielmo
 #
-cd /home/pi/guglielmo && git config credential.helper store >/dev/null && git fetch "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/marcogrecopriolo/guglielmo.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/guglielmo
+cd /home/pi/guglielmo && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/marcogrecopriolo/guglielmo.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/guglielmo
 cd /home/pi/guglielmo && git fetch --all >/dev/null && git reset --hard origin/master >/dev/null && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/guglielmo
 cd ~ && cd guglielmo/
 mkdir build
@@ -739,13 +739,13 @@ cd x86/
 # add at /home/pi/.bashrc :
 #alias reboot='sudo pkill -f python* && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/* && sudo reboot'
 #alias update='sudo pkill -f python && pyclean . && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/ && sudo apt --fix-broken install && sudo apt-get install --fix-missing && sudo apt-get update -y && sudo apt-get upgrade -y --force-yes && sudo apt-get clean -y --force-yes && sudo apt-get dist-upgrade -y --force-yes && sudo apt-get autoremove -y --force-yes && sudo apt-get autoclean -y --force-yes && sudo rpi-update && sudo reboot'
-#alias swr1bw='omxplayer -o local http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+#alias swr1bw='omxplayer -o local https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
 #alias dasding='omxplayer -o local http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3'
-#alias swr3='omxplayer -o local http://swr-swr3-live.cast.addradio.de/swr/swr3/live/mp3/128/stream.mp3'
+#alias swr3='omxplayer -o local https://liveradio.swr.de/sw282p3/swr3/play.mp3'
 #alias rbb='omxplayer -o local http://rbb-fritz-live.cast.addradio.de/rbb/fritz/live/mp3/128/stream.mp3'
-#alias mswr1bw='mplayer -quiet -cache 100 http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+#alias mswr1bw='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
 #alias mdasding='mplayer -quiet -cache 100 http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3'
-#alias mswr3='mplayer -quiet -cache 100 http://swr-swr3-live.cast.addradio.de/swr/swr3/live/mp3/128/stream.mp3'
+#alias mswr3='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr3/play.mp3'
 #alias mrbb='mplayer -quiet -cache 100 http://rbb-fritz-live.cast.addradio.de/rbb/fritz/live/mp3/128/stream.mp3'
 #xset s off > /dev/null 2>&1
 

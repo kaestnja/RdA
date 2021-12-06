@@ -32,13 +32,13 @@ sudo apt install python3-numpy
 sudo apt install python3-scipy
 
 #Read hardware clock and print result 
-sudo hwclock -r  
+sudo hwclock -r ï¿½
  
 #Set the system time from the hardware clock 
-sudo hwclock -s  
+sudo hwclock -s ï¿½
  
 #Set the hardware clock from the current system time 
-sudo hwclock -w  
+sudo hwclock -w ï¿½
  
 #More usage  
 hwclock --help
@@ -46,7 +46,7 @@ hwclock --help
 #https://pypi.org/project/rpi_TM1638/
 
 
-git clone "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git"
+git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git"
 cd /home/pi/aRadio && git pull && sudo python3 /home/pi/aRadio/theRadio/dcf77-reader-DF.py
 
 cd ~

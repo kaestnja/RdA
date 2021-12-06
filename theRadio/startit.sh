@@ -2,7 +2,7 @@
 # coding=utf-8
 
 # git config --global core.autocrlf input
-# cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja:bc2de507d138f286dc7c9c94f9c41c41a7637b70@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
+# cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
 # cd /home/pi/aRadio && git config credential.helper store && git fetch --all >/dev/null && git reset --hard origin/master >/dev/null && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
 
 DISPLAY=:0.0; export DISPLAY;
