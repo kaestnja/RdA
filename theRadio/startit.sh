@@ -26,8 +26,8 @@ fi
 
 if [[ $(hostname) = "pi4radio1" ]]; then
     echo "pi4radio1 identified";
-    omxplayer -o hdmi "/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4";
-    python3 /home/pi/aRadio/theRadio/anneradio.py;
+    #omxplayer -o hdmi "/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4";
+    #python3 /home/pi/aRadio/theRadio/anneradio.py;
     #python3 /home/pi/aRadio/theRadio/janradio.py;
     #python3 /home/pi/aRadio/theRadio/KY040/examples/python3.py;
 fi
