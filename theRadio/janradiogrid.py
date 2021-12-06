@@ -32,7 +32,7 @@ r"""
      omxplayer -o hdmi '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 992 720'
      omxplayer -o hdmi '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 496 360'
      omxplayer -o hdmi '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 248 180'
-     omxplayer -o hdmi 'http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+     omxplayer -o hdmi 'https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
      DISPLAY=:0 /usr/bin/lxterminal -e /usr/bin/omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
      DISPLAY=:0 /usr/bin/lxterminal -e /usr/bin/omxplayer -o local '/home/pi/Music/Asaf Avidan - One Day Live @ Sziget 2015.mp3'
      @xterm -fn fixed /usr/bin/omxplayer '/home/pi/aRadio/theRadio/bImages/aRadioPicture_Text.mp4'
@@ -290,8 +290,8 @@ class Sample_Class(object):
             if sys.platform == "win32" and 0 == 1 :
                 try:
                     #os.system('start wmplayer "' + radio_station + '"')
-                    #start /D /min wmplayer "http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3"
-                    #start /D C:\Programme\Windows%Media%Player /min wmplayer.exe "http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3"
+                    #start /D /min wmplayer "https://liveradio.swr.de/sw282p3/swr1bw/play.mp3"
+                    #start /D C:\Programme\Windows%Media%Player /min wmplayer.exe "https://liveradio.swr.de/sw282p3/swr1bw/play.mp3"
                     #os.system('start /D /min wmplayer "' + radio_station + '"')
                     #os.system('start /D /min wmplayer "' + radio_station + '" /SkipFUE /RemoteOCXLaunch')
                     #os.system('start wmplayer /SkipFUE /RemoteOCXLaunch "' + radio_station + '"')
@@ -299,16 +299,16 @@ class Sample_Class(object):
 
                     #Import WMPLib # reference Com, Windows Media Player C:\Windows\System32\wmp.dll
                     #  then change the uiMode property to "none".  wmp.Visible=0
-                    #AxWindowsMediaPlayer.URL = "http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3"
+                    #AxWindowsMediaPlayer.URL = "https://liveradio.swr.de/sw282p3/swr1bw/play.mp3"
                     #axWindowsMediaPlayer1.Ctlcontrols.stop();
 
                     #mp.Visible=0
                     #tune = mp.newMedia("C:/Program Files/Common Files/HP/Memories Disc/2.0/audio/Swing.mp3")
                     #tune = mp.newMedia("C:/WINDOWS/system32/oobe/images/title.wma")
         #            tune = mp.newMedia(str(radio_station))
-                    #tune = mp.newMedia("http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3")
+                    #tune = mp.newMedia("https://liveradio.swr.de/sw282p3/swr1bw/play.mp3")
         #            mp.currentPlaylist.appendItem(tune)
-                    #mp.URL = "http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3"
+                    #mp.URL = "https://liveradio.swr.de/sw282p3/swr1bw/play.mp3"
                     MediaPath = os.path.join(os.path.join(sys.path[0],'bImages'), 'aRadioPicture_Text.mp4')
                     os.system('start MPLAYER2 /play /close "' + MediaPath + '"')
                     #tune = mp.newMedia(str(MediaPath.replace('//','/')))
@@ -1028,11 +1028,11 @@ class Sample_Class(object):
                 if player_touse == 'mplayer':
                     os.system('mplayer -quiet -cache 100 ' + radio_station + ' &')
                     #omxc = subprocess.Popen('mplayer -quiet -cache 100 ' + dicsenders.get(list_value) + ' &')
-                    #mswr1bw='mplayer -quiet -cache 100 http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
-                    #swr1bw='omxplayer -o local http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+                    #mswr1bw='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
+                    #swr1bw='omxplayer -o local https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
                     #omxplayer --win '100 100 500 500'
                     #https://github.com/cmus/cmus/wiki/status-display-programs
-                    #'cmus http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+                    #'cmus https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
                     #https://opensource.com/life/16/8/3-command-line-music-players-linux
                 if 0==1:
                     ps = subprocess.Popen(['omxplayer', '-o','local', radio_station], shell=True, stdout=subprocess.PIPE)
@@ -1043,8 +1043,8 @@ class Sample_Class(object):
             else:
                 try:
                     #os.system('start wmplayer "' + radio_station + '"')
-                    #start /D /min wmplayer "http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3"
-                    #start /D C:\Programme\Windows%Media%Player /min wmplayer.exe "http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3"
+                    #start /D /min wmplayer "https://liveradio.swr.de/sw282p3/swr1bw/play.mp3"
+                    #start /D C:\Programme\Windows%Media%Player /min wmplayer.exe "https://liveradio.swr.de/sw282p3/swr1bw/play.mp3"
                     #os.system('start /D /min wmplayer "' + radio_station + '"')
                     #os.system('start /D /min wmplayer "' + radio_station + '" /SkipFUE /RemoteOCXLaunch')
                     #os.system('start wmplayer /SkipFUE /RemoteOCXLaunch "' + radio_station + '"')
@@ -1052,16 +1052,16 @@ class Sample_Class(object):
 
                     #Import WMPLib # reference Com, Windows Media Player C:\Windows\System32\wmp.dll
                     #  then change the uiMode property to "none".  wmp.Visible=0
-                    #AxWindowsMediaPlayer.URL = "http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3"
+                    #AxWindowsMediaPlayer.URL = "https://liveradio.swr.de/sw282p3/swr1bw/play.mp3"
                     #axWindowsMediaPlayer1.Ctlcontrols.stop();
 
                     #mp.Visible=0
                     #tune = mp.newMedia("C:/Program Files/Common Files/HP/Memories Disc/2.0/audio/Swing.mp3")
                     #tune = mp.newMedia("C:/WINDOWS/system32/oobe/images/title.wma")
         #            tune = mp.newMedia(str(radio_station))
-                    #tune = mp.newMedia("http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3")
+                    #tune = mp.newMedia("https://liveradio.swr.de/sw282p3/swr1bw/play.mp3")
         #            mp.currentPlaylist.appendItem(tune)
-                    #mp.URL = "http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3"
+                    #mp.URL = "https://liveradio.swr.de/sw282p3/swr1bw/play.mp3"
                     mp.URL = str(radio_station)
                     mp.controls.play()
                     return True

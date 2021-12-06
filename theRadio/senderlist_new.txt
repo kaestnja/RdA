@@ -1,4 +1,4 @@
-swr1bw    http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3
+swr1bw    https://liveradio.swr.de/sw282p3/swr1bw/play.mp3
 dasding    https://liveradio.swr.de/sw282p3/dasding/play.mp3
 swr3    http://swr-swr3-live.cast.addradio.de/swr/swr3/live/mp3/128/stream.mp3
 energy-bw    https://f5-pa6.nrjaudio.fm/de/33005/mp3_128.mp3

@@ -910,8 +910,8 @@ def onselect(evt):
         #dicsendersping[list_value] = do_ping(dicsendershost.get(list_value))
         if not sys.platform == "win32":
             if dicsendersping.get(list_value) == 0:
-                #mswr1bw='mplayer -quiet -cache 100 http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
-                #swr1bw='omxplayer -o local http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+                #mswr1bw='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
+                #swr1bw='omxplayer -o local https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
                 #omxplayer --win '100 100 500 500'
                 try:
                     omxc = subprocess.Popen(['omxplayer', '-o','local', dicsenders.get(list_value)])

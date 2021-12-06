@@ -67,7 +67,7 @@ import jksnixieclock as nixieclock
 # omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 992 720'
 # omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 496 360'
 # omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 248 180'
-# omxplayer -o local 'http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+# omxplayer -o local 'https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
 # omxplayer -o hdmi 'https://youtu.be/YtPSa4LTWgo'
 # DISPLAY=:0 /usr/bin/lxterminal -e mplayer '/mnt/c/Users/janka_cg1/Dropbox/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
 # DISPLAY=:0 /usr/bin/lxterm -e mplayer '/mnt/c/Users/janka_cg1/Dropbox/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
@@ -250,13 +250,13 @@ def process_start_radio(radio_station):
                 os.system('mplayer -quiet -cache 100 ' + radio_station + ' &')
                 return True
                 #omxc = subprocess.Popen('mplayer -quiet -cache 100 ' + dicsenders.get(list_value) + ' &')
-                #mswr1bw='mplayer -quiet -cache 100 http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
-                #swr1bw='omxplayer -o local http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
-                #swr1bw='omxplayer -o hdmi http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+                #mswr1bw='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
+                #swr1bw='omxplayer -o local https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
+                #swr1bw='omxplayer -o hdmi https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
                 #omxplayer --win '100 100 500 500'
                 #vcgencmd display_power 1
                 #https://github.com/cmus/cmus/wiki/status-display-programs
-                #'cmus http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/128/stream.mp3'
+                #'cmus https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
                 #https://opensource.com/life/16/8/3-command-line-music-players-linux
             except:
                 traceback.print_exc()
