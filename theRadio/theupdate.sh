@@ -31,6 +31,8 @@ network={
   priority=2
   id_str="Voelkersbach"
 }' > d:\wpa_supplicant.conf
+
+sudo dhclient -v
 #------------------------------------------------------------
 ssh-keyscan -t rsa pi4radio1
 ssh -o HostKeyAlias=pi4radio1 pi@pi4radio1
