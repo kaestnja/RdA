@@ -26,6 +26,7 @@ fi
 
 if [[ $(hostname) = "pi4radio1" ]]; then
     echo "pi4radio1 identified";
+    sudo dhclient -v
     omxplayer -o hdmi "/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4";
     #python3 /home/pi/aRadio/theRadio/anneradio.py;
     python3 /home/pi/aRadio/theRadio/janradio.py;
