@@ -68,7 +68,9 @@ import jksnixieclock as nixieclock
 # omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 496 360'
 # omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 248 180'
 # omxplayer -o local 'https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
+# omxplayer -o alsa:hw:0,0 'https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
 # omxplayer -o hdmi 'https://youtu.be/YtPSa4LTWgo'
+# omxplayer -o alsa:hw:0,0 'https://youtu.be/YtPSa4LTWgo'
 # DISPLAY=:0 /usr/bin/lxterminal -e mplayer '/mnt/c/Users/janka_cg1/Dropbox/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
 # DISPLAY=:0 /usr/bin/lxterm -e mplayer '/mnt/c/Users/janka_cg1/Dropbox/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
 # DISPLAY=:0 /usr/bin/lxterminal -e /usr/bin/omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
@@ -256,8 +258,9 @@ def process_start_radio(radio_station):
     if not sys.platform == "win32":
         try:
             #omxc = subprocess.Popen(['omxplayer', '-o','hdmi', radio_station,'&'])
+            omxc_string = 'omxplayer'  '-o', sound_out_type, radio_station,'&'
+            print ('omxplayer -o %s %s' % sound_out_type, radio_station)
             omxc = subprocess.Popen(['omxplayer', '-o', sound_out_type, radio_station,'&'])
-
             hdmic = subprocess.Popen(['vcgencmd', 'display_power', '1','&'])
             return True
         except:
