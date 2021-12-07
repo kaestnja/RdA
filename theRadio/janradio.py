@@ -109,6 +109,7 @@ if os.environ.get('DISPLAY','') == '':
     os.environ.__setitem__('DISPLAY', ':0.0')
 
 if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
+    #https://www.tinkerboy.xyz/raspberry-pi-test-sound-output/
     #check (usb)sound devices:
     #cat /proc/asound/modules
     #  0 snd_bcm2835
@@ -122,6 +123,10 @@ if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
     #sound_out_type = 'hdmi' second use, inside case with screen
     #sound_out_type = 'alsa:hw:1,0' #maybe 3.5 jack
     sound_out_type = 'alsa:hw:0,0' #maybe hdmi
+    
+    #https://support.thepihut.com/hc/en-us/articles/360010336738-No-sound-output-with-my-Raspberry-Pi-4
+    #https://projects-raspberry.com/getting-audio-out-working-on-the-raspberry-pi/
+    #https://www.instructables.com/Test-Sound-Card-and-Speakers-in-Raspberry-Pi/
 
 try:
     # Check and import real RPi.GPIO library
