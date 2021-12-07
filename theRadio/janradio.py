@@ -109,6 +109,15 @@ if os.environ.get('DISPLAY','') == '':
     os.environ.__setitem__('DISPLAY', ':0.0')
 
 if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
+    #check (usb)sound devices:
+    #cat /proc/asound/modules
+    #  0 snd_bcm2835
+    #  1 snd_usb_audio
+    #  the first number ist the device number used as "N" here:
+    #speaker-test -c2 -twav -l7 -D plughw:N,0
+    #  similar to 
+    #omxplayer example.mp3 -o alsa:hw:N,0
+    
     #sound_out_type = 'local' first use, 3.5 jack
     #sound_out_type = 'hdmi' second use, inside case with screen
     #sound_out_type = 'alsa:hw:1,0' #maybe 3.5 jack
