@@ -109,8 +109,10 @@ if os.environ.get('DISPLAY','') == '':
     os.environ.__setitem__('DISPLAY', ':0.0')
 
 if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
-    #sound_out_type = 'hdmi'
-    sound_out_type = 'alsa:hw:1,0'
+    #sound_out_type = 'local' first use, 3.5 jack
+    #sound_out_type = 'hdmi' second use, inside case with screen
+    #sound_out_type = 'alsa:hw:1,0' #maybe 3.5 jack
+    sound_out_type = 'alsa:hw:0,0' #maybe hdmi
 
 try:
     # Check and import real RPi.GPIO library
@@ -255,7 +257,7 @@ def process_start_radio(radio_station):
                 #swr1bw='omxplayer -o local https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
                 #swr1bw='omxplayer -o hdmi https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
                 #'omxplayer https://liveradio.swr.de/sw282p3/swr1bw/play.mp3 -o alsa:hw:0,0
-                #'omxplayer https://liveradio.swr.de/sw282p3/swr1bw/play.mp3 -o alsa:hw:1,0 #maybe not not with hdmi,
+                #'omxplayer https://liveradio.swr.de/sw282p3/swr1bw/play.mp3 -o alsa:hw:1,0
                 #omxplayer --win '100 100 500 500'
                 #vcgencmd display_power 1
                 #https://github.com/cmus/cmus/wiki/status-display-programs
