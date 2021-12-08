@@ -60,21 +60,8 @@ import jksmeterva as meterva
 import jksnixieclock as nixieclock
 
 #sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1
-#"omxplayer -o local /home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4"
-# omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
-# omxplayer -o local '/home/pi/aRadio/theRadio/bImages/Electronics_At_Work_1943_Part_3.mp4' --win '0 0 248 180' --no-osd
-# omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '0 0 800 480'
-# omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 992 720'
-# omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 496 360'
-# omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4' --win '100 100 248 180'
-# omxplayer -o local 'https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
-# omxplayer -o alsa:hw:0,0 'https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
-# omxplayer -o hdmi 'https://youtu.be/YtPSa4LTWgo'
-# omxplayer -o alsa:hw:0,0 'https://youtu.be/YtPSa4LTWgo'
-# DISPLAY=:0 /usr/bin/lxterminal -e mplayer '/mnt/c/Users/janka_cg1/Dropbox/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
-# DISPLAY=:0 /usr/bin/lxterm -e mplayer '/mnt/c/Users/janka_cg1/Dropbox/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
-# DISPLAY=:0 /usr/bin/lxterminal -e /usr/bin/omxplayer -o local '/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
-# DISPLAY=:0 /usr/bin/lxterminal -e /usr/bin/omxplayer -o local '/home/pi/Music/Asaf Avidan - One Day Live @ Sziget 2015.mp3'
+
+
 global the_hostname
 the_hostname = socket.gethostname()
 global sound_exist
@@ -111,25 +98,11 @@ if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
     os.environ.__setitem__('DISPLAY', ':0.0')
 
-if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
-    #https://www.tinkerboy.xyz/raspberry-pi-test-sound-output/
-    #check (usb)sound devices:
-    #cat /proc/asound/modules
-    #  0 snd_bcm2835
-    #  1 snd_usb_audio
-    #  the first number ist the device number used as "N" here:
-    #speaker-test -c2 -twav -l7 -D plughw:N,0
-    #  similar to 
-    #omxplayer example.mp3 -o alsa:hw:N,0
-    
+if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname or 'pi4radio3' in the_hostname):
     #sound_out_type = 'local' first use, 3.5 jack
     #sound_out_type = 'hdmi' second use, inside case with screen
     #sound_out_type = 'alsa:hw:1,0' #maybe 3.5 jack
     sound_out_type = 'alsa:hw:0,0' #maybe hdmi
-    
-    #https://support.thepihut.com/hc/en-us/articles/360010336738-No-sound-output-with-my-Raspberry-Pi-4
-    #https://projects-raspberry.com/getting-audio-out-working-on-the-raspberry-pi/
-    #https://www.instructables.com/Test-Sound-Card-and-Speakers-in-Raspberry-Pi/
 
 try:
     # Check and import real RPi.GPIO library
