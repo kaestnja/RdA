@@ -80,7 +80,8 @@ the_hostname = socket.gethostname()
 global sound_exist
 sound_exist = 0
 global sound_out_type
-sound_out_type = 'local'
+#sound_out_type = 'local'
+sound_out_type = 'alsa:hw:0,0'
 global gpio_exist
 gpio_exist = 0
 global printredirect
