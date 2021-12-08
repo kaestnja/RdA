@@ -24,9 +24,17 @@ else
     echo "neither pi4radio1 nor rpi3 identified";
 fi
 
-if [[ $(hostname) = "pi4radio1" ]]; then
+if [[ $(hostname) = "pi4radio1" ]] || [[ $(hostname) == "pi4radio2" ]] || [[ $(hostname) == "pi4radio3" ]]; then
     echo "pi4radio1 identified";
-    sudo dhclient -v
+    sudo dhclient -v;
+    omxplayer -o alsa:hw:0,0 "/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4";
+    #python3 /home/pi/aRadio/theRadio/anneradio.py;
+    python3 /home/pi/aRadio/theRadio/janradio.py;
+    #python3 /home/pi/aRadio/theRadio/KY040/examples/python3.py;
+fi
+if [[ $(hostname) = "pi3radio2" ]]; then
+    echo "pi4radio1 identified";
+    sudo dhclient -v;
     omxplayer -o hdmi "/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4";
     #python3 /home/pi/aRadio/theRadio/anneradio.py;
     python3 /home/pi/aRadio/theRadio/janradio.py;
