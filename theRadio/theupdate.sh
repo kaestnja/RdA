@@ -411,6 +411,35 @@ sudo cat <<EOF > /etc/xdg/lxsession/LXDE-pi/autostart
 @/home/pi/aRadio/theRadio/startit.sh
 EOF
 
+sudo cat <<EOF > /etc/xdg/lxsession/LXDE-pi/autostart
+#@xscreensaver -no-splash
+#@xset s 0 0
+@xset s off
+@xset -dpms
+@xset s noblank
+#@xset s noexpose
+#@xset dpms 0 0 0
+#@unclutter -display :0 -idle 3 -root -noevents
+@unclutter -idle 0.1
+#@omxplayer -o hdmi "/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4"
+#/home/pi/SDRplay/EASYplay.py
+#/home/pi/aRadio/theRadio/janradio.py
+#/home/pi/aRadio/theRadio/anneradio.py
+#point-rpi
+#@python3.6 /home/pi/aRadio/theRadio/jksnixieclock.py
+#@python3 /home/pi/dcf77-reader-DF.py
+#@python3 /home/pi/readClock.py -r 2000
+#@python3 /home/pi/aRadio/theRadio/anneradio.py
+#@sh /home/pi/aRadio/theRadio/startit.sh
+#@lxterminal --command "/home/pi/aRadio/theRadio/startit.sh"
+#@lxterminal -e "/home/pi/aRadio/theRadio/startit.sh"
+#@lxterminal -e "python3 /home/pi/readClock.py -r 2000"
+#@bash /home/pi/.local/bin/yt
+#python3 /mnt/c/Users/theOperator/Dropbox/aRadio/theRadio/janradio.py
+#export DISPLAY=:0 && python3 /mnt/c/Users/theOperator/Dropbox/aRadio/theRadio/janradio.py
+@/home/pi/aRadio/theRadio/startit.sh
+EOF
+
 # Install the VS remote debugger on your Pi by running this command:
 curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
 # To debug you will need to run the program as root, so we'll need to be able to remote launch the program as root as well.
