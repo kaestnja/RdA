@@ -74,6 +74,8 @@ omxplayer -o hdmi 'https://youtu.be/YtPSa4LTWgo'
 omxplayer -o alsa:hw:0,0 'https://youtu.be/YtPSa4LTWgo'
 
 if missing, do "update", if thats failing, do "sudo apt full-upgrade" and "sudo apt dist-upgrade" and "sudo rpi-update"
+sudo apt update && sudo apt install --reinstall omxplayer -y
+sudo apt update && sudo apt install --reinstall vlc -y
 
 ### display
 
