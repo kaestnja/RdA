@@ -73,7 +73,7 @@ omxplayer -o alsa:hw:0,0 'https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
 omxplayer -o hdmi 'https://youtu.be/YtPSa4LTWgo'
 omxplayer -o alsa:hw:0,0 'https://youtu.be/YtPSa4LTWgo'
 
-if missing, do "update", if thats failing, do "sudo apt full-upgrade" and "sudo apt dist-upgrade"
+if missing, do "update", if thats failing, do "sudo apt full-upgrade" and "sudo apt dist-upgrade" and "sudo rpi-update"
 
 ### display
 
