@@ -73,6 +73,8 @@ omxplayer -o alsa:hw:0,0 'https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
 omxplayer -o hdmi 'https://youtu.be/YtPSa4LTWgo'
 omxplayer -o alsa:hw:0,0 'https://youtu.be/YtPSa4LTWgo'
 
+if missing, do "update", if thats failing, do "sudo apt full-upgrade" and "sudo apt dist-upgrade"
+
 ### display
 
  DISPLAY=:0 /usr/bin/lxterminal -e mplayer '/mnt/c/Users/janka_cg1/Dropbox/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
