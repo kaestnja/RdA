@@ -61,6 +61,10 @@ import jksnixieclock as nixieclock
 
 #sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1
 
+#https://github.com/popcornmix/omxplayer/issues/716
+#from omxplayer.player import OMXPlayer
+#player0 = OMXPlayer('videos/video0.mp4', dbus_name='org.mpris.MediaPlayer2.omxplayer1', args=['--no-osd','--no-keys','-b','--loop','--display=2','-o','local'])
+#player1 = OMXPlayer('videos/video1.mp4', dbus_name='org.mpris.MediaPlayer2.omxplayer2', args=['--no-osd','--no-keys','-b','--loop','--display=7',])
 
 global the_hostname
 the_hostname = socket.gethostname()
