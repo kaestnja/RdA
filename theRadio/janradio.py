@@ -234,7 +234,7 @@ def process_start_radio(radio_station):
             #omxc = subprocess.Popen(['omxplayer', '-o','hdmi', radio_station,'&'])
             #print ('omxplayer -o %s %s' % str(sound_out_type) % str(radio_station))
             print ('omxplayer', '-o', str(sound_out_type), str(radio_station))
-            omxc = subprocess.Popen(['omxplayer', '-o', sound_out_type, radio_station,'&'])
+            omxc = subprocess.Popen(['omxplayer', '-o', sound_out_type, radio_station,'&'])  #--no-osd
             hdmic = subprocess.Popen(['vcgencmd', 'display_power', '1','&'])
             return True
         except:
