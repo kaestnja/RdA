@@ -61,10 +61,21 @@ import jksnixieclock as nixieclock
 
 #sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1
 
-#https://github.com/popcornmix/omxplayer/issues/716
+###https://github.com/popcornmix/omxplayer/issues/716
 #from omxplayer.player import OMXPlayer
 #player0 = OMXPlayer('videos/video0.mp4', dbus_name='org.mpris.MediaPlayer2.omxplayer1', args=['--no-osd','--no-keys','-b','--loop','--display=2','-o','local'])
 #player1 = OMXPlayer('videos/video1.mp4', dbus_name='org.mpris.MediaPlayer2.omxplayer2', args=['--no-osd','--no-keys','-b','--loop','--display=7',])
+##Use the video on screen 1 as a "Master" and the screen 2 as a slave , and adjust slightly the playing rate of the slave according to the master's position.
+##Something like :
+#pos1=videoplayer1.position()
+#pos2=videoplayer2.position()
+#offset =abs(pos1-pos2).
+#if(offset>1): #more than 1 second offset, direct jump to correct position
+#    videoplayer2.set_position(pos1)
+#else : #small offset, adjust player 2 rate
+#desiredRate=(pos1-pos2)*0.9+1.0
+#videoplayer2.set_rate(desiredRate)
+
 
 global the_hostname
 the_hostname = socket.gethostname()
