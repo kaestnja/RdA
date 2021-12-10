@@ -76,6 +76,11 @@ omxplayer -o alsa:hw:0,0 'https://youtu.be/YtPSa4LTWgo'
 if missing, do "update", if thats failing, do "sudo apt full-upgrade" and "sudo apt dist-upgrade" and "sudo rpi-update"
 sudo apt update && sudo apt install --reinstall omxplayer -y
 sudo apt update && sudo apt install --reinstall vlc -y
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9165938D90FDDD2E
+wget https://archive.raspbian.org/raspbian.public.key -O - | sudo apt-key add -
+
+
+https://www.cyberrypi.de/blogs/raspberry-pi-blog/informationen-zum-omxplayer-befehlszeilen-mediaplayer
 
 ### display
 
