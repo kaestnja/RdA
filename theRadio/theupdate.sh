@@ -442,18 +442,12 @@ git config --system --list
 git config --local --list
 git config --global --list
 
-sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1
-cd /home/pi
-rm -fr "aRadio"
-git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kaestner"
-git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git"
-git clone "https://github.com/willprice/python-omxplayer-wrapper.git"
-cd aRadio
-git remote add origin git@github.com:kaestnja/aRadio.git
+#cd aRadio
+#git remote add origin git@github.com:kaestnja/aRadio.git
 #git config --unset-all remote.origin.fetch
-git fetch --all
-git reset --hard origin/master
-git pull -r
+#git fetch --all
+#git reset --hard origin/master
+#git pull -r
 #rm -fr ".git/rebase-apply"
 
 # exchange alle spaces in filenames for all files in a directory
@@ -468,20 +462,21 @@ Get-ChildItem -Directory | Rename-Item –NewName { $_.name –replace “ “,�
 sudo dpkg-query -f '${binary:Package}\n' -W > packages_list_$HOSTNAME.txt
 sudo xargs -a packages_list.txt apt install -y
 
-git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kästner"
+sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1
+cd /home/pi
+rm -fr "aRadio"
+git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kaestner"
 cd /home/pi && rm -r /home/pi/aRadio
 cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/aRadio
+cd /home/pi/aRadio/theRadio/fonts && sudo cp -r /home/pi/aRadio/theRadio/fonts/ /usr/local/share/
+cd /home/pi && rm -r /home/pi/tboplayer
 cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer
 cd /home/pi/tboplayer && ./setup.sh
+cd /home/pi && rm -r /home/pi/python-omxplayer-wrapper
+cd /home/pi && git clone "https://github.com/willprice/python-omxplayer-wrapper.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/python-omxplayer-wrapper
 #
 cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
 cd /home/pi/aRadio && git fetch --all >/dev/null && git reset --hard origin/master >/dev/null && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
-
-cd /home/pi/aRadio/theRadio/fonts && sudo cp -r /home/pi/aRadio/theRadio/fonts/ /usr/local/share/
-
-
-cd /home/pi && git clone "https://kaestnja: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@github.com/adafruit/Pi_Eyes.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/Pi_Eyes
-
 
 ## to prepare to generate requirements.txt, if not already there:
 # sudo pip3 install --upgrade pipreqs
@@ -498,10 +493,20 @@ cd /home/pi && git clone "https://kaestnja:ghp_HFlHWlhZhF6GSucqywts5MGG8Vorxg0bG
 # pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U
 # sudo pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 sudo pip3 install -U
 
-
 #sudo nano /home/pi/.config/lxsession/LXDE-pi/autostart
 #sudo su 
 #passwd
+
+cd /home/pi/aRadio && for r in $(cat /home/pi/aRadio/theRadio/requirements.txt | grep -v ^#); do python3 -m pip install $r; done;
+
+cd /home/pi/aRadio && for r in $(cat /home/pi/aRadio/theRadio/requirements.txt | grep -v ^#); do sudo python3 -m pip install $r; done;
+
+cd /home/pi/aRadio && for r in $(cat /home/pi/aRadio/theRadio/requirements.txt | grep -v ^#); do python3 -m pip install --upgrade $r; done;
+
+cd /home/pi/aRadio && for r in $(cat /home/pi/aRadio/theRadio/requirements.txt | grep -v ^#); do sudo python3 -m pip install --upgrade $r; done;
+
+pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U
+sudo pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 sudo pip3 install -U
 
 #sudo sed -i 's+#/home/pi/SDRplay/EASYplay.py+/home/pi/SDRplay/EASYplay.py+g' /etc/xdg/lxsession/LXDE-pi/autostart
 #sudo sed -i 's+/home/pi/aRadio/theRadio/janradio.py+#/home/pi/aRadio/theRadio/janradio.py+g' /etc/xdg/lxsession/LXDE-pi/autostart
@@ -547,21 +552,6 @@ if [ -f /etc/xdg/lxsession/LXDE-pi/sshpwd.sh ]; then
     sudo chmod +x /etc/xdg/lxsession/LXDE-pi/sshpwd.sh
   fi
 fi
-
-
-
-
-cd /home/pi/aRadio && for r in $(cat /home/pi/aRadio/theRadio/requirements.txt | grep -v ^#); do python3 -m pip install $r; done;
-
-cd /home/pi/aRadio && for r in $(cat /home/pi/aRadio/theRadio/requirements.txt | grep -v ^#); do sudo python3 -m pip install $r; done;
-
-cd /home/pi/aRadio && for r in $(cat /home/pi/aRadio/theRadio/requirements.txt | grep -v ^#); do python3 -m pip install --upgrade $r; done;
-
-cd /home/pi/aRadio && for r in $(cat /home/pi/aRadio/theRadio/requirements.txt | grep -v ^#); do sudo python3 -m pip install --upgrade $r; done;
-
-pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U
-sudo pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 sudo pip3 install -U
-
 
 
 # stream chromium
@@ -747,18 +737,6 @@ cd x86/
 #PYTHONPATH="${PYTHONPATH}:/home/pi/aRadio/theRadio:/home/pi/grove.py:/usr/local/lib/python3.5:/usr/local/lib/python3.5/site-packages"
 #export PYTHONPATH
 
-# add at /home/pi/.bashrc :
-#alias reboot='sudo pkill -f python* && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/* && sudo reboot'
-#alias update='sudo pkill -f python && pyclean . && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/ && sudo apt --fix-broken install && sudo apt-get install --fix-missing && sudo apt-get update -y && sudo apt-get upgrade -y --force-yes && sudo apt-get clean -y --force-yes && sudo apt-get dist-upgrade -y --force-yes && sudo apt-get autoremove -y --force-yes && sudo apt-get autoclean -y --force-yes && sudo rpi-update && sudo reboot'
-#alias swr1bw='omxplayer -o local https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
-#alias dasding='omxplayer -o local http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3'
-#alias swr3='omxplayer -o local https://liveradio.swr.de/sw282p3/swr3/play.mp3'
-#alias rbb='omxplayer -o local http://rbb-fritz-live.cast.addradio.de/rbb/fritz/live/mp3/128/stream.mp3'
-#alias mswr1bw='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
-#alias mdasding='mplayer -quiet -cache 100 http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3'
-#alias mswr3='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr3/play.mp3'
-#alias mrbb='mplayer -quiet -cache 100 http://rbb-fritz-live.cast.addradio.de/rbb/fritz/live/mp3/128/stream.mp3'
-#xset s off > /dev/null 2>&1
 
 # https://pi-buch.info/hdmi-ausgang-unkompliziert-ein-und-ausschalten/
 # https://www.screenly.io/blog/2017/07/02/how-to-automatically-turn-off-and-on-your-monitor-from-your-raspberry-pi/
