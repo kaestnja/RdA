@@ -84,6 +84,9 @@ sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ss
 # and adding a line that reads:
 #PermitRootLogin yes
 # reboot the pi: 
+
+sudo sed -i 's/vc4-kms-v3d/vc4-fkms-v3d/g' /boot/config.txt
+
 sudo reboot
 
 

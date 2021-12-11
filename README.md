@@ -59,6 +59,12 @@ https://support.thepihut.com/hc/en-us/articles/360010336738-No-sound-output-with
 https://projects-raspberry.com/getting-audio-out-working-on-the-raspberry-pi/
 https://www.instructables.com/Test-Sound-Card-and-Speakers-in-Raspberry-Pi/
 
+sudo apt update && sudo apt install pavucontrol 
+
+try:
+sudo sed -i 's/vc4-fkms-v3d/vc4-kms-v3d/g' /boot/config.txt
+or:
+sudo sed -i 's/vc4-kms-v3d/vc4-fkms-v3d/g' /boot/config.txt
 
 ### omxplayer
 omxplayer -o local /home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4"
@@ -83,7 +89,7 @@ wget https://archive.raspbian.org/raspbian.public.key -O - | sudo apt-key add -
 
 https://www.cyberrypi.de/blogs/raspberry-pi-blog/informationen-zum-omxplayer-befehlszeilen-mediaplayer
 
-#maybe, to get omxplayer back:
+#### maybe, to get omxplayer back:
 sudo su
 cd /usr/lib/arm-linux-gnueabihf
 ln -s libmmal_core.so.0 libmmal_core.so
