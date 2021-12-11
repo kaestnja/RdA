@@ -83,6 +83,22 @@ wget https://archive.raspbian.org/raspbian.public.key -O - | sudo apt-key add -
 
 https://www.cyberrypi.de/blogs/raspberry-pi-blog/informationen-zum-omxplayer-befehlszeilen-mediaplayer
 
+#maybe, to get omxplayer back:
+sudo su
+cd /usr/lib/arm-linux-gnueabihf
+ln -s libmmal_core.so.0 libmmal_core.so
+ln -s libmmal_util.so.0 libmmal_util.so
+ln -s libmmal_vc_client.so.0 libmmal_vc_client.so
+ln -s libbcm_host.so.0 libbcm_host.so
+ln -s libvcsm.so.0 libvcsm.so
+ln -s libvchiq_arm.so.0 libvchiq_arm.so
+ln -s libvcos.so.0 libvcos.so
+curl -sSfLO 'https://raw.githubusercontent.com/raspberrypi/firmware/master/opt/vc/lib/libbrcmEGL.so'
+curl -sSfLO 'https://raw.githubusercontent.com/raspberrypi/firmware/master/opt/vc/lib/libbrcmGLESv2.so'
+curl -sSfLO 'https://raw.githubusercontent.com/raspberrypi/firmware/master/opt/vc/lib/libopenmaxil.so'
+
+
+
 ### display
 
  DISPLAY=:0 /usr/bin/lxterminal -e mplayer '/mnt/c/Users/janka_cg1/Dropbox/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4'
