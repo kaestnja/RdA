@@ -198,7 +198,10 @@ done
 #sudo apt-get -s remove wicd
 #sudo apt-get -s remove python-wicd
 
-sudo apt-get install -y sysstat unclutter watchdog libsdl2-mixer-2.0-0
+sudo apt-get install -y sysstat unclutter watchdog
+sudo apt-get install -y libsdl2-mixer-2.0-0
+sudo apt-get install -y python3-pil python3-pil.imagetk
+
 #sudo nano /etc/default/sysstat
 #change ENABLED="false" to ENABLED="true"
 if ! sudo grep -q 'ENABLED="true"' "/etc/default/sysstat"; then
