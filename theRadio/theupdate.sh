@@ -117,7 +117,7 @@ alias updategit='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;sudo pkill -S
 alias updatetbo='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; sudo dhclient -v; cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer && /home/pi/tboplayer/setup.sh'
 alias update='sudo dhclient -v; sudo pkill -f python && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/ && sudo apt --fix-broken install && sudo apt-get install --fix-missing && sudo apt-get update -y && sudo apt-get upgrade -y --force-yes && sudo apt-get clean -y --force-yes && sudo apt-get dist-upgrade -y --force-yes && sudo apt-get autoremove -y --force-yes && sudo apt-get autoclean -y --force-yes && rm /home/pi/.cache/lxsession/LXDE-pi/run.log && sudo reboot'
 alias resetgit='git config --global --unset credential.helper; git config --local --unset credential.helper; git config --system --unset credential.helper; git config --system --list; git config --local --list; git config --global --list; sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1; cd /home/pi; rm -fr "aRadio"; git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kaestner"; git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git"'
-alias resetsound='sudo apt-get remove --purge alsa-utils*; sudo apt-get clean; sudo apt-get autoremove; sudo apt-get remove --purge alsamixer*; sudo apt-get clean; sudo apt-get autoremove; sudo apt-get update; sudo apt-get upgrade; sudo apt-get install alsa-utils; sudo apt-get install alsamixer; sudo reboot;'
+alias resetsound='sudo apt-get remove --purge alsa-utils*; sudo apt-get clean; sudo apt-get autoremove; sudo apt-get remove --purge alsamixer*; sudo apt-get clean -y; sudo apt-get autoremove -y --force-yes; sudo apt-get update -y; sudo apt-get upgrade -y --force-yes; sudo apt-get install alsa-utils; sudo apt-get install alsamixer; sudo reboot;'
 alias swr1bw='omxplayer https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
 alias dasding='omxplayer http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3'
 alias swr3='omxplayer https://liveradio.swr.de/sw282p3/swr3/play.mp3'
@@ -391,32 +391,6 @@ sudo cat <<EOF > /etc/xdg/lxsession/LXDE-pi/autostart
 #@lxpanel 2>/dev/null #to prevent filling up run.log
 @lxpanel --profile LXDE-pi
 @pcmanfm --desktop --profile LXDE-pi
-@xscreensaver -no-splash
-@xset s 0 0
-@xset s noblank
-@xset s noexpose
-@xset dpms 0 0 0
-#@unclutter -display :0 -idle 3 -root -noevents
-@unclutter -idle 0.1
-#@omxplayer -o hdmi "/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4"
-#/home/pi/SDRplay/EASYplay.py
-#/home/pi/aRadio/theRadio/janradio.py
-#/home/pi/aRadio/theRadio/anneradio.py
-#point-rpi
-#@python3.6 /home/pi/aRadio/theRadio/jksnixieclock.py
-#@python3 /home/pi/dcf77-reader-DF.py
-#@python3 /home/pi/readClock.py -r 2000
-#@python3 /home/pi/aRadio/theRadio/anneradio.py
-@sh /home/pi/aRadio/theRadio/startit.sh
-#@lxterminal --command "/home/pi/aRadio/theRadio/startit.sh"
-#@lxterminal -e "/home/pi/aRadio/theRadio/startit.sh"
-#@lxterminal -e "python3 /home/pi/readClock.py -r 2000"
-#python3 /mnt/c/Users/theOperator/Dropbox/aRadio/theRadio/janradio.py
-#export DISPLAY=:0 && python3 /mnt/c/Users/theOperator/Dropbox/aRadio/theRadio/janradio.py
-@/home/pi/aRadio/theRadio/startit.sh
-EOF
-
-sudo cat <<EOF > /etc/xdg/lxsession/LXDE-pi/autostart
 #@xscreensaver -no-splash
 #@xset s 0 0
 @xset s off
@@ -449,9 +423,7 @@ EOF
 curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
 # To debug you will need to run the program as root, so we'll need to be able to remote launch the program as root as well.
 
-
 # https://www.linkedin.com/pulse/python-remote-debugging-visual-studio-code-raspberry-pi-mircea-dogaru
-
 
 pip config set global.cache-dir false
 pip config set global.no-cache-dir false
