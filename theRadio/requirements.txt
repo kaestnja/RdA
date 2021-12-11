@@ -21,4 +21,4 @@ gpiozero
 matplotlib
 pyaudio
 omxplayer-wrapper
-RPi
+#RPi
