@@ -61,6 +61,8 @@ https://www.instructables.com/Test-Sound-Card-and-Speakers-in-Raspberry-Pi/
 
 sudo apt update && sudo apt install pavucontrol 
 
+ there's actually 3 different drivers in raspberry, kms is just the newest, before that fkms was the standard, then there's gl for older boards.
+ some people have better luck with the way fkms detects devices.
 try:
 sudo sed -i 's/vc4-fkms-v3d/vc4-kms-v3d/g' /boot/config.txt
 or:
