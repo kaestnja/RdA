@@ -474,6 +474,9 @@ cd /home/pi && git clone "https://kaestnja:ghp_HFlHWlhZhF6GSucqywts5MGG8Vorxg0bG
 cd /home/pi/tboplayer && ./setup.sh
 cd /home/pi && rm -r /home/pi/python-omxplayer-wrapper
 cd /home/pi && git clone "https://github.com/willprice/python-omxplayer-wrapper.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/python-omxplayer-wrapper
+cd /home/pi && rm -r /home/pi/schlizbaedas_Phoniebox
+cd /home/pi && git clone "https://github.com/schlizbaeda/schlizbaedas_Phoniebox.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/schlizbaedas_Phoniebox
+
 #
 cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
 cd /home/pi/aRadio && git fetch --all >/dev/null && git reset --hard origin/master >/dev/null && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
