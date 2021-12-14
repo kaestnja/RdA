@@ -112,6 +112,7 @@ export PYTHONPATH
 #export DISPLAY=0:0
 export DISPLAY=:0.0
 
+alias stoppy='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1; sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1; sudo pkill -SIGKILL -f "chromium" > /dev/null 2>&1; sudo pkill -f python* && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/* && rm /home/pi/.cache/lxsession/LXDE-pi/run.log
 alias reboot='sudo pkill -f python* && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/* && rm /home/pi/.cache/lxsession/LXDE-pi/run.log && sudo reboot'
 alias updategit='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; sudo dhclient -v; cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio && /home/pi/aRadio/GitRepoUpdateTimestamp.sh'
 alias updatetbo='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; sudo dhclient -v; cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer && /home/pi/tboplayer/setup.sh'
