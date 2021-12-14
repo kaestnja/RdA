@@ -1072,8 +1072,8 @@ def ping_gateway_task(root, trafic_stat_old,datetime_old):
     if trafic_stat_old:
         trafic_stat_show = ((((trafic_stat_now - trafic_stat_old)*8)/3)/1000)/1000 #datetime_diff.
     trafic_stat_old = trafic_stat_now
-    print ("bytes send and recieved  trafic_stat_now : %s" % str(datetime_diff)) #19953688
-    print ("bytes send and recieved  trafic_stat_now : %s" % str(int(round(trafic_stat_show)))) #847443838 
+    #print ("bytes send and recieved  trafic_stat_now : %s" % str(datetime_diff)) #19953688
+    #print ("bytes send and recieved  trafic_stat_now : %s" % str(int(round(trafic_stat_show)))) #847443838 
     #cat /sys/class/net/<ethX>/statistics
     #cat /sys/class/thermal/thermal_zone0/temp
     #cat /sys/class/net/wlan0/wireless/link
