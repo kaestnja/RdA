@@ -101,10 +101,10 @@ sudo python3 -m pip install --upgrade rpi-gpio
 
 sudo cat <<EOF >> $HOME/.bashrc
 
-PATH="${PATH}:$HOME/aRadio/theRadio:$HOME/.local/bin:/usr/local/lib/python3.9:/usr/local/lib/python3.9/dist-packages"
-export PATH
-PYTHONPATH="${PYTHONPATH}:$HOME/aRadio/theRadio:$HOME/.local/bin:/usr/local/lib/python3.9:/usr/local/lib/python3.9/dist-packages"
-export PYTHONPATH
+#PATH="${PATH}:$HOME/aRadio/theRadio:$HOME/.local/bin:/usr/local/lib/python3.9:/usr/local/lib/python3.9/dist-packages"
+#export PATH
+#PYTHONPATH="${PYTHONPATH}:$HOME/aRadio/theRadio:$HOME/.local/bin:/usr/local/lib/python3.9:/usr/local/lib/python3.9/dist-packages"
+#export PYTHONPATH
 
 ## PiSDR Variables
 #DISPLAY=:0.0
@@ -132,6 +132,11 @@ EOF
 source ~/.bashrc
 dos2unix ~/.bashrc
 sudo apt-get install dos2unix
+
+#maybe, to get omxplayer back, justonly:
+SUDO apt install -Y libgles-dev libegl-dev
+sudo ln -s /usr/lib/arm-linux-gnueabihf/libGLESv2.so /usr/lib/libbrcmGLESv2.so
+sudo ln -s /usr/lib/arm-linux-gnueabihf/libEGL.so /usr/lib/libbrcmEGL.so
 
 #maybe, to get omxplayer back:
 sudo su
