@@ -77,8 +77,8 @@ plink -ssh pi@raspberrypi -pw raspberry sudo apt-get upgrade -y && sudo apt-get 
 
 # For this, we need to first set a password for the root user in your pi, which you can do by running:
 sudo passwd root
-sudo sed -i 's/#PermitRootLogin without-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
-sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+sudo sed -i 's/#PermitRootLogin without-password/PermitRootLogin yes/g' /etc/ssh/sshd_config;
+sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config;
 # Then we need to enable ssh connections using root, by running :
 #sudo nano /etc/ssh/sshd_config
 # and adding a line that reads:

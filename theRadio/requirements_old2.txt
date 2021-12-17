@@ -19,3 +19,8 @@ RPi
 RPIO
 smbus
 wmi
+matplotlib
+PyGObject
+gpiozero
+pyaudio
+omxplayer-wrapper

@@ -1,11 +1,7 @@
 pip
 pygame
 requests
-numpy
-deepmerge
-extension
 fontTools
-kivy
 mtTkinter
 Pillow
 Pmw
@@ -17,8 +13,5 @@ PyYAML
 RPIO
 smbus
 PyGObject
-gpiozero
-matplotlib
 pyaudio
 omxplayer-wrapper
-#RPi
