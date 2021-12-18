@@ -93,11 +93,11 @@ sudo reboot
 #ln -s /usr/local/bin/python3.7 /usr/bin/python3
 #ln -s /usr/local/bin/pip3.7 /usr/bin/pip3
 
-sudo apt-get install -y python3-rpi.gpio
-pip3 install rpi-gpio
-sudo pip3 install rpi-gpio
-python3 -m pip install --upgrade rpi-gpio 
-sudo python3 -m pip install --upgrade rpi-gpio 
+sudo apt-get install -y python3-rpi.gpio;
+pip3 install rpi-gpio;
+sudo pip3 install rpi-gpio;
+python3 -m pip install --upgrade rpi-gpio;
+sudo python3 -m pip install --upgrade rpi-gpio;
 
 sudo cat <<EOF >> $HOME/.bashrc
 
@@ -139,8 +139,8 @@ sudo ln -s /usr/lib/arm-linux-gnueabihf/libGLESv2.so /usr/lib/libbrcmGLESv2.so
 sudo ln -s /usr/lib/arm-linux-gnueabihf/libEGL.so /usr/lib/libbrcmEGL.so
 
 #maybe, to get omxplayer back:
-sudo su
-cd /usr/lib/arm-linux-gnueabihf
+sudo su;
+cd /usr/lib/arm-linux-gnueabihf;
 ln -s libmmal_core.so.0 libmmal_core.so
 ln -s libmmal_util.so.0 libmmal_util.so
 ln -s libmmal_vc_client.so.0 libmmal_vc_client.so
@@ -482,6 +482,8 @@ cd /home/pi && rm -r /home/pi/python-omxplayer-wrapper
 cd /home/pi && git clone "https://github.com/willprice/python-omxplayer-wrapper.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/python-omxplayer-wrapper
 cd /home/pi && rm -r /home/pi/schlizbaedas_Phoniebox
 cd /home/pi && git clone "https://github.com/schlizbaeda/schlizbaedas_Phoniebox.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/schlizbaedas_Phoniebox
+cd /home/pi && rm -r /home/pi/pwomxplayer-support
+cd /home/pi && git clone "https://github.com/hitesh83/pwomxplayer-support.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/pwomxplayer-support
 
 #
 cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
