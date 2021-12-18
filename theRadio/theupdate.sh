@@ -485,6 +485,17 @@ cd /home/pi && git clone "https://github.com/schlizbaeda/schlizbaedas_Phoniebox.
 cd /home/pi && rm -r /home/pi/pwomxplayer-support
 cd /home/pi && git clone "https://github.com/hitesh83/pwomxplayer-support.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/pwomxplayer-support
 
+cd /home/pi && rm -r /home/pi/omxplayer
+cd /home/pi && git clone "https://github.com/popcornmix/omxplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/omxplayer
+cd /home/pi/omxplayer && ./prepare-native-raspbian.sh
+#sudo apt-get update && sudo apt-get install  git-core libasound2-dev libva1 libpcre3-dev libidn11-dev libboost-dev libdbus-1-dev libssl1.0-dev libssh-dev libsmbclient-dev
+cd /home/pi/omxplayer && ./prepare-native-raspbian.sh
+sudo apt-get update && sudo apt-get install -y git libasound2-dev libva2 libpcre3-dev libidn11-dev libboost-dev
+sudo apt-get update && sudo apt-get install -y libdbus-1-dev libssl1.0-dev libssh-dev libsmbclient-dev
+sudo apt-get install libssl1.0-dev=1.0.2q-2
+sudo apt-get update && sudo apt-get install -y libdbus-1-dev libssh-dev libsmbclient-dev
+cd /home/pi/omxplayer && ./prepare-native-raspbian.sh
+
 #
 cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
 cd /home/pi/aRadio && git fetch --all >/dev/null && git reset --hard origin/master >/dev/null && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
