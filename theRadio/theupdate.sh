@@ -495,6 +495,9 @@ sudo apt-get update && sudo apt-get install -y libdbus-1-dev libssl1.0-dev libss
 sudo apt-get install libssl1.0-dev=1.0.2q-2
 sudo apt-get update && sudo apt-get install -y libdbus-1-dev libssh-dev libsmbclient-dev
 cd /home/pi/omxplayer && ./prepare-native-raspbian.sh
+#maybe also:
+#nano /home/pi/omxplayer/prepare-native-raspbian.sh
+#find libssl1.0-dev and change to libssl-dev
 
 #
 cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
