@@ -87,3 +87,15 @@ export GOOGLE_DEFAULT_CLIENT_SECRET="your_client_secret_goes_here"
 Now launch Chromium:
 
 On Windows: Launch Chromium normally.
+
+KeyRelease event, serial 48, synthetic NO, window 0x2000001,
+    root 0x361, subw 0x0, time 36411973, (-236,116), root:(502,349),
+    state 0x0, keycode 123 (keysym 0x1008ff13, XF86AudioRaiseVolume), same_screen YES,
+    XLookupString gives 0 bytes: 
+    XFilterEvent returns: False
+
+KeyRelease event, serial 48, synthetic NO, window 0x2000001,
+    root 0x361, subw 0x0, time 36435960, (-315,-118), root:(423,115),
+    state 0x0, keycode 122 (keysym 0x1008ff11, XF86AudioLowerVolume), same_screen YES,
+    XLookupString gives 0 bytes: 
+    XFilterEvent returns: False
