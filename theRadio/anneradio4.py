@@ -91,7 +91,8 @@ player.quit()
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
     #os.environ.__setitem__('DISPLAY', ':0.0')
-# check if did not work properly, so use:os.environ['DISPLAY']=':0.0'
+# check if did not work properly, so use:
+os.environ['DISPLAY']=':0.0'
 
 
 ###########################################################################
