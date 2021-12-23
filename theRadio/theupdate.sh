@@ -484,6 +484,9 @@ cd /home/pi && rm -r /home/pi/schlizbaedas_Phoniebox
 cd /home/pi && git clone "https://github.com/schlizbaeda/schlizbaedas_Phoniebox.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/schlizbaedas_Phoniebox
 cd /home/pi && rm -r /home/pi/pwomxplayer-support
 cd /home/pi && git clone "https://github.com/hitesh83/pwomxplayer-support.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/pwomxplayer-support
+cd /home/pi && rm -r /home/pi/pyKY040
+cd /home/pi && git clone "https://github.com/kaestnja/pyKY040.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/pyKY040
+
 
 cd /home/pi && rm -r /home/pi/omxplayer
 cd /home/pi && git clone "https://github.com/popcornmix/omxplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/omxplayer

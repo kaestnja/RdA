@@ -1403,9 +1403,9 @@ def switch_event(switch):
             event = direction
         else:
             direction = ANTICLOCKWISE
-##    if event > 0:
-##        callback(event)
-##    return
+    if event > 0:
+        callback(event)
+    return
 
 Rotary_counter = 0              # Start counting from 0
 Current_A = 1                   # Assume that rotary switch is not
