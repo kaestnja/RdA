@@ -383,8 +383,8 @@ def exitfunc():
         #while pygame.mixer.music.get_busy() == True:
             continue
     if gpio_exist == 1:
-        GPIO.cleanup(dt)
-        GPIO.cleanup(clk)
+        GPIO.cleanup(DATAPINSTATION)
+        GPIO.cleanup(CLOCKPINSTATION)
     if printredirect:
         sys.stdout.flush()
         sys.stderr.flush()
@@ -1374,11 +1374,11 @@ direction = 0
 Rotary_counter=0  # starting point for the running directional counter
 
 def switch_event(switch):
-    if GPIO.input(clk):
+    if GPIO.input(CLOCKPINSTATION):
         rotary_a = 1
     else:
         rotary_a = 0
-    if GPIO.input(dt):
+    if GPIO.input(DATAPINSTATION):
         rotary_b = 1
     else:
         rotary_b = 0
@@ -1413,8 +1413,8 @@ Current_B = 1                   # moving while we init software
 LockRotary = threading.Lock()
 def rotary_interrupt(A_or_B):
     global Rotary_counter, Current_A, Current_B, LockRotary
-    Switch_A = GPIO.input(clk)
-    Switch_B = GPIO.input(dt)
+    Switch_A = GPIO.input(CLOCKPINSTATION)
+    Switch_B = GPIO.input(DATAPINSTATION)
     # now check if state of A or B has changed # if not that means that bouncing caused it
     if Current_A == Switch_A and Current_B == Switch_B: # Same interrupt as before (Bouncing)?
         return                                          # ignore interrupt!
@@ -1422,7 +1422,7 @@ def rotary_interrupt(A_or_B):
     Current_B = Switch_B                                # for next bouncing check
     if (Switch_A and Switch_B):                     # Both one active? Yes -> end of sequence
         LockRotary.acquire()                        # get lock
-        if A_or_B == dt:                         # Turning direction depends on
+        if A_or_B == DATAPINSTATION:                         # Turning direction depends on
             Rotary_counter += 1                     # which input gave last interrupt
             print ("Clockwise -> %s" % str(Rotary_counter))
             channelDown(Rotary_counter)
@@ -1435,27 +1435,27 @@ def rotary_interrupt(A_or_B):
     
 if gpio_exist == 1:
 
-    #CLK - GPIO23 (pin16)         GPIO17 (pin 11)
-    #DT  - GPIO24 (pin18)         GPIO18 (pin 12)
+    #CLOCKPINSTATION - GPIO23 (pin16)         GPIO17 (pin 11)
+    #DATAPINSTATION  - GPIO24 (pin18)         GPIO18 (pin 12)
     #+   - 3v3 (pin1)
     #GND - GND (pin6)
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(True)
     #https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=133740
-    clk = 27  # Encoder input A: input GPIO23 (active high) pin 16
-    dt = 17  # Encoder input B: input GPIO24 (active high) pin 18  pull_up_down=GPIO.PUD_DOWN
+    CLOCKPINSTATION = 27  # Encoder input A: input GPIO23 (active high) pin 16
+    DATAPINSTATION = 17  # Encoder input B: input GPIO24 (active high) pin 18  pull_up_down=GPIO.PUD_DOWN
     if 0==1:
-        GPIO.setup(clk, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(dt, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(CLOCKPINSTATION, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(DATAPINSTATION, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         # setup an event detection thread for the A encoder switch   RISING ,FALLING bouncetime=5 bouncetime in mSec
-        GPIO.add_event_detect(clk, GPIO.FALLING, callback=switch_event)
-        GPIO.add_event_detect(dt, GPIO.FALLING, callback=switch_event)
+        GPIO.add_event_detect(CLOCKPINSTATION, GPIO.FALLING, callback=switch_event)
+        GPIO.add_event_detect(DATAPINSTATION, GPIO.FALLING, callback=switch_event)
     else:
-        GPIO.setup(clk, GPIO.IN)
-        GPIO.setup(dt, GPIO.IN)
+        GPIO.setup(CLOCKPINSTATION, GPIO.IN)
+        GPIO.setup(DATAPINSTATION, GPIO.IN)
         # setup an event detection thread for the A encoder switch   RISING ,FALLING bouncetime=5 bouncetime in mSec
-        GPIO.add_event_detect(clk, GPIO.RISING, callback=rotary_interrupt) 
-        GPIO.add_event_detect(dt, GPIO.RISING, callback=rotary_interrupt)
+        GPIO.add_event_detect(CLOCKPINSTATION, GPIO.RISING, callback=rotary_interrupt) 
+        GPIO.add_event_detect(DATAPINSTATION, GPIO.RISING, callback=rotary_interrupt)
     #root.after(1000, readEncoder)
 
     ButtonAnAus = 22 # GPIO-18 pin 12
