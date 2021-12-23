@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=185
+version=186
 
 # pip3 install --upgrade versioneer https://github.com/warner/python-versioneer
 # pip3 install --upgrade versioneer2
@@ -94,10 +94,6 @@ global trafic_stat_show
 trafic_stat_show = 0
 
 #https://docs.python.org/3/library/pathlib.html
-#if sys.platform == "win32":
-#    import ntpath
-#    pathmodule = ntpath
-#else:
 #    import posixpath
 #    pathmodule = posixpath
 #print ('jk-pathmodule: %s' % str(pathmodule))
@@ -120,7 +116,6 @@ if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname or 'pi4radio3' in
     sound_out_type = 'alsa:hw:0,0' #maybe hdmi
 
 try:
-    # Check and import real RPi.GPIO library
     importlib.util.find_spec('RPi.GPIO') # sudo apt install -y python3-rpi.gpio
     import RPi.GPIO as GPIO # sudo apt install -y python3-rpi.gpio
     GPIO.setmode(GPIO.BCM)# GPIO.BOARD)
@@ -130,24 +125,14 @@ except Exception as e:
     print ("jk-import RPi.GPIO failed, Exception as e:")
     print (e)
 except ImportError:
-    # If real RPi.GPIO library fails, load one of the fake one
-    # import FakeRPi.RPiO as RPiO
-    # or
-    import FakeRPi.GPIO as GPIO
-    # # ## pip install git+https://github.com/sn4k3/FakeRPi
-    # # ## pip3 install --upgrade git+https://github.com/sn4k3/FakeRPi
-except:
-    print ("jk-import RPi.GPIO failed, traceback:")
-    traceback.print_exc()
+    print ("jk-import RPi.GPIO failed, ImportError")
 ###########################################################################
 if __name__ == '__main__':
-    print ('janradiogrid: in main')
+    print ('janradio: in main')
     root = tkinter.Tk()
-    if not sys.platform == "win32":
-        os.system('pkill omxplayer')
-    if not ('sky' in the_hostname or 'test' in the_hostname):
-        root.overrideredirect(1)
-        root.wm_attributes("-topmost", True)
+    os.system('pkill omxplayer')
+    root.overrideredirect(1)
+    root.wm_attributes("-topmost", True)
 ##        root.wm_attributes("-alpha", 0.5)
 ##        root.wm_attributes("-disabled", True)
 ##        root.wm_attributes("-transparentcolor", "blue")
@@ -244,58 +229,48 @@ print ('jk-path_script is %s' % path_script)
 def process_start_radio(radio_station):
     #todo http://www.netzmafia.de/skripten/hardware/RasPi/RasPi_GPIO_int.html
     print ('  play: "%s"' % (radio_station))
-    if not sys.platform == "win32":
+    try:
+        #omxc = subprocess.Popen(['omxplayer', '-o','hdmi', radio_station,'&'])
+        #print ('omxplayer -o %s %s' % str(sound_out_type) % str(radio_station))
+        print ('omxplayer', '-o', str(sound_out_type), str(radio_station))
+        omxc = subprocess.Popen(['omxplayer', '-o', sound_out_type, radio_station,'&'])  #--no-osd
+        hdmic = subprocess.Popen(['vcgencmd', 'display_power', '1','&'])
+        return True
+    except:
+        traceback.print_exc()
+    if not (str(sender_key.get('state')) == '1'):
         try:
-            #omxc = subprocess.Popen(['omxplayer', '-o','hdmi', radio_station,'&'])
-            #print ('omxplayer -o %s %s' % str(sound_out_type) % str(radio_station))
-            print ('omxplayer', '-o', str(sound_out_type), str(radio_station))
-            omxc = subprocess.Popen(['omxplayer', '-o', sound_out_type, radio_station,'&'])  #--no-osd
-            hdmic = subprocess.Popen(['vcgencmd', 'display_power', '1','&'])
+            os.system('mplayer -quiet -cache 100 ' + radio_station + ' &')
             return True
+            #omxc = subprocess.Popen('mplayer -quiet -cache 100 ' + dicsenders.get(list_value) + ' &')
+            #mswr1bw='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
+            #swr1bw='omxplayer -o local https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
+            #swr1bw='omxplayer -o hdmi https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
+            #'omxplayer https://liveradio.swr.de/sw282p3/swr1bw/play.mp3 -o alsa:hw:0,0
+            #'omxplayer https://liveradio.swr.de/sw282p3/swr1bw/play.mp3 -o alsa:hw:1,0
+            #omxplayer --win '100 100 500 500'
+            #vcgencmd display_power 1
+            #https://github.com/cmus/cmus/wiki/status-display-programs
+            #'cmus https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
+            #https://opensource.com/life/16/8/3-command-line-music-players-linux
         except:
             traceback.print_exc()
-        if not (str(sender_key.get('state')) == '1'):
-            try:
-                os.system('mplayer -quiet -cache 100 ' + radio_station + ' &')
-                return True
-                #omxc = subprocess.Popen('mplayer -quiet -cache 100 ' + dicsenders.get(list_value) + ' &')
-                #mswr1bw='mplayer -quiet -cache 100 https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
-                #swr1bw='omxplayer -o local https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
-                #swr1bw='omxplayer -o hdmi https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
-                #'omxplayer https://liveradio.swr.de/sw282p3/swr1bw/play.mp3 -o alsa:hw:0,0
-                #'omxplayer https://liveradio.swr.de/sw282p3/swr1bw/play.mp3 -o alsa:hw:1,0
-                #omxplayer --win '100 100 500 500'
-                #vcgencmd display_power 1
-                #https://github.com/cmus/cmus/wiki/status-display-programs
-                #'cmus https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
-                #https://opensource.com/life/16/8/3-command-line-music-players-linux
-            except:
-                traceback.print_exc()
-        if 0==1:
-            #ps = subprocess.Popen(['omxplayer', '-o','hdmi', radio_station], shell=True, stdout=subprocess.PIPE)
-            ps = subprocess.Popen(['omxplayer', '-o',sound_out_type, radio_station], shell=True, stdout=subprocess.PIPE)
-            ps_pid = ps.pid
-            output = ps.stdout.read()
-            ps.stdout.close()
-            ps.wait()
-    else:
-        try:
-            os.system('start wmplayer "' + radio_station + '"')
-            return True
-        except:
-            traceback.print_exc()
+    if 0==1:
+        #ps = subprocess.Popen(['omxplayer', '-o','hdmi', radio_station], shell=True, stdout=subprocess.PIPE)
+        ps = subprocess.Popen(['omxplayer', '-o',sound_out_type, radio_station], shell=True, stdout=subprocess.PIPE)
+        ps_pid = ps.pid
+        output = ps.stdout.read()
+        ps.stdout.close()
+        ps.wait()
     return False
+
 def process_stop_radio():
     print('   stop radio')
-    if not sys.platform == "win32":
-        #print('pkill omxplayer')
-        os.system('pkill omxplayer')
-        #print('pkill mplayer')
-        os.system('pkill mplayer')
-    else:
-        #print('TASKKILL wmplayer')
-        os.system('TASKKILL /F /IM wmplayer.exe')
-        #os.system("taskkill python* && python D:\__Dropbox\Dropbox\aRadio\theRadio\janradiogrid.py"
+    #print('pkill omxplayer')
+    os.system('pkill omxplayer')
+    #print('pkill mplayer')
+    os.system('pkill mplayer')
+
 def process_exists(proc_name):
     proclist = psutil.process_iter()
     for proc in proclist:
@@ -336,7 +311,6 @@ def get_sys_class_string(sys_class_string='/proc/cpuinfo'):
     if (('rpi' in socket.gethostname()) or ('radio' in socket.gethostname())):
         tempC = str(open(sys_class_string).read())
     return tempC
-##    if not sys.platform == "win32":
 ##        ps = subprocess.Popen("ps ax -o pid= -o args= ", shell=True, stdout=subprocess.PIPE)
 ##        ps_pid = ps.pid
 ##        output = ps.stdout.read()
@@ -349,17 +323,7 @@ def get_sys_class_string(sys_class_string='/proc/cpuinfo'):
 ##                if proc_name in res[0][1] and pid != os.getpid() and pid != ps_pid:
 ##                    return True
 ##        return False
-##    else:
-##        #if proc_name in (p.name() for p in psutil.process_iter()):
-##        for p in psutil.process_iter():
-##            if proc_name in (p.name()):
-##                print (p.name())
-##                return True
-##        return False
-##            os.system("sudo pkill -f omxplayer* && sudo pkill -f python* && python3 /home/pi/aRadio/theRadio/janradiogrid.py")
-##            #os.system('sudo shutdown -r now')
-##            #os.system('sudo reboot')
-##            os.system("sudo reboot > /dev/null 2>&1")
+
 print ("my_cpu_temp:%d" % get_sys_class())
 def button1aclick():
     print ('  button1aclick' )
@@ -397,20 +361,12 @@ def button3aclick(ButtonAnAus=18):
     else:
         t3b.tag_config('STATE', foreground='yellow')
     time.sleep(1)
-    if not sys.platform == "win32":
-        if process_exists('omxplayer') or process_exists('mplayer'):
-            #button3apressed.set(1)
-            button3a.configure(image=charging_trueImagePIL)
-        else:
-            #button3apressed.set(0)
-            button3a.configure(image=charging_falseImagePIL)
+    if process_exists('omxplayer') or process_exists('mplayer'):
+        #button3apressed.set(1)
+        button3a.configure(image=charging_trueImagePIL)
     else:
-        if process_exists('wmplayer'):
-            #button3apressed.set(1)
-            button3a.configure(image=charging_trueImagePIL)
-        else:
-            #button3apressed.set(0)
-            button3a.configure(image=charging_falseImagePIL)
+        #button3apressed.set(0)
+        button3a.configure(image=charging_falseImagePIL)
 ##########################
 def exit(event):
     print ('jk-This exit')
@@ -419,6 +375,7 @@ def on_closing():
     print ('jk-This on_closing')
     exitfunc()
 def exitfunc():
+    print ('jk-This exitfunc')
     process_stop_radio()
     if sound_exist==1:
         effect_shutdown.play()
@@ -1187,20 +1144,12 @@ def onselect(evt):
     else:
         t3b.tag_config('STATE', foreground='yellow')
     time.sleep(1)
-    if not sys.platform == "win32":
-        if process_exists('omxplayer') or process_exists('mplayer'):
-            #button3apressed.set(1)
-            button3a.configure(image=charging_trueImagePIL)
-        else:
-            #button3apressed.set(0)
-            button3a.configure(image=charging_falseImagePIL)
+    if process_exists('omxplayer') or process_exists('mplayer'):
+        #button3apressed.set(1)
+        button3a.configure(image=charging_trueImagePIL)
     else:
-        if process_exists('wmplayer'):
-            #button3apressed.set(1)
-            button3a.configure(image=charging_trueImagePIL)
-        else:
-            #button3apressed.set(0)
-            button3a.configure(image=charging_falseImagePIL)
+        #button3apressed.set(0)
+        button3a.configure(image=charging_falseImagePIL)
 
 def volumeUp():
     print ("Button volumeUp")
@@ -1345,11 +1294,14 @@ sender_listbox.event_generate("<<ListboxSelect>>")
 pygame.init()
 pygame.mixer.pre_init(44100, -16, 2, 2048) # setup mixer to avoid sound lag #pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffersize=4096)
 try:
+    print ("pygame.mixer.init: ")
     pygame.mixer.init()
     sound_exist=1
+    print ("    sound_exist=1")
 except:
     traceback.print_exc()
     sound_exist=0
+    print ("    sound_exist=0")
 if sound_exist==1:
     #pygame.mixer.music.load(os.path.join(path_aNixie,'relay.wav'))
     #root.after(0, pygame.mixer.music.play(loops=10, start=0.0))
@@ -1394,9 +1346,11 @@ if sound_exist==1:
     effect_shutdown.set_volume(1)
 
 def readVolume():
+    print ("readVolume ")
     value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
     return int(value)
 def rotaryChange(direction):
+    print ("rotaryChange ")
     volume_step = 5
     volume = readVolume()
     if direction == 1:
@@ -1480,6 +1434,7 @@ def rotary_interrupt(A_or_B):
     return
     
 if gpio_exist == 1:
+
     #CLK - GPIO23 (pin16)         GPIO17 (pin 11)
     #DT  - GPIO24 (pin18)         GPIO18 (pin 12)
     #+   - 3v3 (pin1)
