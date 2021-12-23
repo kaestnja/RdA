@@ -87,6 +87,13 @@ global player
 player = OMXPlayer(VIDEO_PATH)
 sleep(1)
 player.quit()
+player = OMXPlayer(STREAM_URI)
+sleep(1)
+player.quit()
+STREAM_URI = 'https://liveradio.swr.de/sw282p3/swr3/play.mp3'
+player = OMXPlayer(STREAM_URI)
+sleep(1)
+player.quit()
 # check if 
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
