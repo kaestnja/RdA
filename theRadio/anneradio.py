@@ -544,7 +544,7 @@ def volumnUp():
             print ("amixer set HDMI failed, traceback:")
             traceback.print_exc()
     else:
-            try:
+        try:
             #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
             #os.system("sudo amixer set Master "+str(min(100,max(0,volume + volume_step)))+"%")
             os.popen("amixer set 'Master' "+str(setvolume)+"%")
