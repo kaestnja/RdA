@@ -454,17 +454,30 @@ def readVolume():
     #amixer scontrols
     #amixer -c 1 scontrols
     #cat /proc/asound/cards
-    #value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
-    #value = os.popen("amixer get Master|grep -o [0-9]*%|sed 's/%//'").read()
-    #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1").read()
-    #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed -n 1p").read()
-    value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
-    #value = os.popen("amixer get Capture | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
-    #value = os.popen("amixer -D pulse get Master | awk -F 'Left:|[][]' 'BEGIN {RS=""}{ print $3 }' | sed 's/%//'").read()
-    #value = os.popen("amixer -D pulse get Master | awk -F 'Right:|[][]' 'BEGIN {RS=""}{ print $3 }' | sed 's/%//'").read()
+    if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname or 'pi4radio3' in the_hostname):
+        #value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
+        #value = os.popen("amixer get Master|grep -o [0-9]*%|sed 's/%//'").read()
+        #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1").read()
+        #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed -n 1p").read()
+        value = os.popen("amixer get HDMI | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
+        #value = os.popen("amixer get Capture | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
+        #value = os.popen("amixer -D pulse get Master | awk -F 'Left:|[][]' 'BEGIN {RS=""}{ print $3 }' | sed 's/%//'").read()
+        #value = os.popen("amixer -D pulse get Master | awk -F 'Right:|[][]' 'BEGIN {RS=""}{ print $3 }' | sed 's/%//'").read()
+        #print("amixer get Master|grep -o [0-9]*%|sed 's/%//'")
+        #print("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1")
+    else:
+        #value = os.popen("amixer get PCM|grep -o [0-9]*%|sed 's/%//'").read()
+        #value = os.popen("amixer get Master|grep -o [0-9]*%|sed 's/%//'").read()
+        #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1").read()
+        #value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed -n 1p").read()
+        value = os.popen("amixer get Master | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
+        #value = os.popen("amixer get Capture | grep -o [0-9]*% | sed 's/%//' | head -1 | tr '\n' ' '").read()
+        #value = os.popen("amixer -D pulse get Master | awk -F 'Left:|[][]' 'BEGIN {RS=""}{ print $3 }' | sed 's/%//'").read()
+        #value = os.popen("amixer -D pulse get Master | awk -F 'Right:|[][]' 'BEGIN {RS=""}{ print $3 }' | sed 's/%//'").read()
+        #print("amixer get Master|grep -o [0-9]*%|sed 's/%//'")
+        #print("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1")
     print("current sound:",str(value))
-    #print("amixer get Master|grep -o [0-9]*%|sed 's/%//'")
-    #print("amixer get Master | grep -o [0-9]*% | sed 's/%//' | sed 's*/n**' | head -1")
+
     return int(float(value)) #int(value) 
 
     #GET volume: "amixer -M sget PCM"
@@ -484,17 +497,30 @@ def volumnDown():
         setvolumeplayer=10
     print("will turned Volumn:",str(setvolume))
     print("will turned Volumn:",str(setvolumeplayer))
-    #print("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
-    #print("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
-    try:
-        #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
-        #os.system("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
-        os.popen("amixer set 'Master' "+str(setvolume)+"%")
-        #os.popen("pactl -- set-sink-volume 0 +"+str(setvolume)+"%")
-        player.set_volume(setvolumeplayer)
-    except:
-        print ("amixer set Master failed, traceback:")
-        traceback.print_exc()
+    if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname or 'pi4radio3' in the_hostname):
+        #print("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
+        #print("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
+        try:
+            #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
+            #os.system("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
+            os.popen("amixer set 'HDMI' "+str(setvolume)+"%")
+            #os.popen("pactl -- set-sink-volume 0 +"+str(setvolume)+"%")
+            player.set_volume(setvolumeplayer)
+        except:
+            print ("amixer set HDMI failed, traceback:")
+            traceback.print_exc()
+    else:
+        #print("sudo amixer set Master -- "+str(min(100,max(0,volume - volume_step)))+"%")
+        #print("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
+        try:
+            #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume - volume_step)))+"%")
+            #os.system("sudo amixer set Master "+str(min(100,max(0,volume - volume_step)))+"%")
+            os.popen("amixer set 'Master' "+str(setvolume)+"%")
+            #os.popen("pactl -- set-sink-volume 0 +"+str(setvolume)+"%")
+            player.set_volume(setvolumeplayer)
+        except:
+            print ("amixer set Master failed, traceback:")
+            traceback.print_exc()
     
 def volumnUp():
     volume_step = 5
@@ -507,15 +533,26 @@ def volumnUp():
         setvolumeplayer=10
     print("will turned Volumn:",str(setvolume))
     print("will turned Volumn:",str(setvolumeplayer))
-    try:
-        #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
-        #os.system("sudo amixer set Master "+str(min(100,max(0,volume + volume_step)))+"%")
-        os.popen("amixer set 'Master' "+str(setvolume)+"%")
-        #os.popen("pactl -- set-sink-volume 0 -"+str(min(100,max(0,volume - volume_step)))+"%")
-        player.set_volume(setvolumeplayer)
-    except:
-        print ("amixer set Master failed, traceback:")
-        traceback.print_exc()
+    if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname or 'pi4radio3' in the_hostname):
+        try:
+            #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
+            #os.system("sudo amixer set Master "+str(min(100,max(0,volume + volume_step)))+"%")
+            os.popen("amixer set 'HDMI' "+str(setvolume)+"%")
+            #os.popen("pactl -- set-sink-volume 0 -"+str(min(100,max(0,volume - volume_step)))+"%")
+            player.set_volume(setvolumeplayer)
+        except:
+            print ("amixer set HDMI failed, traceback:")
+            traceback.print_exc()
+    else:
+            try:
+            #os.system("sudo amixer set PCM -- "+str(min(100,max(0,volume + volume_step)))+"%")
+            #os.system("sudo amixer set Master "+str(min(100,max(0,volume + volume_step)))+"%")
+            os.popen("amixer set 'Master' "+str(setvolume)+"%")
+            #os.popen("pactl -- set-sink-volume 0 -"+str(min(100,max(0,volume - volume_step)))+"%")
+            player.set_volume(setvolumeplayer)
+        except:
+            print ("amixer set Master failed, traceback:")
+            traceback.print_exc()
         
 ####################################################################
 sender_listbox.config(yscrollcommand=senderscrollbar.set, selectmode = tkinter.SINGLE, exportselection=False )
