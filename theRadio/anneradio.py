@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=198
+version=199
 
 modulname = 'anneradio'
 import datetime
@@ -38,19 +38,33 @@ from time import sleep
 #global the_hostname
 the_hostname = socket.gethostname()
 sound_exist = 0
-sound_out_type = 'local'
 gpio_exist = 0
 printredirect = 0
 trafic_stat_old = 0
 trafic_stat_show = 0
 
-CLOCKPINVOLUMN = 23
-DATAPINVOLUMN = 24
-SWITCHPINVOLUMN = 18
+if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname or 'pi4radio3' in the_hostname):
+    #sound_out_type = 'local' first use, 3.5 jack
+    #sound_out_type = 'hdmi' second use, inside case with screen
+    #sound_out_type = 'alsa:hw:1,0' #maybe 3.5 jack
+    sound_out_type = 'alsa:hw:0,0' #maybe hdmi
+    CLOCKPINVOLUMN = 23
+    DATAPINVOLUMN = 24
+    SWITCHPINVOLUMN = 18
+    
+    CLOCKPINSTATION = 16 #27
+    DATAPINSTATION = 20
+    SWITCHPINSTATION = 21 #22
+    
+else:
+    sound_out_type = 'local'
+    CLOCKPINVOLUMN = 23
+    DATAPINVOLUMN = 24
+    SWITCHPINVOLUMN = 18
 
-CLOCKPINSTATION = 27
-DATAPINSTATION = 17
-SWITCHPINSTATION = 22
+    CLOCKPINSTATION = 27
+    DATAPINSTATION = 17
+    SWITCHPINSTATION = 22
 
 sender_key = {}
 sender_key['last'] = 'swr3'
@@ -77,15 +91,6 @@ if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
     #os.environ.__setitem__('DISPLAY', ':0.0')
 os.environ['DISPLAY']=':0.0'
-
-if ('pi4radio1' in the_hostname or 'pi4radio2' in the_hostname):
-    sound_out_type = 'hdmi'
-    CLOCKPINSTATION = 4 #27
-    DATAPINSTATION = 17
-    SWITCHPINSTATION = 25 #22
-
-
-
 
 ###########################################################################
 # https://bugs.python.org/issue28165 The 'subprocess' module leaks memory when called in certain ways

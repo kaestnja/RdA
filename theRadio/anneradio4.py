@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-version=198
+version=199
 
 modulname = 'anneradio'
 import datetime
@@ -100,7 +100,6 @@ if os.environ.get('DISPLAY','') == '':
     #os.environ.__setitem__('DISPLAY', ':0.0')
 # check if did not work properly, so use:
 os.environ['DISPLAY']=':0.0'
-
 
 ###########################################################################
 # https://bugs.python.org/issue28165 The 'subprocess' module leaks memory when called in certain ways
