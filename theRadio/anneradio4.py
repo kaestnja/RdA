@@ -213,8 +213,10 @@ def exitfunc():
     root.quit()
     print ("exitfunc() before quit")
     quit()
-    # sys.exit() #exit with exception, used to exit treads
-    # root.destroy()
+    print ("exitfunc() before sys.exit")
+    sys.exit() #exit with exception, used to exit treads
+    print ("exitfunc() before root.destroy")
+    root.destroy()
 
 def exit(event):
     print ("exit(event):   %s" % (str(event)))
