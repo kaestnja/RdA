@@ -205,10 +205,13 @@ def exitfunc():
         process_do('sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1')
     ky040Volumn.stop()
     ky040Station.stop()
+    print ("exitfunc() before cleanup")
     GPIO.cleanup(DATAPINSTATION)
     GPIO.cleanup(CLOCKPINSTATION)
     GPIO.cleanup(SWITCHPINSTATION)
+    print ("exitfunc() before root.quit")
     root.quit()
+    print ("exitfunc() before quit")
     quit()
     # sys.exit() #exit with exception, used to exit treads
     # root.destroy()
