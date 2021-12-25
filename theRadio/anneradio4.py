@@ -611,6 +611,7 @@ def rotaryChangeStation(direction):
 def switchPressedStation():         #process_kill
     print("press Station ")
     exitfunc()
+    #todo: switch on off omxplayer
 
 try:
     importlib.util.find_spec('RPi.GPIO')    # Check and import real RPi.GPIO library
