@@ -41,6 +41,10 @@ if [[ $(hostname) = "pi3radio2" ]]; then
 fi
 if [[ $(hostname) = "rpi3" ]]; then
     echo "rpi3 identified";
+    sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;
+    sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1;
+    sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1;
+    sudo pkill -SIGKILL -f "chromium" > /dev/null 2>&1;
     sleep 15;
     omxplayer -o local "/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4";
     python3 /home/pi/aRadio/theRadio/anneradio.py;
