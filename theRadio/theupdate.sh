@@ -258,20 +258,22 @@ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python3 get-pip.py --force-reinstall
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
 python get-pip.py --force-reinstall
-
-#sudo pip config set global.no-cache-dir true
-#sudo pip3 config set global.no-cache-dir true
-#pip config set global.no-cache-dir true
-#pip3 config set global.no-cache-dir true
+#------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------
+sudo pip config set global.no-cache-dir true
+sudo pip3 config set global.no-cache-dir true
+pip config set global.no-cache-dir true
+pip3 config set global.no-cache-dir true
 #sudo reboot
 
-#pip cache purge
-#pip3 cache purge
-#python -m pip cache purge
-#python3 -m pip cache purge
-#sudo python -m pip cache purge
-#sudo python3 -m pip cache purge
-
+pip cache purge
+pip3 cache purge
+python -m pip cache purge
+python3 -m pip cache purge
+sudo python -m pip cache purge
+sudo python3 -m pip cache purge
+#------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------
 sudo pip config set global.no-cache-dir false
 sudo pip3 config set global.no-cache-dir false
 pip config set global.no-cache-dir false

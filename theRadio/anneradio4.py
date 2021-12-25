@@ -29,7 +29,7 @@ import jksmetermg as metermg
 import jksmeterva as meterva
 import jksnixieclock as nixieclock
 from ky040.KY040 import KY040
-from omxplayer.player import OMXPlayer  #https://github.com/willprice/python-omxplayer-wrapper
+from omxplayer.player import OMXPlayer  #https://github.com/willprice/python-omxplayer-wrapper  #pip install omxplayer-wrapper #pip3 install omxplayer-wrapper
 # https://python-omxplayer-wrapper.readthedocs.io/en/latest/omxplayer/# 
 # https://python-omxplayer-wrapper.readthedocs.io/en/latest/omxplayer/#module-omxplayer.player
 from pathlib import Path
