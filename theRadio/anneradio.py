@@ -587,6 +587,7 @@ def switchPressedVolumn():          #powerOff
     print("press Volumn ")
     #subprocess.call(['poweroff'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     #subprocess.call(['reboot'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    exitfunc()
     process_do('reboot > /dev/null 2>&1')
 
 def rotaryChangeStation(direction):
@@ -597,7 +598,7 @@ def rotaryChangeStation(direction):
         channelDown()
 def switchPressedStation():         #process_kill
     print("press Station ")
-    exitfunc()
+    #todo: switch on off omxplayer
 
 try:
     importlib.util.find_spec('RPi.GPIO')    # Check and import real RPi.GPIO library
