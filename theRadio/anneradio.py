@@ -29,7 +29,7 @@ import jksmetermg as metermg
 import jksmeterva as meterva
 import jksnixieclock as nixieclock
 from ky040.KY040 import KY040
-from omxplayer.player import OMXPlayer  #https://github.com/willprice/python-omxplayer-wrapper
+from omxplayer.player import OMXPlayer  #https://github.com/willprice/python-omxplayer-wrapper  #pip install omxplayer-wrapper #pip3 install omxplayer-wrapper
 # https://python-omxplayer-wrapper.readthedocs.io/en/latest/omxplayer/# 
 # https://python-omxplayer-wrapper.readthedocs.io/en/latest/omxplayer/#module-omxplayer.player
 from pathlib import Path
@@ -90,6 +90,7 @@ player.quit()
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
     #os.environ.__setitem__('DISPLAY', ':0.0')
+# check if did not work properly, so use:
 os.environ['DISPLAY']=':0.0'
 
 ###########################################################################
@@ -196,12 +197,17 @@ def exitfunc():
         process_do('sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1')
     ky040Volumn.stop()
     ky040Station.stop()
+    print ("exitfunc() before cleanup")
     GPIO.cleanup(DATAPINSTATION)
     GPIO.cleanup(CLOCKPINSTATION)
     GPIO.cleanup(SWITCHPINSTATION)
+    print ("exitfunc() before root.quit")
     root.quit()
+    print ("exitfunc() before quit")
     quit()
+    # print ("exitfunc() before sys.exit")
     # sys.exit() #exit with exception, used to exit treads
+    # print ("exitfunc() before root.destroy")
     # root.destroy()
 
 def exit(event):
