@@ -489,6 +489,9 @@ cd /home/pi && git clone "https://github.com/hitesh83/pwomxplayer-support.git" &
 cd /home/pi && rm -r /home/pi/pyKY040
 cd /home/pi && git clone "https://github.com/kaestnja/pyKY040.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/pyKY040
 
+#sudo apt-get update && sudo apt-get install -y libdbus-1{,-dev} 
+#pip install omxplayer-wrapper 
+#pip3 install omxplayer-wrapper
 
 cd /home/pi && rm -r /home/pi/omxplayer
 cd /home/pi && git clone "https://github.com/popcornmix/omxplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/omxplayer
