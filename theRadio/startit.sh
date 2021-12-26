@@ -26,7 +26,9 @@ fi
 
 if [[ $(hostname) = "pi4radio1" ]] || [[ $(hostname) == "pi4radio2" ]] || [[ $(hostname) == "pi4radio3" ]] || [[ $(hostname) == "pi4radio4" ]]; then
     echo "pi4radio1-4 identified";
+    sleep 3;
     sudo dhclient -v;
+    sleep 3;
     omxplayer -o alsa:hw:0,0 "/home/pi/aRadio/theRadio/bImages/A Radio Pictures Logo 1933.mp4";
     #python3 /home/pi/aRadio/theRadio/janradio.py;
     python3 /home/pi/aRadio/theRadio/anneradio4.py;
