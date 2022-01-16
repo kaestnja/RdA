@@ -99,3 +99,7 @@ KeyRelease event, serial 48, synthetic NO, window 0x2000001,
     state 0x0, keycode 122 (keysym 0x1008ff11, XF86AudioLowerVolume), same_screen YES,
     XLookupString gives 0 bytes: 
     XFilterEvent returns: False
+
+
+https://projects.raspberrypi.org/en/projects/getting-started-with-guis/1
+https://tutorials-raspberrypi.de/programmieren-lernen-am-raspberry-pi-teil-3-gui-erstellen/
