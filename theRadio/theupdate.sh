@@ -114,10 +114,10 @@ export DISPLAY=:0.0
 
 alias stoppy='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1; sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; sudo pkill -SIGKILL -f "omxplayer.bin" > /dev/null 2>&1; sudo pkill -SIGKILL -f "chromium" > /dev/null 2>&1; sudo pkill -f python* && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/* && rm /home/pi/.cache/lxsession/LXDE-pi/run.log'
 alias reboot='sudo pkill -f python* && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/* && rm /home/pi/.cache/lxsession/LXDE-pi/run.log && sudo reboot'
-alias updategit='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; sudo dhclient -v; cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio && /home/pi/aRadio/GitRepoUpdateTimestamp.sh'
-alias updatetbo='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; sudo dhclient -v; cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer && /home/pi/tboplayer/setup.sh'
+alias updategit='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; sudo dhclient -v; cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio && /home/pi/aRadio/GitRepoUpdateTimestamp.sh'
+alias updatetbo='sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1;sudo pkill -SIGKILL -f "omxplayer" > /dev/null 2>&1; sudo dhclient -v; cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer && /home/pi/tboplayer/setup.sh'
 alias update='sudo dhclient -v; sudo pkill -f python && sudo chmod -R 6777 /home && sudo chmod -R 6777 /root && sudo chown -R pi:pi /home/ && sudo apt --fix-broken install && sudo apt-get install --fix-missing && sudo apt-get update -y && sudo apt-get upgrade -y --force-yes && sudo apt-get clean -y --force-yes && sudo apt-get dist-upgrade -y --force-yes && sudo apt-get autoremove -y --force-yes && sudo apt-get autoclean -y --force-yes && rm /home/pi/.cache/lxsession/LXDE-pi/run.log && sudo reboot'
-alias resetgit='git config --global --unset credential.helper; git config --local --unset credential.helper; git config --system --unset credential.helper; git config --system --list; git config --local --list; git config --global --list; sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1; cd /home/pi; rm -fr "aRadio"; git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kaestner"; git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git"'
+alias resetgit='git config --global --unset credential.helper; git config --local --unset credential.helper; git config --system --unset credential.helper; git config --system --list; git config --local --list; git config --global --list; sudo pkill -SIGKILL -f "python3" > /dev/null 2>&1; cd /home/pi; rm -fr "aRadio"; git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kaestner"; git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git"'
 alias resetsound='sudo apt-get remove --purge alsa-utils*; sudo apt-get clean; sudo apt-get autoremove; sudo apt-get remove --purge alsamixer*; sudo apt-get clean -y; sudo apt-get autoremove -y --force-yes; sudo apt-get update -y; sudo apt-get upgrade -y --force-yes; sudo apt-get install alsa-utils; sudo apt-get install alsamixer; sudo reboot;'
 alias swr1bw='omxplayer https://liveradio.swr.de/sw282p3/swr1bw/play.mp3'
 alias dasding='omxplayer http://swr-dasding-live.cast.addradio.de/swr/dasding/live/mp3/128/stream.mp3'
@@ -475,10 +475,10 @@ cd /home/pi
 rm -fr "aRadio"
 git config --global user.email "jan.kaestner@online.de" && git config --global user.name "Jan Kaestner"
 cd /home/pi && rm -r /home/pi/aRadio
-cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/aRadio
+cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/aRadio.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/aRadio
 cd /home/pi/aRadio/theRadio/fonts && sudo cp -r /home/pi/aRadio/theRadio/fonts/ /usr/local/share/
 cd /home/pi && rm -r /home/pi/tboplayer
-cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer
+cd /home/pi && git clone "https://kaestnja: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@github.com/kaestnja/tboplayer.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/tboplayer
 cd /home/pi/tboplayer && ./setup.sh
 cd /home/pi && rm -r /home/pi/python-omxplayer-wrapper
 cd /home/pi && git clone "https://github.com/willprice/python-omxplayer-wrapper.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/python-omxplayer-wrapper
@@ -508,7 +508,7 @@ cd /home/pi/omxplayer && ./prepare-native-raspbian.sh
 #find libssl1.0-dev and change to libssl-dev
 
 #
-cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
+cd /home/pi/aRadio && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/kaestnja/aRadio.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
 cd /home/pi/aRadio && git fetch --all >/dev/null && git reset --hard origin/master >/dev/null && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/aRadio
 
 ## to prepare to generate requirements.txt, if not already there:
@@ -604,9 +604,9 @@ tboplayer.cfg
 # https://github.com/marcogrecopriolo/guglielmo
 sudo apt-get install -y libsndfile-dev libsamplerate-dev libfaad-dev
 cd /home/pi && rm -r /home/pi/guglielmo
-cd /home/pi && git clone "https://kaestnja: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@github.com/marcogrecopriolo/guglielmo.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/guglielmo
+cd /home/pi && git clone "https://kaestnja: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@github.com/marcogrecopriolo/guglielmo.git" &&  sudo chown -R pi /home && sudo chmod -R 6777 /home/pi/guglielmo
 #
-cd /home/pi/guglielmo && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/marcogrecopriolo/guglielmo.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/guglielmo
+cd /home/pi/guglielmo && git config credential.helper store >/dev/null && git fetch "https://kaestnja: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@github.com/marcogrecopriolo/guglielmo.git" && git stash && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/guglielmo
 cd /home/pi/guglielmo && git fetch --all >/dev/null && git reset --hard origin/master >/dev/null && git pull && sudo chown -R pi /home && chmod -R 6777 /home/pi/guglielmo
 cd ~ && cd guglielmo/
 mkdir build
