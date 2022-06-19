@@ -34,6 +34,7 @@
     <Compile Include="aMagicEye\MagicEye.py" />
     <Compile Include="aMagicEye\recipe-577695-1.py" />
     <Compile Include="anneradio.py" />
+    <Compile Include="anneradio4.py" />
     <Compile Include="aRadio.py" />
     <Compile Include="aRPi\GPIO.py" />
     <Compile Include="calib_fan.py" />
