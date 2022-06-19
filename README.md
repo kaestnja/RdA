@@ -1,4 +1,5 @@
 # aRadio
+v 1
 Raspberry Pi
 
 ## hints
@@ -118,4 +119,7 @@ curl -sSfLO 'https://raw.githubusercontent.com/raspberrypi/firmware/master/opt/v
 smsc95xx.turbo_mode=N dwc_otg.dma_enable=1 dwc_otg.dma_burst_size=256 dwc_otg.lpm_enable=0 console=serial0,115200 console=tty1 root=PARTUUID=e64496a0-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait consoleblank=0
 
 
+
 sudo apt install -y qt5-default && sudo apt install -y qtcreator && sudo apt install -y python3-pyqt5
+
+# sudo apt install python3-pyqt5
