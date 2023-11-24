@@ -18,6 +18,11 @@ Invoke-Expression "& { $(Invoke-RestMethod 'https://github.com/kaestnja/RdA/raw/
 
 Just in case, you cannt realy start, maybe some first commands help out.
 
+SH: (Windows GitBash prefered (!))
+```
+ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+```
+
 PS: (as Administrator)
 ```
 [Net.ServicePointManager]::SecurityProtocol = ([Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13);
